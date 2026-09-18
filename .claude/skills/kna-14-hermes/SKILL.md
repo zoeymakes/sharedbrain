@@ -109,9 +109,9 @@ hermes mcp test <서버이름>       # 연결과 도구 목록
 - `{{WIKI_RULES}}` 에는 `agents/_shared/block.md` 를 치환한 결과를 넣는다
 
 ```bash
-H=.claude/skills/kna-09-persona/managed-block.mjs
-node $H render --template agents/_shared/block.md \
-               --values .knowanywhere/block-values.json \
+MB=.claude/skills/kna-09-persona/managed-block.mjs
+node $MB render --template agents/_shared/block.md \
+               --values .knowanywhere/hermes-values.json \
                --out .knowanywhere/hermes-rules.md
 # 그 결과를 skill-template.md 의 {{WIKI_RULES}} 자리에 넣어 최종 skill 파일을 만든다
 ```

@@ -60,15 +60,42 @@ OpenClaw 런타임의 MCP 설정에 위키를 추가한다. 상시 실행이면 
 
 블록 파일은 1행이 start 마커, 마지막 행이 end 마커다. `managed-block.mjs` 로 렌더링하고 주입한다.
 
+먼저 값 JSON 을 만든다. 09단계가 만든 파일을 재사용하되 **이 에이전트의 이름·런타임·콜렉션으로 덮어쓴다**.
+
 ```bash
-H=.claude/skills/kna-09-persona/managed-block.mjs
-# 값 JSON 을 만든다(위 placeholder 표의 키를 모두 넣는다. 없으면 render 가 거부한다)
-node $H render --template agents/_shared/block.md \
-               --values .knowanywhere/block-values.json \
+node -e '
+const fs = require("fs");
+const base = fs.existsSync(".knowanywhere/block-values.json")
+  ? JSON.parse(fs.readFileSync(".knowanywhere/block-values.json", "utf8")) : {};
+const s = JSON.parse(fs.readFileSync(".knowanywhere/state.json", "utf8"));
+const name = process.env.AGENT;           // 이 단계에서 정한 에이전트 이름
+const sess = (s.wiki?.collections?.sessions || []).find((c) => c.name === `${name} Sessions`);
+if (!sess) { console.error(`state 에 "${name} Sessions" 콜렉션이 없다. kna-08-collections 를 먼저 한다.`); process.exit(1); }
+const v = {
+  ...base,
+  AGENT_NAME: name,
+  RUNTIME: "OpenClaw",
+  WIKI_URL: s.wiki.url,
+  MCP_SERVER_NAME: process.env.SERVER,    // 이 런타임에 등록한 MCP 서버 이름
+  SESSIONS_COLLECTION: sess.name,
+  SHARED_COLLECTION: s.wiki.collections.shared.name,
+};
+if (!v.PERSONA) v.PERSONA = "- 역할: (한 줄로)\n- 말투: (한 줄로)";
+fs.writeFileSync(".knowanywhere/openclaw-values.json", JSON.stringify(v, null, 2) + "\n");
+console.log(JSON.stringify(v, null, 2));
+'
+```
+
+값을 확인한 뒤 렌더링하고 주입한다.
+
+```bash
+MB=.claude/skills/kna-09-persona/managed-block.mjs
+node $MB render --template agents/_shared/block.md \
+               --values .knowanywhere/openclaw-values.json \
                --out .knowanywhere/openclaw-block.md
 # 먼저 dry-run 으로 무엇이 바뀌는지 보여주고 yes 를 받는다
-node $H apply --block .knowanywhere/openclaw-block.md --target ~/.openclaw/agents/<에이전트>/AGENTS.md --dry-run
-node $H apply --block .knowanywhere/openclaw-block.md --target ~/.openclaw/agents/<에이전트>/AGENTS.md
+node $MB apply --block .knowanywhere/openclaw-block.md --target ~/.openclaw/agents/<에이전트>/AGENTS.md --dry-run
+node $MB apply --block .knowanywhere/openclaw-block.md --target ~/.openclaw/agents/<에이전트>/AGENTS.md
 ```
 
 `apply` 는 멱등이다. 마커 구간이 있으면 교체하고, 없으면 파일 끝에 덧붙이고, 다시 실행하면 "변경 없음"을 출력한다.

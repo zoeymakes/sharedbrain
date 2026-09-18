@@ -7,8 +7,8 @@ knowanywhere 는 Google Cloud VM 한 대에 self-hosted [Outline](https://www.ge
 ## 구성도
 
 ```
- MacBook              desktop              VM or desktop          later (phase 2)
- Claude Code "로제"   Claude Code "로제"   Discord bot "로제"     Codex "지수", Hermes "제니"
+ MacBook              desktop              VM or desktop          13~16단계
+ Claude Code "코드작업자"   Claude Code "코드작업자"   Discord bot "코드작업자"     Codex, Hermes, Aside, OpenClaw
         |                    |                    |                      |
         +--------------------+----------+---------+----------------------+
                                         |  MCP over HTTPS, OAuth sign-in per agent

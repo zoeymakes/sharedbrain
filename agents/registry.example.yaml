@@ -22,30 +22,60 @@
 #     (state.mjs 의 kind 와 같은 어휘를 쓴다. 다르면 agent-add 가 실패한다)
 #   - 비밀값 금지. 경로·변수명·설정 포인터까지만 적는다.
 
+# 아래는 그대로 두어도 `validate` 를 통과하는 최소 구성이다.
+# 이름·기기·역할을 내 것으로 바꾸고, 쓰는 런타임만큼 로우를 늘린다.
+
 version: 0.1
-owner: <내 이름 또는 핸들>
+owner: me
 
 agents:
-  - name: <에이전트 이름>          # 위키 콜렉션·서명에 쓰인다
-    runtime: <런타임>              # claude | codex | hermes | aside | openclaw
-    profile: <프로필>              # 런타임이 프로필을 지원할 때만 (Hermes, OpenClaw 등)
-    devices: [<기기1>, <기기2>]     # 짧은 호스트 이름 또는 별칭
-    interfaces: [<인터페이스>]      # 예: slack, telegram, discord, cli
-    environments: [<환경>]          # environments 섹션의 name 참조
-    role: <이 에이전트가 맡는 일>
-    wiki_access: <권한>            # read-write | read-only | 자기 영역만
+  # 이 기기의 Claude Code. 09단계에서 이 이름으로 콜렉션을 만든다.
+  - name: 코드작업자                # 위키 콜렉션·서명에 쓰인다
+    runtime: claude                # claude | codex | hermes | aside | openclaw
+    devices: [laptop]              # 짧은 호스트 이름 또는 별칭
+    environments: [terminal]       # environments 섹션의 name 참조
+    role: 개발·문서 작업
+    wiki_access: read-write        # read-write | read-only | 자기 영역만
     status: active                 # active | retired | migrating
-    note: <특이사항>
+
+  # 쓰는 런타임만 남기고 나머지는 지운다. 이름은 런타임마다 다르게 둔다.
+  # - name: 검증작업자
+  #   runtime: codex
+  #   devices: [laptop]
+  #   environments: [terminal]
+  #   role: 구현·독립 검증
+  #   wiki_access: read-write
+  #   status: active
+  #
+  # - name: 비서에이전트
+  #   runtime: hermes
+  #   profile: default             # 런타임이 프로필을 지원할 때만 (Hermes, OpenClaw 등)
+  #   devices: [always-on-host]
+  #   interfaces: [chat]           # 예: slack, telegram, discord, cli
+  #   role: 상시 자동화·지식 승격
+  #   wiki_access: read-write      # 정본 승격 권한은 한 에이전트에만 주는 것을 권한다
+  #   status: active
+  #
+  # - name: 브라우저작업자
+  #   runtime: aside
+  #   devices: [laptop]
+  #   role: 브라우저 현장 작업
+  #   wiki_access: 자기 영역만
+  #   status: active
+  #   note: 위키에 직접 쓰지 않고 handoff 파일을 거친다.
 
 environments:
-  - name: <환경 이름>              # 예: orca, terminal, browser
-    kind: <종류>                   # 예: ADE, 터미널, 브라우저
-    devices: [<기기>]
-    role: <역할>
-    rule: <이 환경에서 추가로 지킬 기록 규칙>
+  - name: terminal                 # 예: orca, terminal, browser
+    kind: 터미널                    # 예: ADE, 터미널, 브라우저
+    role: 직접 실행 (tmux 포함)
+  # - name: orca
+  #   kind: ADE
+  #   devices: [laptop]
+  #   role: CLI 에이전트 병렬 실행·worktree 격리
+  #   rule: 이 환경에서 작업하면 Update 줄에 `orca:<worktree>` 를 함께 적는다.
 
-daemons:
-  - <상시 자동화 이름>
+daemons: []
+  # - 상시 자동화 이름
 
-excluded:
-  - {name: <제외한 도구>, reason: <제외 이유>}
+excluded: []
+  # - {name: 제외한 도구, reason: 제외 이유}

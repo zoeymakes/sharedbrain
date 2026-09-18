@@ -95,7 +95,7 @@ node .claude/skills/kna-status/state.mjs step 07 done
 
 토큰, API key, 그 끝자리도 state 에 쓰지 않는다.
 
-## Codex 에서 쓰려면 (phase 2)
+## Codex 에서 쓰려면 (13~16단계)
 
 Codex CLI 도 같은 서버에 붙을 수 있다: `codex mcp add outline --url https://wiki.example.com/mcp` 후
 `codex mcp login outline`. 규칙 파일은 `templates/codex-agents-md.<언어>.md` 에 있다. v1 인스톨러는 Codex 설치를

@@ -28,7 +28,7 @@ node $H init                                   # version, created_at, 모든 단
 node $H set '{"gcp":{"region":"asia-northeast3","zone":"asia-northeast3-a"}}'
 node $H step 01 done                           # steps.01 = {status: "done", at: 지금}
 node $H mode join                              # mode 를 쓰고 fresh 전용 단계 01~06, 11 을 skipped 로 표시
-node $H agent-add '{"name":"로제","machine":"macbook","kind":"claude","sessions_collection":"로제 Sessions"}'
+node $H agent-add '{"name":"코드작업자","machine":"macbook","kind":"claude","sessions_collection":"코드작업자 Sessions"}'
 node $H get gcp.project_id                     # 값 하나를 JSON 으로 출력
 node $H next                                   # 예: "03 kna-03-vm", 다 끝났으면 "complete"
 node $H status                                 # 표. 기계가 읽을 출력은 --json
@@ -44,7 +44,7 @@ node $H status                                 # 표. 기계가 읽을 출력은
 | `created_at` | string (ISO) | 00 (`init`) | state 파일을 만든 시각 |
 | `mode` | `"fresh"` \| `"join"` | 00 | 새 위키를 만든다, 또는 있는 위키에 연결한다 |
 | `language` | `"en"` \| `"ko"` | 00 | 위키와 `~/.claude/CLAUDE.md` 에 쓸 규칙 템플릿의 언어. 대화 언어는 이것과 관계없이 사용자 언어를 따른다 |
-| `agent.name` | string | 00 | 에이전트 이름. 예: `로제`. 콜렉션 이름 `로제 Sessions` 와 문서 서명 줄이 된다 |
+| `agent.name` | string | 00 | 에이전트 이름. 예: `코드작업자`. 콜렉션 이름 `코드작업자 Sessions` 와 문서 서명 줄이 된다 |
 | `agent.persona_written_at` | string (ISO) | 09 | `~/.claude/CLAUDE.md` 에 관리 블록을 쓴 시각 |
 | `prereqs.gcloud` | string \| `null` | 00 | 확인한 버전. 없으면 `null`(`join` 모드에서는 필요 없다) |
 | `prereqs.node` | string | 00 | 확인한 버전. 20 이상이어야 한다 |
@@ -78,16 +78,16 @@ node $H status                                 # 표. 기계가 읽을 출력은
 | `backup.snapshot_policy` | string | 11 | resource policy 이름. 예: `kna-daily-snapshot` |
 | `backup.verified_at` | string (ISO) | 11 | 스냅샷과 덤프를 둘 다 확인한 시각 |
 | `agents[]` | 배열 | 09, 10, 12 | 머신별 에이전트마다 한 항목. 아래 표. 10단계는 브리지를 VM 에서 돌릴 때 VM 항목을 더한다 |
-| `steps.<id>.status` | `"pending"` \| `"done"` \| `"skipped"` | 모든 단계 | `<id>` 는 `"00"` 부터 `"12"` |
+| `steps.<id>.status` | `"pending"` \| `"done"` \| `"skipped"` | 모든 단계 | `<id>` 는 `"00"` 부터 `"16"` |
 | `steps.<id>.at` | string (ISO) \| `null` | 모든 단계 | status 가 `done` 이나 `skipped` 로 바뀐 시각 |
 
 `agents[]` 항목:
 
 | 필드 | 타입 | 뜻 |
 |---|---|---|
-| `name` | string | 에이전트 이름. 예: `로제` |
+| `name` | string | 에이전트 이름. 예: `코드작업자` |
 | `machine` | string | 머신을 가리키는 짧은 이름. 예: `macbook`(기본 제안값: `hostname -s`) |
-| `kind` | `"claude"` \| `"codex"` \| `"hermes"` | 런타임. v1 은 `claude` 만 설치하고 나머지는 phase 2 다 |
+| `kind` | `"claude"` \| `"codex"` \| `"hermes"` \| `"aside"` \| `"openclaw"` | 런타임. v1 은 `claude` 만 설치하고 나머지는 13~16단계 다 |
 | `sessions_collection` | string | 이 에이전트가 세션 기록을 쓰는 콜렉션 |
 
 같은 `name` 과 `machine` 조합으로 `agent-add` 를 다시 부르면 항목을 새로 추가하지 않고 교체한다.
@@ -102,7 +102,7 @@ node $H status                                 # 표. 기계가 읽을 출력은
   "created_at": "2026-09-15T05:00:00Z",
   "mode": "fresh",
   "language": "ko",
-  "agent": { "name": "로제", "persona_written_at": "2026-09-15T09:40:00Z" },
+  "agent": { "name": "코드작업자", "persona_written_at": "2026-09-15T09:40:00Z" },
   "prereqs": {
     "gcloud": "560.0.0",
     "node": "22.11.0",
@@ -131,7 +131,7 @@ node $H status                                 # 표. 기계가 읽을 출력은
     "buckets": { "uploads": "kna-wiki-a1b2-uploads", "backups": "kna-wiki-a1b2-backups" },
     "deployed_at": "2026-09-15T08:05:00Z",
     "collections": {
-      "sessions": [{ "agent": "로제", "name": "로제 Sessions", "id": "00000000-0000-4000-8000-000000000001" }],
+      "sessions": [{ "agent": "코드작업자", "name": "코드작업자 Sessions", "id": "00000000-0000-4000-8000-000000000001" }],
       "shared": { "name": "공유 지식", "id": "00000000-0000-4000-8000-000000000002" }
     }
   },
@@ -140,7 +140,7 @@ node $H status                                 # 표. 기계가 읽을 출력은
   "discord": { "enabled": false, "bot_name": null, "host": null },
   "backup": { "snapshot_policy": "kna-daily-snapshot", "verified_at": "2026-09-16T03:40:00Z" },
   "agents": [
-    { "name": "로제", "machine": "macbook", "kind": "claude", "sessions_collection": "로제 Sessions" }
+    { "name": "코드작업자", "machine": "macbook", "kind": "claude", "sessions_collection": "코드작업자 Sessions" }
   ],
   "steps": {
     "00": { "status": "done", "at": "2026-09-15T05:01:30Z" },

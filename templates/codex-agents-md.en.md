@@ -21,7 +21,7 @@ Manual setup, in this order:
 Codex has no session-scoped memory of this block beyond AGENTS.md, so keep it short.
 -->
 <!-- oneagent:rules:start -->
-## Shared wiki: {{AGENT_NAME}} (managed by knowanywhere, phase 2)
+## Shared wiki: {{AGENT_NAME}} (managed by knowanywhere, 13~16단계)
 
 Your name is **{{AGENT_NAME}}**. You are a Codex agent. The same name on several machines is one agent: same collection, same signature, continuing the same documents.
 

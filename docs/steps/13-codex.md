@@ -38,11 +38,11 @@ codex mcp add <서버이름> --url https://<위키>/mcp --bearer-token-env-var O
 `agents/codex/block.md` 를 렌더링해 `~/.codex/AGENTS.md` 의 마커 구간에 넣는다.
 
 ```bash
-H=.claude/skills/kna-09-persona/managed-block.mjs
-node $H render --template agents/codex/block.md --values .knowanywhere/block-values.json \
+MB=.claude/skills/kna-09-persona/managed-block.mjs
+node $MB render --template agents/codex/block.md --values .knowanywhere/block-values.json \
                --out .knowanywhere/codex-block.md
-node $H apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md --dry-run
-node $H apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md
+node $MB apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md --dry-run
+node $MB apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md
 ```
 
 `apply` 는 멱등이고 쓰기 전에 백업을 만든다. Codex는 system prompt를 받지 않고 `AGENTS.md` 만 읽으므로

@@ -2,7 +2,7 @@
 Codex 주입 정본은 agents/codex/agents-md-block.ko.md 이고, 설치 단계는 kna-13-codex 다.
 이 파일은 참고용으로만 남긴다. -->
 <!--
-PHASE 2: 아직 설치기가 다루지 않는다.
+DEPRECATED: kna-13-codex 와 agents/codex/block.md 로 대체됐다.
 knowanywhere v1은 Claude Code 에이전트만 설치한다. 이 템플릿은 Codex 에이전트를 지금 손으로 연결하려는 사람을 위한 것이다.
 설치기는 아직 ~/.codex/AGENTS.md 를 읽지도 쓰지도 않는다.
 
@@ -20,7 +20,7 @@ knowanywhere v1은 Claude Code 에이전트만 설치한다. 이 템플릿은 Co
 Codex는 AGENTS.md 말고는 이 블록을 기억할 곳이 없으니 짧게 유지한다.
 -->
 <!-- oneagent:rules:start -->
-## 공유 위키: {{AGENT_NAME}} (knowanywhere 관리 블록, phase 2)
+## 공유 위키: {{AGENT_NAME}} (knowanywhere 관리 블록, 13~16단계)
 
 이 에이전트의 이름은 **{{AGENT_NAME}}**, 런타임은 Codex 다. 같은 이름이 여러 머신에서 돌아도 에이전트는 하나다. 같은 콜렉션에 같은 서명으로 같은 문서를 이어 쓴다.
 

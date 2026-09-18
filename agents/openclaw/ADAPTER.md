@@ -6,7 +6,7 @@ OpenClaw는 에이전트별 작업 디렉터리와 지침 파일을 갖는 멀�
 |---|---|
 | 규칙 주입 위치 | 에이전트별 지침 파일 (`~/.openclaw/agents/<에이전트>/AGENTS.md` 또는 런타임이 읽는 지침 경로) |
 | 마커 | `<!-- oneagent:rules:start -->` ~ `<!-- oneagent:rules:end -->` |
-| 블록 템플릿 | `agents/_shared/wiki-rules.ko.md` 치환 결과를 그대로 사용 |
+| 블록 템플릿 | `agents/_shared/block.md` (설명: `wiki-rules.ko.md`) |
 | 설치 단계 | `kna-16-openclaw` |
 
 ## 역할 분리

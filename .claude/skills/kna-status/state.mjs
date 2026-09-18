@@ -11,7 +11,7 @@
 //   node .claude/skills/kna-status/state.mjs set '<deep-merge 할 JSON 객체>'
 //   node .claude/skills/kna-status/state.mjs step <id> <pending|done|skipped>
 //   node .claude/skills/kna-status/state.mjs mode <fresh|join>
-//   node .claude/skills/kna-status/state.mjs agent-add '{"name":"로제","machine":"macbook","kind":"claude","sessions_collection":"로제 Sessions"}'
+//   node .claude/skills/kna-status/state.mjs agent-add '{"name":"코드작업자","machine":"macbook","kind":"claude","sessions_collection":"코드작업자 Sessions"}'
 //   node .claude/skills/kna-status/state.mjs path
 //
 // `next` 출력("03 kna-03-vm" 또는 "complete")과 `status --json` 의 키는 다른 스킬이 읽으므로

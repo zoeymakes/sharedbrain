@@ -14,13 +14,13 @@
 | `fresh` | 새 위키를 만든다. 이 머신이 첫 머신이다. | 00 부터 11 까지(02 와 10 은 선택) |
 | `join` | knowanywhere 위키가 이미 있고, 이 머신이나 새 에이전트가 그것을 쓰게 한다. | 00, 07, 08, 09(10 은 선택) |
 
-**2. 에이전트 이름.** 짧은 이름이면 된다. 예: `로제`. 이름은 두 곳에 쓰인다.
+**2. 에이전트 이름.** 짧은 이름이면 된다. 예: `코드작업자`. 이름은 두 곳에 쓰인다.
 
-- 위키 콜렉션 `로제 Sessions`. 이 에이전트만 여기에 작업 기록을 쓴다.
-- 에이전트가 쓰는 모든 문서의 첫 줄 서명(한국어 템플릿은 `작성자: 로제`, 영어 템플릿은 `Author:` 뒤에 이름).
+- 위키 콜렉션 `코드작업자 Sessions`. 이 에이전트만 여기에 작업 기록을 쓴다.
+- 에이전트가 쓰는 모든 문서의 첫 줄 서명(한국어 템플릿은 `작성자: 코드작업자`, 영어 템플릿은 `Author:` 뒤에 이름).
 
 같은 에이전트를 맥북과 데스크탑에서 함께 돌리면 두 머신에서 대소문자까지 똑같은 이름을 준다. 다른 에이전트(예:
-Codex 로 도는 `지수`)는 자기 이름과 자기 콜렉션을 갖는다.
+Codex 로 도는 `검증작업자`)는 자기 이름과 자기 콜렉션을 갖는다.
 
 **3. 템플릿 언어: `ko` 또는 `en`.** 위키와 `~/.claude/CLAUDE.md` 에 쓸 규칙 템플릿을 어느 언어판으로 할지 정한다.
 인스톨러는 이것과 관계없이 늘 사용자가 쓰는 언어로 대화한다.
@@ -113,7 +113,7 @@ Windows 는 https://nodejs.org/ 의 LTS 설치기를 쓴다.
 git check-ignore -v .knowanywhere/state.json   # .gitignore 규칙이 출력돼야 한다
 node .claude/skills/kna-status/state.mjs init
 node .claude/skills/kna-status/state.mjs mode fresh
-node .claude/skills/kna-status/state.mjs set '{"language":"ko","agent":{"name":"로제"},"domain":{"kind":"own"}}'
+node .claude/skills/kna-status/state.mjs set '{"language":"ko","agent":{"name":"코드작업자"},"domain":{"kind":"own"}}'
 node .claude/skills/kna-status/state.mjs status
 ```
 
@@ -123,7 +123,7 @@ node .claude/skills/kna-status/state.mjs status
 {
   "mode": "fresh",
   "language": "ko",
-  "agent": { "name": "로제" },
+  "agent": { "name": "코드작업자" },
   "domain": { "kind": "own" },
   "prereqs": { "gcloud": "560.0.0", "node": "22.11.0", "claude": "2.1.0", "git": "2.45.2", "checked_at": "2026-09-15T05:01:10Z" }
 }

@@ -4,10 +4,10 @@ step 09(`kna-09-persona`)는 아래 질문을 한 번에 하나씩 묻고, 답�
 
 ## 같은 이름을 여러 머신에서 쓰는 것은 의도다
 
-에이전트 이름은 머신 라벨이 아니라 정체성이다. 맥북의 Claude Code, 데스크탑의 Claude Code, Discord 봇이 모두 `로제` 라는 이름을 쓰면 위키에게는 에이전트 하나다.
+에이전트 이름은 머신 라벨이 아니라 정체성이다. 맥북의 Claude Code, 데스크탑의 Claude Code, Discord 봇이 모두 `코드작업자` 라는 이름을 쓰면 위키에게는 에이전트 하나다.
 
-- 같은 콜렉션 `로제 Sessions` 에 쓴다.
-- 같은 서명을 쓴다. `작성자: 로제`, `최종 갱신: 로제 · <시각>`.
+- 같은 콜렉션 `코드작업자 Sessions` 에 쓴다.
+- 같은 서명을 쓴다. `작성자: 코드작업자`, `최종 갱신: 코드작업자 · <시각>`.
 - 맥북에서 시작한 작업을 데스크탑이나 Discord에서 같은 문서에 이어 쓴다. 머신마다 만들기 전에 검색하고, `## Update` 제목 끝에 머신 이름을 붙인다.
 
 새 이름은 역할이 다르거나 런타임이 다른(예: Codex) 에이전트에만 쓴다. 새 이름을 쓰면 `<이름> Sessions` 콜렉션이 하나 더 생긴다. 이름은 대소문자와 철자를 구분한다. `Rose` 와 `rose` 는 서로 다른 에이전트다.
@@ -16,11 +16,11 @@ step 09(`kna-09-persona`)는 아래 질문을 한 번에 하나씩 묻고, 답�
 
 | 에이전트 | 런타임 | 도는 곳 | 세션 콜렉션 |
 |---|---|---|---|
-| 로제 | Claude Code | 맥북, 데스크탑, Discord 봇 | `로제 Sessions` |
-| 지수 | Codex | 맥북, 데스크탑, Discord 봇 | `지수 Sessions` |
-| 제니 | Hermes | GCP VM, Discord | `제니 Sessions` |
+| 코드작업자 | Claude Code | 맥북, 데스크탑, Discord 봇 | `코드작업자 Sessions` |
+| 검증작업자 | Codex | 맥북, 데스크탑, Discord 봇 | `검증작업자 Sessions` |
+| 비서에이전트 | Hermes | GCP VM, Discord | `비서에이전트 Sessions` |
 
-로제는 머신 세 곳에서 돌지만 콜렉션은 하나다. 지수는 로제와 같은 머신에서 돌지만 런타임과 역할이 달라서 이름과 콜렉션이 따로 있다. 여기에 리사처럼 에이전트를 하나 더 들이면 `리사 Sessions` 콜렉션이 새로 생기고, 모든 에이전트가 공유 콜렉션 `공유 지식`(영어 템플릿이면 `Shared Knowledge`)을 함께 읽고 쓴다. v1 설치기는 Claude Code 에이전트만 설치하고, Codex와 Hermes는 `docs/phase2-codex-hermes.md` 에 적힌 phase 2다.
+로제는 머신 세 곳에서 돌지만 콜렉션은 하나다. 지수는 로제와 같은 머신에서 돌지만 런타임과 역할이 달라서 이름과 콜렉션이 따로 있다. 여기에 리사처럼 에이전트를 하나 더 들이면 `글작성자 Sessions` 콜렉션이 새로 생기고, 모든 에이전트가 공유 콜렉션 `공유 지식`(영어 템플릿이면 `Shared Knowledge`)을 함께 읽고 쓴다. v1 설치기는 Claude Code 에이전트만 설치하고, Codex와 Hermes는 `docs/phase2-codex-hermes.md` 에 적힌 13~16단계다.
 
 ## 질문
 
@@ -41,13 +41,13 @@ step 09(`kna-09-persona`)는 아래 질문을 한 번에 하나씩 묻고, 답�
 - 경계: <한 줄, 또는 짧은 절 여러 개>
 ```
 
-## 완성 예시: 로제
+## 완성 예시: 코드작업자
 
 사용자는 에이전트 하나를 어디서나 쓴다. 맥북(`mbp`)과 데스크탑(`desktop`)의 Claude Code, 그리고 휴대폰에서 일을 맡기려고 둔 Discord 봇이다.
 
 답:
 
-1. 이름: `로제`
+1. 이름: `코드작업자`
 2. 역할: 개인 프로젝트의 코딩, 조사, 홈랩 관리를 함께 하는 파트너.
 3. 말투: 담백하고 직접적으로. 답부터 쓰고 근거를 붙인다. 격려나 감탄은 넣지 않는다.
 4. 언어: 사용자가 쓰는 언어로 답한다(한국어와 영어를 오간다). 위키 문서는 대화 언어로 쓴다. 코드와 명령은 원문 그대로 둔다.
@@ -66,7 +66,7 @@ step 09(`kna-09-persona`)는 아래 질문을 한 번에 하나씩 묻고, 답�
 
 | 위치 | 값 |
 |---|---|
-| `.knowanywhere/state.json` (머신마다 clone 이 따로 있다) | `agent.name: "로제"`. `mbp` 의 state 에는 `agents[]` 항목 `{name: "로제", machine: "mbp", kind: "claude", sessions_collection: "로제 Sessions"}`, `desktop` 의 state 에는 `machine: "desktop"` 항목. Discord 봇을 올린 머신의 state 에는 `discord.host` 가 기록된다 |
-| 위키 | 콜렉션 `로제 Sessions`. 문서 첫 줄 `작성자: 로제`, Update 제목 `## Update — 2026-09-15 21:40 KST · desktop` |
-| `mbp` 와 `desktop` 의 `~/.claude/CLAUDE.md` | 같은 관리 블록(`이 에이전트의 이름은 **로제**`) |
-| Discord 브리지 `.env` | `AGENT_NAME=로제`, `PERSONA_FILE=./persona.md` 에 같은 페르소나 줄 |
+| `.knowanywhere/state.json` (머신마다 clone 이 따로 있다) | `agent.name: "코드작업자"`. `mbp` 의 state 에는 `agents[]` 항목 `{name: "코드작업자", machine: "mbp", kind: "claude", sessions_collection: "코드작업자 Sessions"}`, `desktop` 의 state 에는 `machine: "desktop"` 항목. Discord 봇을 올린 머신의 state 에는 `discord.host` 가 기록된다 |
+| 위키 | 콜렉션 `코드작업자 Sessions`. 문서 첫 줄 `작성자: 코드작업자`, Update 제목 `## Update — 2026-09-15 21:40 KST · desktop` |
+| `mbp` 와 `desktop` 의 `~/.claude/CLAUDE.md` | 같은 관리 블록(`이 에이전트의 이름은 **코드작업자**`) |
+| Discord 브리지 `.env` | `AGENT_NAME=코드작업자`, `PERSONA_FILE=./persona.md` 에 같은 페르소나 줄 |

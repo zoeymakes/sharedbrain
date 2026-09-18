@@ -84,7 +84,7 @@ Discord 채널 id 와 사용자 id 는 1의 포털 절차 뒤에 묻는다.
    고른다. 아래에 생긴 URL 을 연다. 또는 **General Information** 의 Application ID 로 바로 만든다:
    `https://discord.com/api/oauth2/authorize?client_id=<APPLICATION_ID>&scope=bot&permissions=309237746688`
 5. 열린 화면에서 사용자 본인만 있는 서버를 고르고 **Authorize**. 서버가 없으면 Discord 앱에서 **+** (서버 추가) →
-   **직접 만들기** 로 먼저 만든다. 봇 전용 채널(예: `#로제`)을 하나 만든다.
+   **직접 만들기** 로 먼저 만든다. 봇 전용 채널(예: `#코드작업자`)을 하나 만든다.
 6. Discord **사용자 설정 → 고급 → 개발자 모드** 를 켠다. 봇 전용 채널을 우클릭 → **채널 ID 복사**, 내 프로필을
    우클릭 → **사용자 ID 복사**. 두 값(숫자 17~20자리, 비밀값이 아니다)을 채팅으로 받는다.
 
@@ -128,7 +128,7 @@ for (const [k, v] of Object.entries(JSON.parse(process.argv[2]))) {
   t = re.test(t) ? t.replace(re, () => `${k}=${v}`) : `${t}\n${k}=${v}\n`;
 }
 fs.writeFileSync(f, t); console.log("설정함:", Object.keys(JSON.parse(process.argv[2])).join(", "));
-' ~/kna-bridge/.env '{"ALLOWED_USER_IDS":"123456789012345678","ALLOWED_CHANNEL_IDS":"234567890123456789","AGENT_NAME":"로제"}'
+' ~/kna-bridge/.env '{"ALLOWED_USER_IDS":"123456789012345678","ALLOWED_CHANNEL_IDS":"234567890123456789","AGENT_NAME":"코드작업자"}'
 grep -E '^(ALLOWED_USER_IDS|ALLOWED_CHANNEL_IDS|AGENT_NAME|PERSONA_FILE|PERMISSION_MODE)=' ~/kna-bridge/.env
 node -e 'console.log((require("fs").statSync(process.argv[1]).mode & 0o777).toString(8))' ~/kna-bridge/.env
 ```
@@ -206,7 +206,7 @@ set -e
 F=/home/kna-bot/kna-bridge/.env
 sudo -u kna-bot cp -n /home/kna-bot/kna-bridge/.env.example $F
 sudo chmod 600 $F
-sudo -u kna-bot sed -i -e "s/^ALLOWED_USER_IDS=.*/ALLOWED_USER_IDS=123456789012345678/" -e "s/^ALLOWED_CHANNEL_IDS=.*/ALLOWED_CHANNEL_IDS=234567890123456789/" -e "s/^AGENT_NAME=.*/AGENT_NAME=로제/" $F
+sudo -u kna-bot sed -i -e "s/^ALLOWED_USER_IDS=.*/ALLOWED_USER_IDS=123456789012345678/" -e "s/^ALLOWED_CHANNEL_IDS=.*/ALLOWED_CHANNEL_IDS=234567890123456789/" -e "s/^AGENT_NAME=.*/AGENT_NAME=코드작업자/" $F
 sudo grep -E "^(ALLOWED_USER_IDS|ALLOWED_CHANNEL_IDS|AGENT_NAME|PERSONA_FILE|PERMISSION_MODE)=" $F
 sudo stat -c "%a %U %n" $F'
 ```
@@ -370,11 +370,11 @@ drop-in 이 적용되지 않았다. `systemctl cat knowanywhere-bridge` 로 drop
 기대 로그(순서대로):
 
 ```
-[bot] 로그인: 로제#1234 (345678901234567890)
-[bot] agent: 로제 / backend: claude
+[bot] 로그인: 코드작업자#1234 (345678901234567890)
+[bot] agent: 코드작업자 / backend: claude
 [bot] persona: /home/kna-bot/kna-bridge/persona.md (1894자)
 [bot] 허용 사용자: 123456789012345678
-[recv] 2026-09-15T10:02:11.000Z #로제 사용자이름: 너의 이름을 말하고, 위키 콜렉션 목록을 보여줘. → handled
+[recv] 2026-09-15T10:02:11.000Z #코드작업자 사용자이름: 너의 이름을 말하고, 위키 콜렉션 목록을 보여줘. → handled
 [job] 456789012345678901 완료 subtype=success turns=3 cost=0.0421 (18234ms)
 ```
 
@@ -401,14 +401,14 @@ drop-in 이 적용되지 않았다. `systemctl cat knowanywhere-bridge` 로 drop
 
 ```bash
 H=.claude/skills/kna-status/state.mjs
-node $H set '{"discord":{"enabled":true,"bot_name":"로제","host":"vm"}}'
+node $H set '{"discord":{"enabled":true,"bot_name":"코드작업자","host":"vm"}}'
 node $H step 10 done
 ```
 
 VM 에서 돌리면 그 머신도 이 에이전트가 도는 곳이므로 `agents[]` 에 더한다:
 
 ```bash
-node .claude/skills/kna-status/state.mjs agent-add '{"name":"로제","machine":"kna-wiki-vm","kind":"claude","sessions_collection":"로제 Sessions"}'
+node .claude/skills/kna-status/state.mjs agent-add '{"name":"코드작업자","machine":"kna-wiki-vm","kind":"claude","sessions_collection":"코드작업자 Sessions"}'
 ```
 
 건너뛸 때:

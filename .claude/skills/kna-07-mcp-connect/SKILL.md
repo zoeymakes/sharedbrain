@@ -119,7 +119,7 @@ node .claude/skills/kna-status/state.mjs step 07 done
 `kna-08-collections`: 이 에이전트의 `<Agent> Sessions` 콜렉션과 공유 콜렉션 `공유 지식`(영어 템플릿이면
 `Shared Knowledge`)을 만들고 규칙을 설명에 넣는다. 시작 전에 묻는다.
 
-### Codex 메모 (phase 2, 이 단계에서 실행하지 않는다)
+### Codex 메모 (이 단계에서 실행하지 않는다. 13단계에서 한다)
 
 Codex CLI도 같은 서버를 쓸 수 있다. 참고용으로만 알려준다(이 레포는 v1에서 Codex 설치를 검증하지 않는다):
 `codex mcp add outline --url https://wiki.example.com/mcp` 후 `codex mcp login outline`. 규칙 파일은

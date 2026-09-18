@@ -106,18 +106,18 @@ systemctl is-active knowanywhere-bridge
 sudo journalctl -u knowanywhere-bridge -n 30 --no-pager
 ```
 
-로그에 `[bot] 로그인: ...`, `[bot] agent: 로제 / backend: claude`, `[bot] persona: .../kna-bridge/persona.md (...자)`,
+로그에 `[bot] 로그인: ...`, `[bot] agent: 코드작업자 / backend: claude`, `[bot] persona: .../kna-bridge/persona.md (...자)`,
 `[recv] ... → handled`, `[job] ... 완료 subtype=success` 가 보여야 한다. VM 이면 `kna-bot` 으로 metadata 서버에 접속했을 때
 `000` 이 나와야 한다.
 
 ## 쓰는 것
 
 ```bash
-node .claude/skills/kna-status/state.mjs set '{"discord":{"enabled":true,"bot_name":"로제","host":"vm"}}'
+node .claude/skills/kna-status/state.mjs set '{"discord":{"enabled":true,"bot_name":"코드작업자","host":"vm"}}'
 node .claude/skills/kna-status/state.mjs step 10 done
 ```
 
-VM 에서 돌리면 `agents[]` 에 `{"name":"로제","machine":"kna-wiki-vm","kind":"claude","sessions_collection":"로제 Sessions"}` 도
+VM 에서 돌리면 `agents[]` 에 `{"name":"코드작업자","machine":"kna-wiki-vm","kind":"claude","sessions_collection":"코드작업자 Sessions"}` 도
 더한다. 건너뛰면 `discord.enabled` 를 `false` 로, `step 10 skipped` 로 쓴다. 토큰과 Discord id 는 state 에 쓰지 않는다.
 
 ## 다음

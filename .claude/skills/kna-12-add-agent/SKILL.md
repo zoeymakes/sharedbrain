@@ -1,6 +1,6 @@
 ---
 name: kna-12-add-agent
-description: 설치를 마친 뒤(또는 join 머신에서) 사용자가 머신이나 에이전트를 더 붙이겠다고 할 때 쓴다. 요청 시에만 돈다. 같은 에이전트를 새 머신에서 이어 쓰는지(같은 이름, 같은 콜렉션), 새 에이전트인지(새 이름, 새 `<이름> Sessions` 콜렉션), Codex·Hermes 인지(phase 2) 가르고, 새 머신에서 clone → claude → join → 07 → 08 → 09(→ 10)를 돌리게 안내한 뒤 list_collections 와 세션 문서의 새 `## Update` 로 확인한다.
+description: 설치를 마친 뒤(또는 join 머신에서) 사용자가 머신이나 에이전트를 더 붙이겠다고 할 때 쓴다. 요청 시에만 돈다. 같은 에이전트를 새 머신에서 이어 쓰는지(같은 이름, 같은 콜렉션), 새 에이전트인지(새 이름, 새 `<이름> Sessions` 콜렉션), Codex·Hermes·Aside·OpenClaw 인지(13~16단계) 가르고, 새 머신에서 clone → claude → join → 07 → 08 → 09(→ 10)를 돌리게 안내한 뒤 list_collections 와 세션 문서의 새 `## Update` 로 확인한다.
 ---
 
 # 12단계: 머신이나 에이전트 추가
@@ -39,8 +39,8 @@ node $H get agents
 
 | 경우 | 예 | 콜렉션 | 새 머신에서 도는 단계 |
 |---|---|---|---|
-| A. 같은 에이전트, 새 머신 | 맥북의 로제를 데스크탑에서도 | 기존 `로제 Sessions` | 00(join) → 07 → 08(확인만) → 09 → 10(선택) |
-| B. 새 Claude Code 에이전트 | 역할이 다른 리사 | 새 `리사 Sessions` | 00(join) → 07 → 08(생성) → 09 → 10(선택) |
+| A. 같은 에이전트, 새 머신 | 맥북의 로제를 데스크탑에서도 | 기존 `코드작업자 Sessions` | 00(join) → 07 → 08(확인만) → 09 → 10(선택) |
+| B. 새 Claude Code 에이전트 | 역할이 다른 글작성자 | 새 `글작성자 Sessions` | 00(join) → 07 → 08(생성) → 09 → 10(선택) |
 | C. Codex·Hermes·Aside·OpenClaw | 다른 런타임의 에이전트 | 새 콜렉션 | 콜렉션은 여기서 만들고, 연결은 각 전용 단계(13~16)에서 한다 |
 | D. 같은 에이전트를 Discord 에 | 로제를 Discord 봇으로 | 기존 | `kna-10-discord` 로 간다 |
 
@@ -69,7 +69,7 @@ claude
 |---|---|
 | 설치를 시작할까요 | yes |
 | 모드 | `join` |
-| 에이전트 이름 | `로제` (이 머신의 `agent.name` 그대로. 대소문자, 악센트, 공백까지 같게) |
+| 에이전트 이름 | `코드작업자` (이 머신의 `agent.name` 그대로. 대소문자, 악센트, 공백까지 같게) |
 | 다른 머신에 이미 있는 같은 에이전트인가 | 예 |
 | 템플릿 언어 | `ko` (이 머신의 `language`) |
 | 기존 위키 주소 | `https://wiki.example.com` (이 머신의 `wiki.url`) |
@@ -85,7 +85,7 @@ claude
    않는다. `list_collections` 로 두 콜렉션을 정확한 이름으로 찾아 id 를 state 에 기록하는 것으로 끝낸다. 그 단계가 이
    경우를 따로 다루지 않으면 새 머신에서 이렇게 기록한다(id 는 `list_collections` 결과):
    ```bash
-   node .claude/skills/kna-status/state.mjs set '{"wiki":{"collections":{"sessions":[{"agent":"로제","name":"로제 Sessions","id":"00000000-0000-4000-8000-000000000001"}],"shared":{"name":"공유 지식","id":"00000000-0000-4000-8000-000000000002"}}}}'
+   node .claude/skills/kna-status/state.mjs set '{"wiki":{"collections":{"sessions":[{"agent":"코드작업자","name":"코드작업자 Sessions","id":"00000000-0000-4000-8000-000000000001"}],"shared":{"name":"공유 지식","id":"00000000-0000-4000-8000-000000000002"}}}}'
    node .claude/skills/kna-status/state.mjs step 08 done
    ```
 4. `kna-09-persona`: 새 머신의 `~/.claude/CLAUDE.md` 에 같은 블록을 넣는다. 스모크 테스트가 먼저 검색하므로 첫 머신이
@@ -103,7 +103,7 @@ A 와 같지만 두 가지가 다르다.
 
 9단계에서 새 에이전트의 페르소나를 새로 받는다. 역할이 겹치지 않게 기존 에이전트의 역할을 한 줄로 알려준다.
 
-### C. Codex·Hermes (phase 2)
+### C. Codex·Hermes·Aside·OpenClaw (13~16단계)
 
 v1 인스톨러는 Codex·Hermes 런타임을 설치하거나 검증하지 않는다. 알려줄 것:
 
@@ -118,21 +118,21 @@ v1 인스톨러는 Codex·Hermes 런타임을 설치하거나 검증하지 않�
    `wiki.collections.sessions` 에 더한다. `set` 은 배열을 통째로 바꾸므로 기존 항목을 함께 넣는다:
    ```bash
    node .claude/skills/kna-status/state.mjs get wiki.collections.sessions
-   node .claude/skills/kna-status/state.mjs set '{"wiki":{"collections":{"sessions":[{"agent":"로제","name":"로제 Sessions","id":"00000000-0000-4000-8000-000000000001"},{"agent":"지수","name":"지수 Sessions","id":"00000000-0000-4000-8000-000000000003"}]}}}'
+   node .claude/skills/kna-status/state.mjs set '{"wiki":{"collections":{"sessions":[{"agent":"코드작업자","name":"코드작업자 Sessions","id":"00000000-0000-4000-8000-000000000001"},{"agent":"검증작업자","name":"검증작업자 Sessions","id":"00000000-0000-4000-8000-000000000003"}]}}}'
    ```
 2. **Codex 블록 렌더링.** `templates/persona.md` 질문으로 새 에이전트의 페르소나 줄을 받아
    `.knowanywhere/codex-persona-lines.md` 에 쓰고, 9단계 절차 2와 같은 방식으로 값 파일
    `.knowanywhere/codex-values.json` 을 만든 뒤(`AGENT_NAME` 과 `SESSIONS_COLLECTION` 은 새 에이전트 것):
    ```bash
-   node .claude/skills/kna-09-persona/managed-block.mjs render --template agents/codex/agents-md-block.ko.md (정본, kna-13-codex 가 사용) --values .knowanywhere/codex-values.json --out .knowanywhere/codex-agents-md.md
+   node .claude/skills/kna-09-persona/managed-block.mjs render --template agents/codex/block.md --values .knowanywhere/codex-values.json --out .knowanywhere/codex-agents-md.md
    ```
-   `language` 가 `en` 이면 `agents/codex/agents-md-block.ko.md (정본, kna-13-codex 가 사용)` 를 쓴다. 파일 맨 위 주석이 수동 설정 순서다. 사용자는 `<!-- oneagent:rules:start -->` 부터 `<!-- oneagent:rules:end -->` 까지를
+   Codex·Hermes·Aside·OpenClaw 연결은 이 단계에서 하지 않는다. 콜렉션만 만들고 각 전용 단계(13~16)로 넘긴다. 사용자는 `<!-- oneagent:rules:start -->` 부터 `<!-- oneagent:rules:end -->` 까지를
    Codex 가 도는 머신의 `~/.codex/AGENTS.md` 끝에 붙인다.
 
 `agents[]` 에는 사용자가 그 에이전트를 설정하고 그 에이전트가 자기 콜렉션에 첫 문서를 쓴 것을 확인한 뒤에만 더한다:
 
 ```bash
-node .claude/skills/kna-status/state.mjs agent-add '{"name":"지수","machine":"mbp","kind":"codex","sessions_collection":"지수 Sessions"}'
+node .claude/skills/kna-status/state.mjs agent-add '{"name":"검증작업자","machine":"mbp","kind":"codex","sessions_collection":"검증작업자 Sessions"}'
 ```
 
 ## 검증
@@ -157,7 +157,7 @@ node .claude/skills/kna-status/state.mjs agent-add '{"name":"지수","machine":"
 - 기록해 두고 싶으면 A·B 확인이 끝난 뒤 이 머신의 `agents[]` 에 새 머신 항목을 더한다. 같은 `name` 과 `machine` 은
   교체되므로 중복되지 않는다:
   ```bash
-  node .claude/skills/kna-status/state.mjs agent-add '{"name":"로제","machine":"desktop","kind":"claude","sessions_collection":"로제 Sessions"}'
+  node .claude/skills/kna-status/state.mjs agent-add '{"name":"코드작업자","machine":"desktop","kind":"claude","sessions_collection":"코드작업자 Sessions"}'
   ```
 - `steps.12` 는 `pending` 으로 둔다. 요청할 때마다 다시 도는 단계라서 `done` 으로 쓰지 않는다(`docs/state.md`).
 

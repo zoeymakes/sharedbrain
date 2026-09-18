@@ -51,10 +51,10 @@ state.mjs 의 `kind` 와 같은 어휘라서, 다르면 `agent-add` 가 실패�
 `--target` 만 바꿔 재사용할 수 있다.
 
 ```bash
-H=.claude/skills/kna-09-persona/managed-block.mjs
-node $H render --template agents/codex/block.md --values .knowanywhere/block-values.json \
+MB=.claude/skills/kna-09-persona/managed-block.mjs
+node $MB render --template agents/codex/block.md --values .knowanywhere/block-values.json \
                --out .knowanywhere/codex-block.md
-node $H apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md --dry-run
+node $MB apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md --dry-run
 ```
 
 이 경로는 실제로 동작함을 확인했다(render → dry-run → apply → 재적용 시 "변경 없음").

@@ -12,7 +12,7 @@ description: knowanywhere 8단계에 쓴다(kna-07-mcp-connect 뒤, fresh와 joi
 
 위키에 두 종류의 콜렉션이 있고, 각 콜렉션 설명에 에이전트가 따를 규칙이 들어 있는 상태.
 
-- `<Agent> Sessions`: 이 에이전트의 작업 기록. 이름 예: `로제 Sessions`, `리사 Sessions`.
+- `<Agent> Sessions`: 이 에이전트의 작업 기록. 이름 예: `코드작업자 Sessions`, `글작성자 Sessions`.
 - 공유 콜렉션: 모든 에이전트가 읽고 쓰는 정제된 지식. 시드 문서 `00 · …` 하나로 시작한다.
 
 Outline v1.10.1의 MCP `create_collection` 은 `name`, `description`, `icon`, `color` 만 받고 콜렉션을 비공개
@@ -80,9 +80,9 @@ fs.writeFileSync(dest, out + "\n");
 console.log("OK", dest, out.split("\n").length, "lines");
 ' "$@"
 SH
-bash .knowanywhere/render.sh templates/collection-sessions.ko.md overview "로제" "공유 지식" "$(date +%F)"
-bash .knowanywhere/render.sh templates/collection-shared.ko.md overview "로제" "공유 지식" "$(date +%F)"
-bash .knowanywhere/render.sh templates/collection-shared.ko.md seed "로제" "공유 지식" "$(date +%F)"
+bash .knowanywhere/render.sh templates/collection-sessions.ko.md overview "코드작업자" "공유 지식" "$(date +%F)"
+bash .knowanywhere/render.sh templates/collection-shared.ko.md overview "코드작업자" "공유 지식" "$(date +%F)"
+bash .knowanywhere/render.sh templates/collection-shared.ko.md seed "코드작업자" "공유 지식" "$(date +%F)"
 ```
 
 기대 출력: 파일마다 `OK .knowanywhere/render/<부분>-<템플릿 파일명> <줄 수> lines`. `ERROR` 가 나오면 템플릿의
@@ -103,7 +103,7 @@ bash .knowanywhere/render.sh templates/collection-shared.ko.md seed "로제" "�
 
 ### 4. Sessions 콜렉션 (이 에이전트의 콜렉션이 없을 때만)
 
-`create_collection`: `name` 은 `<agent.name> Sessions`(예: `로제 Sessions`), `description` 은
+`create_collection`: `name` 은 `<agent.name> Sessions`(예: `코드작업자 Sessions`), `description` 은
 `.knowanywhere/render/overview-collection-sessions.<lang>.md` 본문 전체, `icon`, `color`. 응답의 `id` 를 기록한다.
 Sessions 콜렉션에는 문서를 미리 만들지 않는다. 첫 문서는 9단계의 스모크 테스트가 쓴다.
 
@@ -152,7 +152,7 @@ join 모드에서 이미 있던 콜렉션을 기록만 한 경우에는 `permiss
 에이전트의 항목만 더한 전체 배열을 쓴다. 같은 `agent` 항목이 이미 있으면 그 항목을 바꾼다.
 
 ```bash
-node .claude/skills/kna-status/state.mjs set '{"wiki":{"collections":{"sessions":[{"agent":"로제","name":"로제 Sessions","id":"00000000-0000-4000-8000-000000000001"}],"shared":{"name":"공유 지식","id":"00000000-0000-4000-8000-000000000002"}}}}'
+node .claude/skills/kna-status/state.mjs set '{"wiki":{"collections":{"sessions":[{"agent":"코드작업자","name":"코드작업자 Sessions","id":"00000000-0000-4000-8000-000000000001"}],"shared":{"name":"공유 지식","id":"00000000-0000-4000-8000-000000000002"}}}}'
 node .claude/skills/kna-status/state.mjs step 08 done
 node .claude/skills/kna-status/state.mjs get wiki.collections
 ```

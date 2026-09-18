@@ -38,7 +38,7 @@ node $H get steps.08
 | 파일 | 내용 | 다시 쓰는 곳 |
 |---|---|---|
 | `.knowanywhere/persona-lines.md` | 페르소나 4~6줄 | 10단계 `persona.md` |
-| `.knowanywhere/block-values.json` | placeholder 값 6개 | 10단계 렌더링 |
+| `.knowanywhere/block-values.json` | placeholder 값 7개(`RUNTIME` 포함) | 10단계·13~16단계 렌더링 |
 | `.knowanywhere/claude-md-block.md` | 렌더링한 관리 블록 | 이 단계의 apply |
 
 ## 물을 것
@@ -46,7 +46,7 @@ node $H get steps.08
 한 번에 하나씩 묻는다.
 
 먼저 같은 이름을 여러 머신에서 쓰는 뜻을 두 줄로 알린다. 이름은 머신 라벨이 아니라 정체성이다. 맥북, 데스크탑,
-Discord 봇이 모두 `로제` 면 위키에게는 에이전트 하나이고, 같은 `로제 Sessions` 에 같은 서명으로 같은 문서를 이어 쓴다.
+Discord 봇이 모두 `코드작업자` 면 위키에게는 에이전트 하나이고, 같은 `코드작업자 Sessions` 에 같은 서명으로 같은 문서를 이어 쓴다.
 
 1. **이름 확인.** `agent.name` 을 보여주고 맞는지 묻는다. 바꾸려면 콜렉션도 새로 필요하므로 여기서 바꾸지 않고
    `kna-00-start` 와 `kna-08-collections` 로 돌아간다고 알린다.
@@ -78,6 +78,7 @@ Discord 봇이 모두 `로제` 면 위키에게는 에이전트 하나이고, �
 ### 2. placeholder 값 만들기
 
 state 에서 값을 모아 `.knowanywhere/block-values.json` 을 쓰고 출력한다.
+13~16단계도 이 파일을 재사용하므로 `RUNTIME` 을 함께 넣는다(그 단계들은 자기 런타임 이름으로 덮어쓴다).
 
 ```bash
 node -e '
@@ -88,6 +89,7 @@ const sess = (s.wiki?.collections?.sessions || []).find((c) => c.name === `${nam
 if (!sess) { console.error(`state 에 "${name} Sessions" 콜렉션이 없다. kna-08-collections 를 먼저 한다.`); process.exit(1); }
 const v = {
   AGENT_NAME: name,
+  RUNTIME: "Claude Code",
   PERSONA: fs.readFileSync(".knowanywhere/persona-lines.md", "utf8").trim(),
   WIKI_URL: s.wiki.url,
   MCP_SERVER_NAME: s.mcp.server_name,
@@ -178,7 +180,7 @@ grep -c '^<!-- oneagent:rules:end -->$' ~/.claude/CLAUDE.md
 node .claude/skills/kna-09-persona/managed-block.mjs show --target ~/.claude/CLAUDE.md | head -3
 ```
 
-기대: `1`, `1`, 그리고 `<!-- oneagent:rules:start -->` 와 `## 공유 위키: 로제 (knowanywhere 관리 블록)` 로 시작하는 줄.
+기대: `1`, `1`, 그리고 `<!-- oneagent:rules:start -->` 와 `## 공유 위키: 코드작업자 (knowanywhere 관리 블록)` 로 시작하는 줄.
 
 ### 2. 새 세션이 블록을 읽는다
 
@@ -211,7 +213,7 @@ node .claude/skills/kna-09-persona/managed-block.mjs show --target ~/.claude/CLA
    - 본문(ko 예시. en 이면 `templates/claude-md-block.en.md` 의 라벨):
 
      ```
-     작성자: 로제 · 상태: 🟡 진행 중
+     작성자: 코드작업자 · 상태: 🟡 진행 중
      시작: 2026-09-15 14:05 KST · 최종 갱신: 2026-09-15 18:40 KST
 
      ## 배경
@@ -224,11 +226,11 @@ node .claude/skills/kna-09-persona/managed-block.mjs show --target ~/.claude/CLA
 
      ## Update — 2026-09-15 18:40 KST · mbp
      - 모드 fresh. 위키 https://wiki.example.com, MCP 서버 `outline`
-     - 콜렉션 `로제 Sessions`, `공유 지식`
+     - 콜렉션 `코드작업자 Sessions`, `공유 지식`
      - `~/.claude/CLAUDE.md` 에 관리 블록을 넣었다. 백업 `~/.claude/CLAUDE.md.bak-20260915T094000Z`
      - 남은 단계: 10(선택), 11
 
-     최종 갱신: 로제 · 2026-09-15 18:40 KST
+     최종 갱신: 코드작업자 · 2026-09-15 18:40 KST
      ```
 
      상태는 남은 단계가 있으면 🟡, 이 모드의 단계가 모두 끝났으면 ✅ 로 쓰고 `## 완료 기록` 에 `state.mjs status`
@@ -253,7 +255,7 @@ node .claude/skills/kna-09-persona/managed-block.mjs show --target ~/.claude/CLA
 ```bash
 H=.claude/skills/kna-status/state.mjs
 node $H set '{"agent":{"persona_written_at":"2026-09-15T09:40:00Z"}}'
-node $H agent-add '{"name":"로제","machine":"mbp","kind":"claude","sessions_collection":"로제 Sessions"}'
+node $H agent-add '{"name":"코드작업자","machine":"mbp","kind":"claude","sessions_collection":"코드작업자 Sessions"}'
 node $H step 09 done
 ```
 

@@ -1,3 +1,7 @@
+> **이 문서는 원작(kubony/knowanywhere)의 v0 설계 기록이다.**
+> 현재 계약은 [README.md](../README.md)와 [CLAUDE.md](../CLAUDE.md), 그리고 각 단계 스킬이다.
+> 13~16단계와 `agents/` registry·어댑터는 이 문서 작성 이후에 추가됐으므로, 충돌하면 README/CLAUDE.md 를 따른다.
+
 # knowanywhere 설계 명세 (v0, 2026-09-15)
 
 **한 줄 요약:** Claude Code 로 열면 *인스톨러*처럼 동작하는 GitHub 레포다. 처음 쓰는 사람이 여러 머신(노트북, 데스크탑,
@@ -76,7 +80,7 @@ templates/claude-md-block.{en,ko}.md    ~/.claude/CLAUDE.md 에 덧붙이는 블
 templates/collection-sessions.{en,ko}.md  "<Agent> Sessions" 설명 본문 (wiki)
 templates/collection-shared.{en,ko}.md    공유 콜렉션(`공유 지식` / `Shared Knowledge`) 설명 본문 (wiki)
 templates/persona.md           페르소나 질문지와 예시 (agents)
-templates/codex-agents-md.{en,ko}.md     Codex 용 AGENTS.md 블록, "phase 2" 표시 (agents)
+templates/codex-agents-md.{en,ko}.md     Codex 용 AGENTS.md 블록, "13~16단계" 표시 (agents)
 bridge/discord/                vendoring 한 Claude Code + Codex 용 Discord 브리지 (agents)
 .knowanywhere/                 실행 중 state, gitignore 대상
 ```
@@ -101,7 +105,7 @@ bridge/discord/                vendoring 한 Claude Code + Codex 용 Discord 브
 | 14 | kna-14-hermes | Hermes 프로필별 에이전트 연결 (skill 주입, `hermes mcp add`) | `agents[]` |
 | 15 | kna-15-aside | Aside 연결 (계정별 규칙 + handoff 모드) | `agents[]` |
 | 16 | kna-16-openclaw | OpenClaw 에이전트 연결 | `agents[]` |
-| 12 | kna-12-add-agent | join 모드: 다른 머신이나 다른 에이전트 → 07, 08(새 콜렉션), 09 만. Codex 는 phase 2 표시 | `agents[]` 에 추가 |
+| 12 | kna-12-add-agent | join 모드: 다른 머신이나 다른 에이전트 → 07, 08(새 콜렉션), 09 만. Codex 는 13~16단계 표시 | `agents[]` 에 추가 |
 
 01 ~ 06 과 11 단계는 `fresh` 모드에서만 돈다. `join` 모드는 00 → 07 → 08 → 09 (→ 10 선택) 순서다.
 
@@ -118,5 +122,5 @@ bridge/discord/                vendoring 한 Claude Code + Codex 용 Discord 브
 
 ## 7. v1 에서 하지 않는 것
 
-Codex/Hermes 설치(템플릿과 "phase 2" 메모만 둔다), Kubernetes, 멀티 테넌트 위키, SMTP 초대, 기존 Obsidian vault
+Codex/Hermes 설치(템플릿과 "13~16단계" 메모만 둔다), Kubernetes, 멀티 테넌트 위키, SMTP 초대, 기존 Obsidian vault
 이전(짧은 메모만 둔다).

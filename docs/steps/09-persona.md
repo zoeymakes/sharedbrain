@@ -8,11 +8,11 @@
 
 ## 이름은 정체성이다
 
-에이전트 이름은 머신 라벨이 아니다. 맥북의 Claude Code, 데스크탑의 Claude Code, Discord 봇이 모두 `로제` 라는 이름을
+에이전트 이름은 머신 라벨이 아니다. 맥북의 Claude Code, 데스크탑의 Claude Code, Discord 봇이 모두 `코드작업자` 라는 이름을
 쓰면 위키에게는 에이전트 하나다.
 
-- 같은 콜렉션 `로제 Sessions` 에 쓴다.
-- 같은 서명을 쓴다. 문서 첫 줄 `작성자: 로제`, 마지막 줄 `최종 갱신: 로제 · <시각>`.
+- 같은 콜렉션 `코드작업자 Sessions` 에 쓴다.
+- 같은 서명을 쓴다. 문서 첫 줄 `작성자: 코드작업자`, 마지막 줄 `최종 갱신: 코드작업자 · <시각>`.
 - 맥북에서 시작한 작업을 데스크탑이나 Discord 에서 같은 문서에 이어 쓴다. 어느 머신에서 썼는지는
   `## Update — <시각> · <머신>` 제목 끝의 머신 이름으로 남는다.
 
@@ -20,13 +20,13 @@
 
 | 에이전트 | 런타임 | 도는 곳 | 세션 콜렉션 |
 |---|---|---|---|
-| 로제 | Claude Code | 맥북, 데스크탑, Discord 봇 | `로제 Sessions` |
-| 지수 | Codex | 맥북, 데스크탑, Discord 봇 | `지수 Sessions` |
-| 제니 | Hermes | GCP VM, Discord | `제니 Sessions` |
-| 리사 | Claude Code | 새로 들이는 에이전트 | `리사 Sessions` |
+| 코드작업자 | Claude Code | 맥북, 데스크탑, Discord 봇 | `코드작업자 Sessions` |
+| 검증작업자 | Codex | 맥북, 데스크탑, Discord 봇 | `검증작업자 Sessions` |
+| 비서에이전트 | Hermes | GCP VM, Discord | `비서에이전트 Sessions` |
+| 글작성자 | Claude Code | 새로 들이는 에이전트 | `글작성자 Sessions` |
 
-모든 에이전트가 공유 콜렉션 `공유 지식`(영어 템플릿이면 `Shared Knowledge`)을 함께 읽고 쓴다. v1 인스톨러는 Claude Code 에이전트만 설치한다. 지수와 제니 같은
-Codex·Hermes 에이전트는 [phase 2](../phase2-codex-hermes.md) 다.
+모든 에이전트가 공유 콜렉션 `공유 지식`(영어 템플릿이면 `Shared Knowledge`)을 함께 읽고 쓴다. v1 인스톨러는 Claude Code 에이전트만 설치한다. 지수와 비서에이전트 같은
+Codex·Hermes·Aside·OpenClaw 에이전트는 각각 [13](13-codex.md)·[14](14-hermes.md)·[15](15-aside.md)·[16](16-openclaw.md)단계에서 붙인다.
 
 ## 질문
 
@@ -56,7 +56,7 @@ placeholder 여섯 개(`{{AGENT_NAME}}`, `{{PERSONA}}`, `{{WIKI_URL}}`, `{{MCP_S
 
 ```
 <!-- oneagent:rules:start -->
-## 공유 위키: 로제 (knowanywhere 관리 블록)
+## 공유 위키: 코드작업자 (knowanywhere 관리 블록)
 ...페르소나, 위키 주소와 MCP 서버, 세션 기록 규칙, 공유 지식 규칙, 다른 에이전트, 위키에 닿지 않을 때...
 <!-- oneagent:rules:end -->
 ```
@@ -88,19 +88,19 @@ node $M apply --block .knowanywhere/claude-md-block.md --target ~/.claude/CLAUDE
 
 ```bash
 grep -c '^<!-- oneagent:rules:start -->$' ~/.claude/CLAUDE.md                              # 1
-(cd "$(mktemp -d)" && claude -p '너의 에이전트 이름과 세션 기록 콜렉션 이름만 한 줄로 답하라.')   # 로제, 로제 Sessions
+(cd "$(mktemp -d)" && claude -p '너의 에이전트 이름과 세션 기록 콜렉션 이름만 한 줄로 답하라.')   # 코드작업자, 코드작업자 Sessions
 ```
 
-그다음 에이전트가 `로제 Sessions` 에서 `knowanywhere` 로 먼저 검색하고, 없으면 `2026-09-15 · knowanywhere 설치` 문서를
-만든다. 첫 줄 `작성자: 로제 · 상태: 🟡 진행 중`, `## 배경`, `## 완료 조건`, 이 머신 이름이 붙은 `## Update`, 마지막 줄
-`최종 갱신: 로제 · <시각>`. 다른 머신에서 같은 에이전트로 이미 만든 문서가 있으면 새로 만들지 않고 Update 만 붙인다.
+그다음 에이전트가 `코드작업자 Sessions` 에서 `knowanywhere` 로 먼저 검색하고, 없으면 `2026-09-15 · knowanywhere 설치` 문서를
+만든다. 첫 줄 `작성자: 코드작업자 · 상태: 🟡 진행 중`, `## 배경`, `## 완료 조건`, 이 머신 이름이 붙은 `## Update`, 마지막 줄
+`최종 갱신: 코드작업자 · <시각>`. 다른 머신에서 같은 에이전트로 이미 만든 문서가 있으면 새로 만들지 않고 Update 만 붙인다.
 에이전트가 문서를 다시 읽어 URL 을 보여주면 끝이다.
 
 ## 쓰는 것
 
 ```bash
 node .claude/skills/kna-status/state.mjs set '{"agent":{"persona_written_at":"2026-09-15T09:40:00Z"}}'
-node .claude/skills/kna-status/state.mjs agent-add '{"name":"로제","machine":"mbp","kind":"claude","sessions_collection":"로제 Sessions"}'
+node .claude/skills/kna-status/state.mjs agent-add '{"name":"코드작업자","machine":"mbp","kind":"claude","sessions_collection":"코드작업자 Sessions"}'
 node .claude/skills/kna-status/state.mjs step 09 done
 ```
 

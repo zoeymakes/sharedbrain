@@ -221,7 +221,7 @@ journalctl -u knowanywhere-bridge -n 50 --no-pager
 
 ```
 [bot] 로그인: MyBot#1234 (123456789012345678)
-[bot] agent: 로제 / backend: claude
+[bot] agent: 코드작업자 / backend: claude
 [bot] persona: /home/kna-bot/kna-bridge/persona.md (1830자)
 [bot] 허용 사용자: 123456789012345678
 ```
@@ -281,7 +281,7 @@ npm run start:second
   지운다. 25 MB 가 넘는 파일은 건너뛰고 답에 경고 줄을 붙인다.
 - codex 는 resume 할 때마다 새 `thread_id` 를 준다. 브리지는 `thread.started` 의 최신 값을 저장한다.
 
-knowanywhere 에서 Codex 같은 두 번째 에이전트 종류는 phase 2 다. 레포 루트의 `docs/phase2-codex-hermes.md` 를 본다.
+Codex 등 다른 런타임 연결은 13~16단계에서 다룬다. `docs/steps/13-codex.md` 를 본다.
 
 ## 구조
 

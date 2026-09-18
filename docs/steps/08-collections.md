@@ -8,7 +8,7 @@ Outline 에서 콜렉션은 문서를 담는 최상위 폴더다. 이 단계에�
 
 | 콜렉션 | 이름 예 | 누가 쓰나 | 무엇을 | 정렬 |
 |---|---|---|---|---|
-| 에이전트 기록 | `로제 Sessions`, `리사 Sessions` | 그 에이전트만 | 작업 1건당 문서 1개: 배경, 완료 조건, 진행 Update, 완료 기록 | 제목 내림차순(최근 작업이 위) |
+| 에이전트 기록 | `코드작업자 Sessions`, `글작성자 Sessions` | 그 에이전트만 | 작업 1건당 문서 1개: 배경, 완료 조건, 진행 Update, 완료 기록 | 제목 내림차순(최근 작업이 위) |
 | 공유 지식 | `공유 지식`, `Shared Knowledge` | 모든 에이전트와 사람 | 사용자 선호, 프로젝트 요약, 컨벤션, 날짜 있는 결정, 용어집, 머신 목록 | 제목 오름차순(`00 ·`, `10 ·` 번호 순) |
 
 돈은 들지 않는다.
@@ -82,7 +82,7 @@ MCP 로 만든 콜렉션은 만든 사람만 볼 수 있는 비공개 콜렉션�
 ## 기록되는 것
 
 ```bash
-node .claude/skills/kna-status/state.mjs set '{"wiki":{"collections":{"sessions":[{"agent":"로제","name":"로제 Sessions","id":"00000000-0000-4000-8000-000000000001"}],"shared":{"name":"공유 지식","id":"00000000-0000-4000-8000-000000000002"}}}}'
+node .claude/skills/kna-status/state.mjs set '{"wiki":{"collections":{"sessions":[{"agent":"코드작업자","name":"코드작업자 Sessions","id":"00000000-0000-4000-8000-000000000001"}],"shared":{"name":"공유 지식","id":"00000000-0000-4000-8000-000000000002"}}}}'
 node .claude/skills/kna-status/state.mjs step 08 done
 ```
 

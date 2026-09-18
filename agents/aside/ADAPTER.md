@@ -6,7 +6,7 @@ Aside는 브라우저 안에서 도는 에이전트다. **브라우저 상태(�
 |---|---|
 | 규칙 주입 위치 | 계정별 `~/.aside/u/<계정>/AGENTS.md` |
 | 마커 | `<!-- oneagent:rules:start -->` ~ `<!-- oneagent:rules:end -->` |
-| 블록 템플릿 | `agents/aside/agents-md-block.ko.md` |
+| 블록 템플릿 | `agents/aside/block.md` (설명: `agents-md-block.ko.md`) |
 | 기록 방식 | **handoff 모드** (아래 참조) |
 | 설치 단계 | `kna-15-aside` |
 
