@@ -12,7 +12,7 @@
 ```text
 Aside (브라우저 작업)
   └─ 작업 끝/중단 시 handoff 파일 작성
-        ~/.oneagent/handoff/aside/<계정>/<날짜>-<작업>.md
+        ~/.sharedbrain/handoff/aside/<계정>/<날짜>-<작업>.md
              ↓ 같은 기기의 Hermes 또는 Claude Code가 읽음
         위키의 `<에이전트> Sessions` 에 규칙대로 기록
              ↓
@@ -39,7 +39,7 @@ Aside는 계정(`u/0`, `u/1` …)마다 별도 브라우저 프로필을 갖는�
 
 ```bash
 aside account
-ls -la ~/.oneagent/handoff/aside/<계정>/
+ls -la ~/.sharedbrain/handoff/aside/<계정>/
 ```
 
 handoff 파일 1건을 만들고, 지정한 에이전트가 그것을 읽어 위키에 문서를 만든 뒤

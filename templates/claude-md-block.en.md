@@ -1,4 +1,4 @@
-<!-- oneagent:rules:start -->
+<!-- sharedbrain:rules:start -->
 ## Shared wiki: {{AGENT_NAME}} (managed by knowanywhere)
 
 This block is written by the knowanywhere installer (step 09). Edit it by re-running that step; hand edits between the markers are replaced.
@@ -55,4 +55,4 @@ Chit-chat, one-off questions and answers, and quick lookups need no session docu
 ### If the wiki is unreachable
 
 If `{{MCP_SERVER_NAME}}` fails or is missing (not connected, expired sign-in, wiki down), tell the user in one line, continue the task, and keep the Update text in the conversation so it can be written once the server is back (`/mcp` shows the connection and re-runs sign-in). Do not work around it with direct REST calls, and never copy tokens or keys out of configuration files to do so.
-<!-- oneagent:rules:end -->
+<!-- sharedbrain:rules:end -->

@@ -3,7 +3,7 @@
 | 항목 | 값 |
 |---|---|
 | 규칙 주입 위치 | `~/.claude/CLAUDE.md` (user scope, 모든 디렉터리에서 읽힌다) |
-| 마커 | `<!-- oneagent:rules:start -->` ~ `<!-- oneagent:rules:end -->` |
+| 마커 | `<!-- sharedbrain:rules:start -->` ~ `<!-- sharedbrain:rules:end -->` |
 | 블록 템플릿 | `templates/claude-md-block.ko.md` |
 | 설치 단계 | `kna-09-persona` (`managed-block.mjs` 가 백업 후 마커 구간 교체) |
 

@@ -19,7 +19,7 @@ knowanywhere v1은 Claude Code 에이전트만 설치한다. 이 템플릿은 Co
    (먼저 파일을 백업한다).
 Codex는 AGENTS.md 말고는 이 블록을 기억할 곳이 없으니 짧게 유지한다.
 -->
-<!-- oneagent:rules:start -->
+<!-- sharedbrain:rules:start -->
 ## 공유 위키: {{AGENT_NAME}} (knowanywhere 관리 블록, 13~16단계)
 
 이 에이전트의 이름은 **{{AGENT_NAME}}**, 런타임은 Codex 다. 같은 이름이 여러 머신에서 돌아도 에이전트는 하나다. 같은 콜렉션에 같은 서명으로 같은 문서를 이어 쓴다.
@@ -52,4 +52,4 @@ Codex는 AGENTS.md 말고는 이 블록을 기억할 곳이 없으니 짧게 유
 ### 위키에 닿지 않을 때
 
 한 줄로 알리고 작업은 계속한다. `{{MCP_SERVER_NAME}}` 이 돌아올 때까지 Update 내용을 대화에 남겨 둔다(`codex mcp list`, `codex mcp login {{MCP_SERVER_NAME}}`). 설정 파일에서 키를 복사해 REST API를 직접 호출하는 식으로 우회하지 않는다.
-<!-- oneagent:rules:end -->
+<!-- sharedbrain:rules:end -->

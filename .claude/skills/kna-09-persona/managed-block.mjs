@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// oneagent 관리 블록을 렌더링하고 적용한다 (Node >= 20, 의존성 없음).
+// sharedbrain 관리 블록을 렌더링하고 적용한다 (Node >= 20, 의존성 없음).
 //
 //   node managed-block.mjs render --template <file> --values <json-file> --out <file>
 //       {{KEY}} placeholder 를 JSON 객체의 값으로 바꾼다. 값이 없는 placeholder 가 있거나, 값 안에 다른
@@ -17,8 +17,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const START = '<!-- oneagent:rules:start -->';
-const END = '<!-- oneagent:rules:end -->';
+const START = '<!-- sharedbrain:rules:start -->';
+const END = '<!-- sharedbrain:rules:end -->';
 // 출력용 동작 이름. 내부 값(created/appended/replaced)은 그대로 둔다.
 const ACTION_KO = { created: '생성함', appended: '덧붙임', replaced: '교체함' };
 

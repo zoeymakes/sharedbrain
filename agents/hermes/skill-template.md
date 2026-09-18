@@ -1,5 +1,5 @@
 ---
-name: oneagent-wiki-{{AGENT_SLUG}}
+name: sharedbrain-wiki-{{AGENT_SLUG}}
 description: "공유 위키에 작업을 기록하거나 사용자 맥락을 찾을 때 쓴다. {{AGENT_NAME}} 전용."
 ---
 

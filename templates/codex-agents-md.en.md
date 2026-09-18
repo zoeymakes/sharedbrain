@@ -20,7 +20,7 @@ Manual setup, in this order:
    marker to the end marker to ~/.codex/AGENTS.md (back the file up first).
 Codex has no session-scoped memory of this block beyond AGENTS.md, so keep it short.
 -->
-<!-- oneagent:rules:start -->
+<!-- sharedbrain:rules:start -->
 ## Shared wiki: {{AGENT_NAME}} (managed by knowanywhere, 13~16단계)
 
 Your name is **{{AGENT_NAME}}**. You are a Codex agent. The same name on several machines is one agent: same collection, same signature, continuing the same documents.
@@ -53,4 +53,4 @@ Other agents' `<Name> Sessions` collections are read-only for you. Cite their li
 ### If the wiki is unreachable
 
 Say so in one line, continue the task, and keep the Update text in the conversation until `{{MCP_SERVER_NAME}}` works again (`codex mcp list`, `codex mcp login {{MCP_SERVER_NAME}}`). Do not fall back to direct REST calls with keys copied from configuration files.
-<!-- oneagent:rules:end -->
+<!-- sharedbrain:rules:end -->

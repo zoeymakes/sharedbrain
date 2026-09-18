@@ -1,6 +1,6 @@
 ---
 name: kna-16-openclaw
-description: oneagent 16단계에 쓴다. OpenClaw 에이전트를 공유 위키에 붙인다. 에이전트 하나가 registry 로우 하나이며, 역할이 좁으므로 권한을 자기 Sessions와 담당 주제로 제한한다. 은퇴 에이전트와 런타임 이사 처리 규칙을 포함한다.
+description: sharedbrain 16단계에 쓴다. OpenClaw 에이전트를 공유 위키에 붙인다. 에이전트 하나가 registry 로우 하나이며, 역할이 좁으므로 권한을 자기 Sessions와 담당 주제로 제한한다. 은퇴 에이전트와 런타임 이사 처리 규칙을 포함한다.
 ---
 
 # 16단계: OpenClaw 에이전트 연결

@@ -11,7 +11,7 @@ description: knowanywhere 9단계에 쓴다(kna-08-collections 뒤, fresh·join 
 ## 목표
 
 이 머신의 Claude Code 가 어느 디렉터리에서 열리든 자기 이름, 페르소나, 위키 기록 규칙을 아는 상태. 규칙은
-`~/.claude/CLAUDE.md` 끝의 관리 블록(`<!-- oneagent:rules:start -->` ~ `<!-- oneagent:rules:end -->`) 하나에 들어간다.
+`~/.claude/CLAUDE.md` 끝의 관리 블록(`<!-- sharedbrain:rules:start -->` ~ `<!-- sharedbrain:rules:end -->`) 하나에 들어간다.
 블록 밖은 건드리지 않는다. 다시 실행하면 같은 구간을 교체하므로 블록은 늘 하나다.
 
 이 단계는 돈이 들지 않는다. 전역 Claude 설정(`~/.claude/CLAUDE.md`)을 고치므로 전체 블록을 보여주고 yes 를 받는다.
@@ -45,7 +45,7 @@ node $H get steps.08
 
 한 번에 하나씩 묻는다.
 
-먼저 같은 이름을 여러 머신에서 쓰는 뜻을 두 줄로 알린다. 이름은 머신 라벨이 아니라 정체성이다. 맥북, 데스크탑,
+먼저 같은 이름을 여러 머신에서 쓰는 뜻을 두 줄로 알린다. 이름은 머신 라벨이 아니라 정체성이다. 노트북, 데스크탑,
 Discord 봇이 모두 `코드작업자` 면 위키에게는 에이전트 하나이고, 같은 `코드작업자 Sessions` 에 같은 서명으로 같은 문서를 이어 쓴다.
 
 1. **이름 확인.** `agent.name` 을 보여주고 맞는지 묻는다. 바꾸려면 콜렉션도 새로 필요하므로 여기서 바꾸지 않고
@@ -134,7 +134,7 @@ node .claude/skills/kna-09-persona/managed-block.mjs render \
 마커 밖에 다른 위키 기록 규칙이 이미 있는지도 본다.
 
 ```bash
-awk '/^<!-- oneagent:rules:start -->$/{m=1} !m && /[Oo]utline|[Ww]iki|위키|Sessions/{print NR": "$0} /^<!-- oneagent:rules:end -->$/{m=0}' ~/.claude/CLAUDE.md
+awk '/^<!-- sharedbrain:rules:start -->$/{m=1} !m && /[Oo]utline|[Ww]iki|위키|Sessions/{print NR": "$0} /^<!-- sharedbrain:rules:end -->$/{m=0}' ~/.claude/CLAUDE.md
 ```
 
 마커 밖에 비슷한 규칙이 있으면 에이전트가 두 규칙을 함께 읽게 된다고 알린다. 설치기는 마커 밖을 고치지 않으므로,
@@ -175,12 +175,12 @@ ls -l ~/.claude/CLAUDE.md.bak-* 2>/dev/null | tail -3
 ### 1. 블록이 하나만 있다
 
 ```bash
-grep -c '^<!-- oneagent:rules:start -->$' ~/.claude/CLAUDE.md
-grep -c '^<!-- oneagent:rules:end -->$' ~/.claude/CLAUDE.md
+grep -c '^<!-- sharedbrain:rules:start -->$' ~/.claude/CLAUDE.md
+grep -c '^<!-- sharedbrain:rules:end -->$' ~/.claude/CLAUDE.md
 node .claude/skills/kna-09-persona/managed-block.mjs show --target ~/.claude/CLAUDE.md | head -3
 ```
 
-기대: `1`, `1`, 그리고 `<!-- oneagent:rules:start -->` 와 `## 공유 위키: 코드작업자 (knowanywhere 관리 블록)` 로 시작하는 줄.
+기대: `1`, `1`, 그리고 `<!-- sharedbrain:rules:start -->` 와 `## 공유 위키: 코드작업자 (knowanywhere 관리 블록)` 로 시작하는 줄.
 
 ### 2. 새 세션이 블록을 읽는다
 

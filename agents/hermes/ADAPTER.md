@@ -5,7 +5,7 @@ Hermes는 상시 실행형 에이전트 런타임이다. **프로필 하나가 �
 | 항목 | 값 |
 |---|---|
 | 규칙 주입 위치 | 기본 프로필은 `~/.hermes/skills/`, 그 외 프로필은 `~/.hermes/profiles/<프로필>/skills/` |
-| 마커 | skill 파일 전체를 관리 (`oneagent-wiki-<에이전트>` 이름) |
+| 마커 | skill 파일 전체를 관리 (`sharedbrain-wiki-<에이전트>` 이름) |
 | 블록 템플릿 | `agents/hermes/skill-template.md` |
 | MCP 설정 | `hermes mcp add` (또는 `~/.hermes/config.yaml` 최상위 `mcp_servers:`) |
 | 설치 단계 | `kna-14-hermes` |

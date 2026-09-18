@@ -98,7 +98,7 @@ bridge/discord/                vendoring 한 Claude Code + Codex 용 Discord 브
 | 06 | kna-06-outline-deploy | GCS 버킷(uploads, backups), HMAC 키, VM 에서 비밀값 생성, compose up, Caddy TLS, 첫 관리자 로그인 | `wiki.url`, `wiki.buckets.*`, `wiki.deployed_at` |
 | 07 | kna-07-mcp-connect | `https://<host>/mcp` 를 Claude Code 에 user scope 로 등록, `/mcp` 로 OAuth 로그인, `list_collections` 로 검증 | `mcp.server_name`, `mcp.verified_at` |
 | 08 | kna-08-collections | `<Agent> Sessions` 와 공유 콜렉션(`ko` 면 `공유 지식`, `en` 이면 `Shared Knowledge`) 생성, 규칙 템플릿을 설명에 넣기, 검증 | `wiki.collections.sessions[]`, `wiki.collections.shared` |
-| 09 | kna-09-persona | 에이전트 이름과 페르소나 확정, `~/.claude/CLAUDE.md` 에 관리 블록 덧붙이기(`<!-- oneagent:rules:start -->` / `<!-- oneagent:rules:end -->` 사이), 스모크 테스트 = 에이전트가 이 설치에 대한 첫 세션 문서를 쓴다 | `agent.persona_written_at`, `agents[]` |
+| 09 | kna-09-persona | 에이전트 이름과 페르소나 확정, `~/.claude/CLAUDE.md` 에 관리 블록 덧붙이기(`<!-- sharedbrain:rules:start -->` / `<!-- sharedbrain:rules:end -->` 사이), 스모크 테스트 = 에이전트가 이 설치에 대한 첫 세션 문서를 쓴다 | `agent.persona_written_at`, `agents[]` |
 | 10 | kna-10-discord | 선택: Discord 앱과 봇, 브리지 설치(`bridge/discord`), `.env`, 서비스로 실행(VM 의 pm2/launchd/systemd), 페르소나 주입, 테스트 메시지 | `discord.enabled`, `discord.bot_name`, `discord.host`, `agents[]`(VM 에서 돌릴 때) |
 | 11 | kna-11-backups | 매일 디스크 스냅샷 정책, `outline-vm` 에 backups 버킷 `roles/storage.objectCreator`, 매일 밤 pg dump 를 backups 버킷으로. 복원 훈련 문서 | `backup.snapshot_policy`, `backup.verified_at` |
 | 13 | kna-13-codex | Codex 에이전트를 같은 위키에 연결 (`~/.codex/AGENTS.md`, `codex mcp`) | `agents[]` |

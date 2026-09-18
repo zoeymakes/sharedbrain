@@ -26,7 +26,7 @@ state.mjs 의 `kind` 와 같은 어휘라서, 다르면 `agent-add` 가 실패�
 |---|---|
 | **규칙 주입 위치** | 그 런타임이 매 세션 읽는 파일·설정 |
 | **MCP 연결 방법** | 위키 MCP 서버를 등록하고 인증하는 실제 명령 |
-| **마커** | 재실행 시 교체할 구간 (`<!-- oneagent:rules:start -->` ~ `end`) |
+| **마커** | 재실행 시 교체할 구간 (`<!-- sharedbrain:rules:start -->` ~ `end`) |
 | **검증** | 실행 가능한 명령과 기대 출력 |
 
 13~16단계의 규칙 본문은 [`_shared/block.md`](_shared/block.md) 하나에서 온다.

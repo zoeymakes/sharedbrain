@@ -1,6 +1,6 @@
 ---
 name: kna-13-codex
-description: oneagent 13단계에 쓴다. Codex 에이전트를 공유 위키에 붙인다. codex mcp add/login 으로 MCP를 등록하고, ~/.codex/AGENTS.md 의 oneagent 마커 구간에 규칙 블록을 넣고, 세션 문서 한 건으로 검증한다. 선택 단계이며 사용자가 Codex를 쓸 때만 돈다.
+description: sharedbrain 13단계에 쓴다. Codex 에이전트를 공유 위키에 붙인다. codex mcp add/login 으로 MCP를 등록하고, ~/.codex/AGENTS.md 의 sharedbrain 마커 구간에 규칙 블록을 넣고, 세션 문서 한 건으로 검증한다. 선택 단계이며 사용자가 Codex를 쓸 때만 돈다.
 ---
 
 # 13단계: Codex 에이전트 연결

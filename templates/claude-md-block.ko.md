@@ -1,4 +1,4 @@
-<!-- oneagent:rules:start -->
+<!-- sharedbrain:rules:start -->
 ## 공유 위키: {{AGENT_NAME}} (knowanywhere 관리 블록)
 
 이 블록은 knowanywhere 설치기(step 09)가 쓴다. 고치려면 그 단계를 다시 실행한다. 마커 사이를 손으로 고치면 다음 실행 때 덮어쓴다.
@@ -55,4 +55,4 @@
 ### 위키에 닿지 않을 때
 
 `{{MCP_SERVER_NAME}}` 이 실패하거나 없으면(연결 안 됨, 로그인 만료, 위키 다운) 사용자에게 한 줄로 알리고 작업은 계속한다. 서버가 돌아오면 쓸 수 있게 Update 내용을 대화에 남겨 둔다(`/mcp` 에서 연결 상태를 보고 다시 로그인한다). REST API를 직접 호출해 우회하지 않고, 그러려고 설정 파일에서 토큰이나 키를 복사하지 않는다.
-<!-- oneagent:rules:end -->
+<!-- sharedbrain:rules:end -->

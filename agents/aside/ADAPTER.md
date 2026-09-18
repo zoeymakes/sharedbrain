@@ -5,7 +5,7 @@ Aside는 브라우저 안에서 도는 에이전트다. **브라우저 상태(�
 | 항목 | 값 |
 |---|---|
 | 규칙 주입 위치 | 계정별 `~/.aside/u/<계정>/AGENTS.md` |
-| 마커 | `<!-- oneagent:rules:start -->` ~ `<!-- oneagent:rules:end -->` |
+| 마커 | `<!-- sharedbrain:rules:start -->` ~ `<!-- sharedbrain:rules:end -->` |
 | 블록 템플릿 | `agents/aside/block.md` (설명: `agents-md-block.ko.md`) |
 | 기록 방식 | **handoff 모드** (아래 참조) |
 | 설치 단계 | `kna-15-aside` |
@@ -21,7 +21,7 @@ Aside는 브라우저 안에서 도는 에이전트다. **브라우저 상태(�
 ```text
 Aside (브라우저 작업)
   └─ 작업 끝/중단 시 handoff 파일 작성
-        ~/.oneagent/handoff/aside/<계정>/<YYYY-MM-DD>-<작업슬러그>.md
+        ~/.sharedbrain/handoff/aside/<계정>/<YYYY-MM-DD>-<작업슬러그>.md
              ↓ 같은 기기의 Hermes 또는 Claude Code가 읽음
         위키의 `<에이전트> Sessions` 에 규칙대로 기록
 ```
@@ -47,7 +47,7 @@ sensitivity: 개인 | 회사-비식별화필요
 ## 남은 일과 이어받는 방법
 ```
 
-- 파일 경로와 확장자를 고정한다. 읽는 쪽은 `~/.oneagent/handoff/aside/` 를 스캔하면 된다.
+- 파일 경로와 확장자를 고정한다. 읽는 쪽은 `~/.sharedbrain/handoff/aside/` 를 스캔하면 된다.
 - 위키에 기록한 handoff는 `.done` 으로 확장자를 바꾸거나 `archive/` 로 옮겨 중복 기록을 막는다.
 - 인증된 화면의 실제 조작은 이 기기에서 계속하고, 다른 기기는 정리·판단·후속 문서 작업만 이어받는다.
 
@@ -66,7 +66,7 @@ Aside는 계정(`u/0`, `u/1` …)마다 별도 브라우저 프로필을 갖는�
 
 ```bash
 aside account                                   # 계정 목록
-ls ~/.oneagent/handoff/aside/<계정>/             # handoff 파일이 생겼는지
+ls ~/.sharedbrain/handoff/aside/<계정>/             # handoff 파일이 생겼는지
 ```
 
 handoff 파일 1건을 만들고, 같은 기기의 Hermes 또는 Claude Code가 그것을 읽어 위키에 문서를 만든 뒤

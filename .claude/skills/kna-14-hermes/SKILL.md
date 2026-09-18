@@ -1,6 +1,6 @@
 ---
 name: kna-14-hermes
-description: oneagent 14단계에 쓴다. Hermes 프로필별 에이전트를 공유 위키에 붙인다. 프로필 하나가 에이전트 하나이므로 프로필마다 이름·콜렉션·권한을 따로 둔다. config.yaml에 MCP 서버를 API key로 등록하고, 규칙을 프로필 skill로 주입하고, 세션 문서 한 건으로 검증한다.
+description: sharedbrain 14단계에 쓴다. Hermes 프로필별 에이전트를 공유 위키에 붙인다. 프로필 하나가 에이전트 하나이므로 프로필마다 이름·콜렉션·권한을 따로 둔다. config.yaml에 MCP 서버를 API key로 등록하고, 규칙을 프로필 skill로 주입하고, 세션 문서 한 건으로 검증한다.
 ---
 
 # 14단계: Hermes 에이전트 연결
@@ -103,7 +103,7 @@ hermes mcp test <서버이름>       # 연결과 도구 목록
 
 `agents/hermes/skill-template.md` 를 치환해 skill 하나를 만든다.
 
-- skill 이름: `oneagent-wiki-<에이전트-slug>`
+- skill 이름: `sharedbrain-wiki-<에이전트-slug>`
 - 위치: 기본 프로필이면 `~/.hermes/skills/`, 그 외는 `~/.hermes/profiles/<프로필>/skills/`
 - `{{WIKI_ACCESS_RULE}}` 에는 위에서 확인한 권한 문장을 넣는다
 - `{{WIKI_RULES}}` 에는 `agents/_shared/block.md` 를 치환한 결과를 넣는다

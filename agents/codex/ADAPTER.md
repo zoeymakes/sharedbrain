@@ -3,7 +3,7 @@
 | 항목 | 값 |
 |---|---|
 | 규칙 주입 위치 | `~/.codex/AGENTS.md` (전역). 프로젝트별은 작업 디렉터리의 `AGENTS.md` |
-| 마커 | `<!-- oneagent:rules:start -->` ~ `<!-- oneagent:rules:end -->` |
+| 마커 | `<!-- sharedbrain:rules:start -->` ~ `<!-- sharedbrain:rules:end -->` |
 | 블록 템플릿 | `agents/codex/block.md` (설명: `agents-md-block.ko.md`) |
 | 설치 단계 | `kna-13-codex` |
 

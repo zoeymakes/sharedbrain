@@ -39,7 +39,7 @@ node $H get agents
 
 | 경우 | 예 | 콜렉션 | 새 머신에서 도는 단계 |
 |---|---|---|---|
-| A. 같은 에이전트, 새 머신 | 맥북의 로제를 데스크탑에서도 | 기존 `코드작업자 Sessions` | 00(join) → 07 → 08(확인만) → 09 → 10(선택) |
+| A. 같은 에이전트, 새 머신 | 노트북의 로제를 데스크탑에서도 | 기존 `코드작업자 Sessions` | 00(join) → 07 → 08(확인만) → 09 → 10(선택) |
 | B. 새 Claude Code 에이전트 | 역할이 다른 글작성자 | 새 `글작성자 Sessions` | 00(join) → 07 → 08(생성) → 09 → 10(선택) |
 | C. Codex·Hermes·Aside·OpenClaw | 다른 런타임의 에이전트 | 새 콜렉션 | 콜렉션은 여기서 만들고, 연결은 각 전용 단계(13~16)에서 한다 |
 | D. 같은 에이전트를 Discord 에 | 로제를 Discord 봇으로 | 기존 | `kna-10-discord` 로 간다 |
@@ -58,8 +58,8 @@ node $H get agents
 설치 명령을 안내한다.
 
 ```bash
-git clone https://github.com/zoeymakes/oneagent.git
-cd oneagent
+git clone https://github.com/zoeymakes/sharedbrain.git
+cd sharedbrain
 claude
 ```
 
@@ -126,7 +126,7 @@ v1 인스톨러는 Codex·Hermes 런타임을 설치하거나 검증하지 않�
    ```bash
    node .claude/skills/kna-09-persona/managed-block.mjs render --template agents/codex/block.md --values .knowanywhere/codex-values.json --out .knowanywhere/codex-agents-md.md
    ```
-   Codex·Hermes·Aside·OpenClaw 연결은 이 단계에서 하지 않는다. 콜렉션만 만들고 각 전용 단계(13~16)로 넘긴다. 사용자는 `<!-- oneagent:rules:start -->` 부터 `<!-- oneagent:rules:end -->` 까지를
+   Codex·Hermes·Aside·OpenClaw 연결은 이 단계에서 하지 않는다. 콜렉션만 만들고 각 전용 단계(13~16)로 넘긴다. 사용자는 `<!-- sharedbrain:rules:start -->` 부터 `<!-- sharedbrain:rules:end -->` 까지를
    Codex 가 도는 머신의 `~/.codex/AGENTS.md` 끝에 붙인다.
 
 `agents[]` 에는 사용자가 그 에이전트를 설정하고 그 에이전트가 자기 콜렉션에 첫 문서를 쓴 것을 확인한 뒤에만 더한다:

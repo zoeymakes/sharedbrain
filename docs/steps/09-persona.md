@@ -8,20 +8,20 @@
 
 ## 이름은 정체성이다
 
-에이전트 이름은 머신 라벨이 아니다. 맥북의 Claude Code, 데스크탑의 Claude Code, Discord 봇이 모두 `코드작업자` 라는 이름을
+에이전트 이름은 머신 라벨이 아니다. 노트북의 Claude Code, 데스크탑의 Claude Code, Discord 봇이 모두 `코드작업자` 라는 이름을
 쓰면 위키에게는 에이전트 하나다.
 
 - 같은 콜렉션 `코드작업자 Sessions` 에 쓴다.
 - 같은 서명을 쓴다. 문서 첫 줄 `작성자: 코드작업자`, 마지막 줄 `최종 갱신: 코드작업자 · <시각>`.
-- 맥북에서 시작한 작업을 데스크탑이나 Discord 에서 같은 문서에 이어 쓴다. 어느 머신에서 썼는지는
+- 노트북에서 시작한 작업을 데스크탑이나 Discord 에서 같은 문서에 이어 쓴다. 어느 머신에서 썼는지는
   `## Update — <시각> · <머신>` 제목 끝의 머신 이름으로 남는다.
 
 새 이름은 역할이나 런타임이 다른 에이전트에만 준다.
 
 | 에이전트 | 런타임 | 도는 곳 | 세션 콜렉션 |
 |---|---|---|---|
-| 코드작업자 | Claude Code | 맥북, 데스크탑, Discord 봇 | `코드작업자 Sessions` |
-| 검증작업자 | Codex | 맥북, 데스크탑, Discord 봇 | `검증작업자 Sessions` |
+| 코드작업자 | Claude Code | 노트북, 데스크탑, Discord 봇 | `코드작업자 Sessions` |
+| 검증작업자 | Codex | 노트북, 데스크탑, Discord 봇 | `검증작업자 Sessions` |
 | 비서에이전트 | Hermes | GCP VM, Discord | `비서에이전트 Sessions` |
 | 글작성자 | Claude Code | 새로 들이는 에이전트 | `글작성자 Sessions` |
 
@@ -55,10 +55,10 @@ placeholder 여섯 개(`{{AGENT_NAME}}`, `{{PERSONA}}`, `{{WIKI_URL}}`, `{{MCP_S
 `{{SHARED_COLLECTION}}`)를 state 와 답으로 채운다. 블록은 마커 두 줄 사이에 있고, 인스톨러는 그 사이만 고친다.
 
 ```
-<!-- oneagent:rules:start -->
+<!-- sharedbrain:rules:start -->
 ## 공유 위키: 코드작업자 (knowanywhere 관리 블록)
 ...페르소나, 위키 주소와 MCP 서버, 세션 기록 규칙, 공유 지식 규칙, 다른 에이전트, 위키에 닿지 않을 때...
-<!-- oneagent:rules:end -->
+<!-- sharedbrain:rules:end -->
 ```
 
 인스톨러는 넣기 전에 렌더링한 블록 전체와 대상 경로를 보여주고 yes 를 기다린다.
@@ -87,7 +87,7 @@ node $M apply --block .knowanywhere/claude-md-block.md --target ~/.claude/CLAUDE
 ## 확인
 
 ```bash
-grep -c '^<!-- oneagent:rules:start -->$' ~/.claude/CLAUDE.md                              # 1
+grep -c '^<!-- sharedbrain:rules:start -->$' ~/.claude/CLAUDE.md                              # 1
 (cd "$(mktemp -d)" && claude -p '너의 에이전트 이름과 세션 기록 콜렉션 이름만 한 줄로 답하라.')   # 코드작업자, 코드작업자 Sessions
 ```
 

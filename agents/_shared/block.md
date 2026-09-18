@@ -1,4 +1,4 @@
-<!-- oneagent:rules:start -->
+<!-- sharedbrain:rules:start -->
 이 에이전트의 이름은 **{{AGENT_NAME}}**, 런타임은 {{RUNTIME}}. 같은 이름이 여러 기기에서 돌아도 에이전트는 하나다. 같은 콜렉션에 같은 서명으로 같은 작업 문서를 이어 쓴다.
 
 위키는 {{WIKI_URL}} 의 Outline이고 MCP 서버 `{{MCP_SERVER_NAME}}` 으로 접근한다. 콜렉션은 매 세션 `list_collections` 로 **정확한 이름**으로 찾는다. 콜렉션 id·문서 id를 설정 파일·스크립트·메모리에 하드코딩하지 않는다.
@@ -45,4 +45,4 @@ API key·토큰·비밀번호·OAuth secret·개인 키는 위키에 쓰지 않�
 ### 위키에 닿지 않을 때
 
 한 줄로 알리고 작업은 계속한다. 쓰려던 Update는 대화에 남겨 두고 연결이 돌아오면 쓴다. 설정 파일에서 토큰을 꺼내 REST API로 우회하지 않는다.
-<!-- oneagent:rules:end -->
+<!-- sharedbrain:rules:end -->

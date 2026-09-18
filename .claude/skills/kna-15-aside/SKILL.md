@@ -1,6 +1,6 @@
 ---
 name: kna-15-aside
-description: oneagent 15단계에 쓴다. Aside 에이전트를 공유 위키에 붙인다. 계정별 AGENTS.md에 규칙을 주입하고, MCP를 쓸 수 없으면 handoff 모드로 운영한다. 회사 계정에는 반출 금지 규칙을 필수로 넣는다. 브라우저 상태는 기기 로컬에 남긴다.
+description: sharedbrain 15단계에 쓴다. Aside 에이전트를 공유 위키에 붙인다. 계정별 AGENTS.md에 규칙을 주입하고, MCP를 쓸 수 없으면 handoff 모드로 운영한다. 회사 계정에는 반출 금지 규칙을 필수로 넣는다. 브라우저 상태는 기기 로컬에 남긴다.
 ---
 
 # 15단계: Aside 에이전트 연결
@@ -54,11 +54,11 @@ node $H get language
 확인되지 않았으므로 **handoff 모드로 운영한다**. 자세한 형식은 `agents/aside/ADAPTER.md`.
 
 ```bash
-mkdir -p ~/.oneagent/handoff/aside/<계정>/archive
+mkdir -p ~/.sharedbrain/handoff/aside/<계정>/archive
 ```
 
 읽어서 위키에 올릴 에이전트를 정한다(같은 기기의 Hermes 또는 Claude Code). 그 에이전트의 규칙에
-"`~/.oneagent/handoff/aside/` 를 확인하고, 기록한 파일은 `archive/` 로 옮긴다"를 추가한다.
+"`~/.sharedbrain/handoff/aside/` 를 확인하고, 기록한 파일은 `archive/` 로 옮긴다"를 추가한다.
 
 인증된 화면의 실제 조작은 이 기기에서 계속하고, 다른 기기는 정리·판단·후속 문서 작업만 이어받는다.
 
@@ -121,7 +121,7 @@ node $MB apply --block .knowanywhere/aside-block.md --target ~/.aside/u/<계정>
 
 ```bash
 aside account
-ls -la ~/.oneagent/handoff/aside/<계정>/
+ls -la ~/.sharedbrain/handoff/aside/<계정>/
 ```
 2. Aside 세션에서 작업 한 건을 하고 handoff 파일 1건을 만든다.
 3. 지정한 에이전트가 그 handoff를 읽어 위키에 규칙대로 세션 문서를 만든다(`작성자: <이름>` 서명 포함).

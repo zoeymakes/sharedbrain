@@ -1,23 +1,26 @@
-# oneagent
+# sharedbrain
 
-**두 대의 컴퓨터, 다섯 종류의 에이전트. 그런데 하나의 에이전트처럼 쓰고 싶다.**
+**에이전트는 여럿, 작업 기억은 하나.**
 
-집 맥미니에는 상시 실행 에이전트(Hermes)가 있어 자동화와 Slack 응답을 처리하고, 필요할 때 CLI로 Claude Code나
-Codex를 띄워 작업한다. 맥북에서는 Claude Code나 Codex와 직접 대화하며 일한다. 실제 작업의 맥락과 흔적은
-맥북에, 상시 자동화와 정리는 맥미니에 쌓인다.
+에이전트를 여러 개 쓰는 건 문제가 아니다. 역할이 다르니 여러 개인 게 맞다. 문제는
+**어제 다른 기기의 내 에이전트가 무엇을 했는지 오늘 이 기기의 에이전트가 모른다**는 것이다.
+
+상시 켜 둔 기기에는 자동화와 알림을 맡는 에이전트(Hermes 등)가 있고, 필요할 때 CLI로 Claude Code나
+Codex를 띄워 작업한다. 노트북에서는 Claude Code나 Codex와 직접 대화하며 일한다. 실제 작업의 맥락과 흔적은
+노트북에, 상시 자동화와 정리는 상시 호스트에 쌓인다.
 
 그러면 이런 일이 생긴다.
 
-- 맥북에서 하던 작업을 맥미니에서 이어받으려면, 어제 내가 무엇을 했는지 그 기기만 알고 있다.
+- 노트북에서 하던 작업을 다른 기기에서 이어받으려면, 어제 무엇을 했는지 그 기기만 알고 있다.
 - 에이전트가 각 기기에서 만든 스킬·메모리·세션 중 **무엇을 공유하고 무엇을 로컬에 둬야 하는지**가 불명확하다.
 - 에이전트 종류가 늘어날수록(Hermes, Claude Code, Codex, Aside, OpenClaw…) 각자 다른 규칙으로 돌아 **공통 기억이 없다**.
 - Wiki와 공용 스킬은 Git으로, 기기 접근은 Tailscale·SSH로 이어붙여 봤지만 매달 운영 방식을 고치게 된다.
 
-`oneagent`의 답은 **self-hosted 위키 하나 + 모든 에이전트가 따르는 짧은 규칙 + 에이전트군을 선언하는 registry**다.
+`sharedbrain`의 답은 **self-hosted 위키 하나 + 모든 에이전트가 따르는 짧은 규칙 + 에이전트군을 선언하는 registry**다.
 
 - 내 Google Cloud VM 위에 **[Outline](https://www.getoutline.com) 위키 하나**를 HTTPS와 Google 로그인으로 띄운다.
 - **에이전트마다 콜렉션 하나**(`<에이전트> Sessions`). 그 에이전트만 쓰고, 작업 1건당 문서 1개를 세션과 기기를 넘어
-  이어 쓴다. 에이전트는 새 문서를 만들기 전에 먼저 검색하므로, 화요일 맥미니 세션이 월요일 맥북 작업을 이어받는다.
+  이어 쓴다. 에이전트는 새 문서를 만들기 전에 먼저 검색하므로, 화요일의 이 기기 세션이 월요일 다른 기기의 작업을 이어받는다.
 - **공유 콜렉션 하나**(`공유 지식`). 모든 에이전트가 읽고 쓴다. 나에 대한 사실, 프로젝트, 컨벤션, 결정처럼
   오래 갈 지식을 둔다. 세션 로그는 여기 쓰지 않고, 거기서 걸러낸 지식만 옮긴다.
 - **모든 에이전트는 MCP로 접속한다.** `https://<내 위키>/mcp` 에 OAuth 또는 API key로 로그인한다.
@@ -59,7 +62,7 @@ Codex를 띄워 작업한다. 맥북에서는 Claude Code나 Codex와 직접 대
 
 ## 레포 이름과 파일 이름이 다른 이유
 
-레포 이름은 `oneagent` 지만 안에는 `kna-*` 스킬과 `.knowanywhere/state.json` 이 있다.
+레포 이름은 `sharedbrain` 지만 안에는 `kna-*` 스킬과 `.knowanywhere/state.json` 이 있다.
 원작 [knowanywhere](https://github.com/kubony/knowanywhere)의 단계 id·state 키·스킬 이름을 그대로
 유지해서 원작 업데이트를 따라가기 쉽게 했기 때문이다. 기능상 문제는 없다.
 
@@ -78,8 +81,8 @@ Codex를 띄워 작업한다. 맥북에서는 Claude Code나 Codex와 직접 대
 ## 빠른 시작
 
 ```bash
-git clone https://github.com/zoeymakes/oneagent.git
-cd oneagent
+git clone https://github.com/zoeymakes/sharedbrain.git
+cd sharedbrain
 claude
 ```
 
@@ -151,7 +154,7 @@ Docker, Caddy(자동 HTTPS), Outline, Postgres, Redis, 비공개 Cloud Storage �
 
 13~16단계(Codex·Hermes·Aside·OpenClaw)의 규칙 원문은 [`agents/_shared/block.md`](agents/_shared/block.md)
 하나다. Claude Code(09단계)는 페르소나 질문 흐름 때문에 아직 `templates/claude-md-block.ko.md` 를 쓰고,
-Discord 브리지도 자체 요약본을 갖고 있다. 마커는 전부 `<!-- oneagent:rules:start/end -->` 로 통일했으므로
+Discord 브리지도 자체 요약본을 갖고 있다. 마커는 전부 `<!-- sharedbrain:rules:start/end -->` 로 통일했으므로
 어느 경로로 주입하든 재실행 시 같은 구간이 교체된다. 규칙 본문 통합은 남은 과제다.
 
 블록 파일은 1행이 start 마커, 마지막 행이 end 마커여야 한다(`managed-block.mjs` 의 계약).
@@ -217,7 +220,7 @@ agents:
 
 위키는 한 번만 만든다. 그다음 기기는 연결만 한다.
 
-1. 새 기기에서 `git clone`, `cd oneagent`, `claude` 를 실행하고 모드를 물으면 `join` 이라고 답한다.
+1. 새 기기에서 `git clone`, `cd sharedbrain`, `claude` 를 실행하고 모드를 물으면 `join` 이라고 답한다.
 2. 위키 주소를 알려준다. 예: `https://wiki.example.com`.
 3. 같은 에이전트로 이어가려면 **같은 이름**을 쓴다(노트북의 `코드작업자` 도 상시호스트의 `코드작업자` 와 같은 콜렉션에 쓴다).
    다른 에이전트를 추가하려면 **새 이름**을 주고, 그 에이전트는 자기 콜렉션을 새로 받는다.

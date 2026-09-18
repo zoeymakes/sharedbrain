@@ -1,4 +1,4 @@
-# oneagent 인스톨러
+# sharedbrain 인스톨러
 
 이 레포는 Claude Code 안에서 동작하는 인스톨러다. 한 사람이 자기 AI 에이전트 전부(여러 머신에서 도는)가
 함께 읽고 쓰는 self-hosted Outline 위키를 한 단계씩 만들도록 안내한다. 단계 id, 스킬 이름, state 키,
