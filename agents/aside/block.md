@@ -44,7 +44,22 @@ API key·토큰·비밀번호·OAuth secret·개인 키는 위키에 쓰지 않�
 
 ### 위키에 닿지 않을 때
 
-한 줄로 알리고 작업은 계속한다. 쓰려던 Update는 대화에 남겨 두고 연결이 돌아오면 쓴다. 설정 파일에서 토큰을 꺼내 REST API로 우회하지 않는다.
+한 줄로 알리고 작업은 계속한다. 쓰려던 Update는 `~/.sharedbrain/handoff/aside/<계정>/` 에 파일로 남기고, 위키가 돌아오면 올린다.
+
+### 이 런타임의 기록 경로
+
+Aside는 위키 MCP를 소비하지 않는다. **Outline REST API 직접 호출이 정식 경로다.** 다른 런타임의 "REST로 우회하지 않는다" 규칙은 여기에 적용되지 않는다.
+
+기록은 `scripts/aside-wiki.sh` 로 한다. 키는 `~/.sharedbrain/aside.env`(mode 600)에 있고 셸이 치환해 주입한다. 키를 코드·대화·위키에 쓰지 않는다.
+
+```bash
+scripts/aside-wiki.sh check
+scripts/aside-wiki.sh run 'const d = await startWork({title:"<YYYY-MM-DD> · <작업 요약>", collection:"{{SESSIONS_COLLECTION}}"}); console.log(d.url)'
+scripts/aside-wiki.sh run 'await appendUpdate("<문서id>", "- 무엇을 했는지")'
+scripts/aside-wiki.sh run 'console.log(await searchShared("<질문>", "{{SHARED_COLLECTION}}"))'
+```
+
+`startWork` 가 같은 제목 문서를 먼저 검색하므로 중복이 생기지 않는다.
 
 ### 브라우저 상태
 

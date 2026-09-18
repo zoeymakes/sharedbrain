@@ -40,7 +40,7 @@ Codex를 띄워 작업한다. 노트북에서는 Claude Code나 Codex와 직접 
      |                |                |                |                |
      +----------------+--------+-------+----------------+----------------+
                                |  MCP over HTTPS (OAuth 또는 API key)
-                               |  Aside는 handoff 파일 경유
+                               |  Aside는 Outline REST API 직접 호출
                                v
      +--------------------------------------------------------
      |  Outline 위키   https://wiki.example.com
@@ -209,7 +209,7 @@ agents:
 | 12 | `kna-12-add-agent` | [에이전트나 기기 추가](docs/steps/12-add-agent.md) | 나중에 | 나중에 |
 | 13 | `kna-13-codex` | [Codex 에이전트 연결](docs/steps/13-codex.md) | 선택 | 선택 |
 | 14 | `kna-14-hermes` | [Hermes 프로필별 에이전트 연결](docs/steps/14-hermes.md) | 선택 | 선택 |
-| 15 | `kna-15-aside` | [Aside 연결 (handoff 모드)](docs/steps/15-aside.md) | 선택 | 선택 |
+| 15 | `kna-15-aside` | [Aside 연결 (REST 직접 호출)](docs/steps/15-aside.md) | 선택 | 선택 |
 | 16 | `kna-16-openclaw` | [OpenClaw 에이전트 연결](docs/steps/16-openclaw.md) | 선택 | 선택 |
 
 00~11은 위키를 만들고 첫 Claude Code 에이전트를 붙이는 단계다(원작에서 계승).
@@ -272,6 +272,9 @@ Obsidian vault나 Markdown으로 노트를 쌓아 두었다면 Outline의 Markdo
   (`codex mcp add --url`, `hermes mcp add/list/test` 와 최상위 `mcp_servers:` 스키마, `openclaw mcp list/probe/doctor`,
   `aside account`). Aside는 MCP 서버를 *제공*하는 쪽이라 위키를 직접 소비하지 않음을 확인하고 handoff 모드로 설계.
 - `agents/registry.mjs` 는 validate/list/next/get 이 실제로 동작함을 확인.
+- Aside REPL 제약을 실측: `fetch` 는 크로스 오리진 POST와 `Authorization` 헤더가 정상 전달되지만,
+  외부 모듈 `import` 불가·`process` 없음·`fs` 가 세션 디렉터리에 샌드박스됨. 이에 맞춰 키를 셸에서
+  치환하는 `scripts/aside-wiki.sh` 를 만들고 요청 모양(POST `/api/documents.create`, Bearer 헤더, JSON 본문)을 확인.
 - `state.mjs` 의 13~16 단계 기록과 `agent-add` 의 aside/openclaw kind 를 실행해 확인(잘못된 값은 거부).
 - 규칙 블록 주입을 종단 확인: `managed-block.mjs render` → `apply --dry-run` → `apply` → 재적용 시
   "변경 없음"(멱등), 기존 파일 내용 보존, `.bak-<타임스탬프>` 백업 생성.

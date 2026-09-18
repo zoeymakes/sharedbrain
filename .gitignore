@@ -8,3 +8,4 @@ workspace/
 logs/
 .DS_Store
 agents/registry.yaml
+.sharedbrain/

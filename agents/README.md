@@ -43,7 +43,7 @@ state.mjs 의 `kind` 와 같은 어휘라서, 다르면 `agent-add` 가 실패�
 | Claude Code | `~/.claude/CLAUDE.md` | 09 | `managed-block.mjs` 로 렌더링·주입 | 원작에서 검증 |
 | Codex | `~/.codex/AGENTS.md` | 13 | 안내형 절차 + `codex mcp` 명령 | CLI 확인, 종단 미검증 |
 | Hermes | 프로필별 skill | 14 | 안내형 절차 + `hermes mcp` 명령 | CLI·스키마 확인, 종단 미검증 |
-| Aside | 계정별 `AGENTS.md` | 15 | 안내형 절차 + handoff 파일 | CLI 확인, 종단 미검증 |
+| Aside | 계정별 `AGENTS.md` | 15 | `scripts/aside-wiki.sh` (REST 직접 호출) | REST 경로·래퍼 확인, 실제 위키 미검증 |
 | OpenClaw | 에이전트별 지침 | 16 | 안내형 절차 + `openclaw mcp` 명령 | CLI 확인, 종단 미검증 |
 
 "안내형 절차"는 Claude Code가 문서를 따라 명령을 실행하고 diff를 보여준 뒤 동의를 받는 방식이다.
