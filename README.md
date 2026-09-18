@@ -1,7 +1,5 @@
 # oneagent
 
-> [kubony/knowanywhere](https://github.com/kubony/knowanywhere)(MIT)의 설치기와 위키 운영 규칙을 기반으로 한 **파생 프로젝트**입니다(GitHub 포크가 아닌 독립 저장소). 원작이 다루지 않는 멀티 런타임 registry와 어댑터를 더했습니다. 자세한 관계는 [출처와 관계](#출처와-관계).
-
 **두 대의 컴퓨터, 다섯 종류의 에이전트. 그런데 하나의 에이전트처럼 쓰고 싶다.**
 
 집 맥미니에는 상시 실행 에이전트(Hermes)가 있어 자동화와 Slack 응답을 처리하고, 필요할 때 CLI로 Claude Code나
