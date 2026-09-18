@@ -29,8 +29,12 @@ state.mjs 의 `kind` 와 같은 어휘라서, 다르면 `agent-add` 가 실패�
 | **마커** | 재실행 시 교체할 구간 (`<!-- oneagent:rules:start -->` ~ `end`) |
 | **검증** | 실행 가능한 명령과 기대 출력 |
 
-13~16단계의 규칙 본문은 [`_shared/wiki-rules.ko.md`](_shared/wiki-rules.ko.md) 하나에서 온다.
-어댑터는 이 파일을 복사하지 않고 placeholder만 치환한다.
+13~16단계의 규칙 본문은 [`_shared/block.md`](_shared/block.md) 하나에서 온다.
+어댑터는 이 파일을 복사하지 않고 placeholder만 치환한다. placeholder 목록과 주입 명령은
+[`_shared/wiki-rules.ko.md`](_shared/wiki-rules.ko.md)에 있다.
+
+**블록 파일 규칙:** 1행이 start 마커, 마지막 행이 end 마커여야 한다. `managed-block.mjs apply` 가
+그렇게 검사하므로 설명 주석을 블록 파일 안에 넣지 않는다(넣으면 exit 3).
 
 ## 런타임별 현황
 
@@ -47,9 +51,13 @@ state.mjs 의 `kind` 와 같은 어휘라서, 다르면 `agent-add` 가 실패�
 `--target` 만 바꿔 재사용할 수 있다.
 
 ```bash
-node .claude/skills/kna-09-persona/managed-block.mjs apply \
-  --block .knowanywhere/<런타임>-block.md --target ~/.codex/AGENTS.md --dry-run
+H=.claude/skills/kna-09-persona/managed-block.mjs
+node $H render --template agents/codex/block.md --values .knowanywhere/block-values.json \
+               --out .knowanywhere/codex-block.md
+node $H apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md --dry-run
 ```
+
+이 경로는 실제로 동작함을 확인했다(render → dry-run → apply → 재적용 시 "변경 없음").
 
 ## 새 런타임 추가
 

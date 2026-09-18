@@ -73,11 +73,21 @@ codex mcp add <서버이름> --url <WIKI_URL>/mcp --bearer-token-env-var OUTLINE
 
 ### 3. 규칙 블록 주입
 
-`agents/codex/agents-md-block.ko.md` 를 치환해 `.knowanywhere/codex-agents-md.md` 로 쓴다.
-`~/.codex/AGENTS.md` 를 백업한 뒤 `<!-- oneagent:rules:start -->` ~ `<!-- oneagent:rules:end -->` 구간을
-교체한다(없으면 파일 끝에 덧붙인다). 마커 밖은 건드리지 않는다.
+블록 파일은 1행이 start 마커, 마지막 행이 end 마커다. `managed-block.mjs` 로 렌더링하고 주입한다.
 
-Codex는 system prompt를 받지 않고 `AGENTS.md` 만 읽으므로 블록을 짧게 유지한다.
+```bash
+H=.claude/skills/kna-09-persona/managed-block.mjs
+# 값 JSON 을 만든다(위 placeholder 표의 키를 모두 넣는다. 없으면 render 가 거부한다)
+node $H render --template agents/codex/block.md \
+               --values .knowanywhere/block-values.json \
+               --out .knowanywhere/codex-block.md
+# 먼저 dry-run 으로 무엇이 바뀌는지 보여주고 yes 를 받는다
+node $H apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md --dry-run
+node $H apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md
+```
+
+`apply` 는 멱등이다. 마커 구간이 있으면 교체하고, 없으면 파일 끝에 덧붙이고, 다시 실행하면 "변경 없음"을 출력한다.
+기존 내용은 보존되고 쓰기 전에 `.bak-<타임스탬프>` 백업을 만든다.
 
 ## 검증 (출력을 요약하지 말고 그대로 보여준다)
 
@@ -100,3 +110,6 @@ node $H step <단계id> done
 ```
 
 실패하면 done으로 표시하지 않는다. 에러를 읽고 원인을 설명하고 고친 뒤 다시 시도한다.
+
+
+Codex는 system prompt를 받지 않고 `AGENTS.md` 만 읽으므로 블록을 짧게 유지한다.

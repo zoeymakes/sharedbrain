@@ -1,54 +1,31 @@
-<!-- agents/_shared/wiki-rules.ko.md
-모든 런타임 어댑터가 공유하는 규칙의 단일 출처.
-어댑터는 이 파일을 복사하지 말고 placeholder만 치환해 주입한다.
-placeholder: {{AGENT_NAME}} {{RUNTIME}} {{WIKI_URL}} {{MCP_SERVER_NAME}}
-             {{SESSIONS_COLLECTION}} {{SHARED_COLLECTION}}
--->
-<!-- oneagent:rules:start -->
-이 에이전트의 이름은 **{{AGENT_NAME}}**, 런타임은 {{RUNTIME}}. 같은 이름이 여러 기기에서 돌아도 에이전트는 하나다. 같은 콜렉션에 같은 서명으로 같은 작업 문서를 이어 쓴다.
+# 위키 규칙 — 단일 출처
 
-위키는 {{WIKI_URL}} 의 Outline이고 MCP 서버 `{{MCP_SERVER_NAME}}` 으로 접근한다. 콜렉션은 매 세션 `list_collections` 로 **정확한 이름**으로 찾는다. 콜렉션 id·문서 id를 설정 파일·스크립트·메모리에 하드코딩하지 않는다.
+13~16단계(Codex·Hermes·Aside·OpenClaw)의 규칙 본문은 `agents/_shared/block.md` 하나다.
+각 런타임 어댑터는 이 파일을 복사하지 않고 placeholder만 치환해 주입한다.
 
-### 공유 경계
+## placeholder
 
-| 대상 | 위치 |
+| 이름 | 값 |
 |---|---|
-| 작업 기록·결정·정제된 지식 | 공유 위키 |
-| 운영 규칙·공용 스킬·registry | Git |
-| 세션 id·resume 상태·프로세스·인증·캐시 | 이 기기 로컬 고정 |
+| `{{AGENT_NAME}}` | 이 에이전트 이름 |
+| `{{RUNTIME}}` | 런타임 표기 (예: Codex, Hermes) |
+| `{{WIKI_URL}}` | state `wiki.url` |
+| `{{MCP_SERVER_NAME}}` | 이 런타임에 등록한 MCP 서버 이름 |
+| `{{SESSIONS_COLLECTION}}` | `<AGENT_NAME> Sessions` |
+| `{{SHARED_COLLECTION}}` | state `wiki.collections.shared.name` |
 
-로컬 고정 항목을 공유 폴더나 Git으로 동기화하지 않는다. 런타임마다 형식이 다르고 동시 쓰기에서 깨진다.
+## 주입 방법
 
-### 세션 기록: `{{SESSIONS_COLLECTION}}`
+블록 파일은 **1행이 start 마커, 마지막 행이 end 마커**다. `managed-block.mjs` 의 계약이라
+설명 주석을 블록 파일 안에 넣지 않는다(넣으면 apply 가 exit 3 으로 거부한다).
 
-`{{SESSIONS_COLLECTION}}` 에는 {{AGENT_NAME}} 만 쓴다. 콜렉션 overview가 원본 규정이고, 이 블록과 다르면 overview를 따른다.
+```bash
+H=.claude/skills/kna-09-persona/managed-block.mjs
+node $H render --template agents/codex/block.md \
+               --values .knowanywhere/block-values.json \
+               --out .knowanywhere/codex-block.md
+node $H apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md --dry-run
+node $H apply --block .knowanywhere/codex-block.md --target ~/.codex/AGENTS.md
+```
 
-- **작업 1건당 문서 1개.** 세션·기기가 바뀌어도 같은 작업이면 이어 쓴다.
-- **만들기 전에 검색한다.** 같은 작업 문서를 먼저 찾고, 없을 때만 만든다. 중복 생성 금지.
-- **제목:** `YYYY-MM-DD · <작업 요약>` (작업 시작일의 현지 날짜).
-- **골격:** 첫 줄 `작성자: {{AGENT_NAME}}` + 상태(⚪ 대기 / 🟡 진행 중 / 🔴 차단됨 / ✅ 완료 / ⚫ 취소) → `## 배경` → `## 완료 조건` → 진행·전환·blocker마다 `## Update — <YYYY-MM-DD HH:MM TZ> · <기기>[ · <환경>]` → `## 완료 기록` + 검증 근거 → 마지막 줄 `최종 갱신: {{AGENT_NAME}} · <시각>`.
-- **환경 표기:** 병렬 실행 환경(Orca 등 worktree 기반)에서 작업하면 `<환경>` 자리에 `orca:<worktree>` 를 적는다. 같은 프롬프트를 여러 에이전트에 fan-out 했을 때 어느 시도였는지 구분하기 위한 필수 항목이다.
-- **완료 기준:** 명령이 exit 0 인 것과 목표가 달성된 것은 다른 상태다. 검증 근거(수치·경로·해시·명령 출력·링크) 없이 ✅ 로 바꾸지 않는다.
-- **서명이 유일한 저자 표기다.** 여러 에이전트가 같은 계정·API key로 쓰므로 위키의 작성자 필드로는 구분되지 않는다.
-- flat 구조 유지. 하위 문서를 만들지 않는다.
-- 잡담·단순 조회는 기록하지 않아도 된다. 목표가 있거나 여러 단계를 거치거나 나중에 누가 결과를 찾을 작업을 기록한다.
-
-### 공유 지식: `{{SHARED_COLLECTION}}`
-
-- 사용자의 선호·프로젝트·컨벤션을 **묻기 전에 먼저 검색**한다. 찾은 내용을 쓰면 문서를 링크로 인용한다.
-- 오래 갈 사실만 정제해 쓴다. 세션 로그·대화 원문·긴 명령 출력은 쓰지 않는다.
-- 고칠 때마다 끝에 `수정자: {{AGENT_NAME}} · <YYYY-MM-DD>` 를 붙이고 이전 줄은 지우지 않는다.
-- 모순되는 두 번째 문서를 만들지 않고 그 자리에서 고친다. 판단이 서지 않으면 사용자에게 묻는다.
-
-### 다른 에이전트
-
-다른 에이전트의 Sessions 콜렉션은 읽기만 한다. 오류를 찾으면 고치지 말고 사용자에게 알리거나, 공유 사실이면 `{{SHARED_COLLECTION}}` 에서 고친다.
-
-### 비밀값
-
-API key·토큰·비밀번호·OAuth secret·개인 키는 위키에 쓰지 않는다. 저장 경로·변수명·끝 4자리까지만 쓴다. 명령 출력을 붙일 때 섞였는지 먼저 확인한다.
-
-### 위키에 닿지 않을 때
-
-한 줄로 알리고 작업은 계속한다. 쓰려던 Update는 대화에 남겨 두고 연결이 돌아오면 쓴다. 설정 파일에서 토큰을 꺼내 REST API로 우회하지 않는다.
-<!-- oneagent:rules:end -->
+`render` 는 값이 없는 placeholder가 있으면 실패한다. 그래서 값 JSON에 위 표의 키를 모두 넣는다.

@@ -58,7 +58,23 @@ OpenClaw 런타임의 MCP 설정에 위키를 추가한다. 상시 실행이면 
 
 ### 3. 규칙 블록 주입
 
-그 에이전트의 지침 파일을 백업한 뒤 마커 구간을 교체한다.
+블록 파일은 1행이 start 마커, 마지막 행이 end 마커다. `managed-block.mjs` 로 렌더링하고 주입한다.
+
+```bash
+H=.claude/skills/kna-09-persona/managed-block.mjs
+# 값 JSON 을 만든다(위 placeholder 표의 키를 모두 넣는다. 없으면 render 가 거부한다)
+node $H render --template agents/_shared/block.md \
+               --values .knowanywhere/block-values.json \
+               --out .knowanywhere/openclaw-block.md
+# 먼저 dry-run 으로 무엇이 바뀌는지 보여주고 yes 를 받는다
+node $H apply --block .knowanywhere/openclaw-block.md --target ~/.openclaw/agents/<에이전트>/AGENTS.md --dry-run
+node $H apply --block .knowanywhere/openclaw-block.md --target ~/.openclaw/agents/<에이전트>/AGENTS.md
+```
+
+`apply` 는 멱등이다. 마커 구간이 있으면 교체하고, 없으면 파일 끝에 덧붙이고, 다시 실행하면 "변경 없음"을 출력한다.
+기존 내용은 보존되고 쓰기 전에 `.bak-<타임스탬프>` 백업을 만든다.
+
+주입 위치는 런타임이 실제로 읽는 지침 경로다. `openclaw` 설정에서 확인한다.
 
 ## 은퇴와 런타임 이사
 

@@ -59,6 +59,12 @@ Codex를 띄워 작업한다. 맥북에서는 Claude Code나 Codex와 직접 대
 역할·권한·기록 위치가 다르므로 registry 로우도 둘이다. 새 에이전트를 붙일 때는 registry에 한 줄 더하고
 `kna-12-add-agent` 로 `<이름> Sessions` 를 하나 만든다.
 
+## 레포 이름과 파일 이름이 다른 이유
+
+레포 이름은 `oneagent` 지만 안에는 `kna-*` 스킬과 `.knowanywhere/state.json` 이 있다.
+원작 [knowanywhere](https://github.com/kubony/knowanywhere)의 단계 id·state 키·스킬 이름을 그대로
+유지해서 원작 업데이트를 따라가기 쉽게 했기 때문이다. 기능상 문제는 없다.
+
 ## 지금 상태 (먼저 읽어 주세요)
 
 | 범위 | 상태 |
@@ -93,6 +99,9 @@ Claude가 [`CLAUDE.md`](CLAUDE.md)를 읽고 무엇을 만드는지, 비용이 �
 진행 상황은 `node .claude/skills/kna-status/state.mjs status` 로 본다(Claude Code 안에서는 `kna-status` 스킬).
 
 필요한 것: Google 계정과 결제 수단, [Claude Code](https://claude.com/claude-code), Node.js 20 이상, git.
+
+> 13~16단계의 규칙 템플릿은 현재 **한국어판만** 있다(`agents/_shared/block.md`).
+> 00~12단계는 원작의 `ko`/`en` 두 벌을 그대로 쓴다.
 Google Cloud CLI(`gcloud`) 설치는 인스톨러가 도와준다. 도메인은 없어도 된다.
 
 ## 설치되는 것
@@ -120,7 +129,7 @@ Docker, Caddy(자동 HTTPS), Outline, Postgres, Redis, 비공개 Cloud Storage �
 | 세션 id, resume 상태 | **로컬 고정** | 런타임마다 형식이 달라 섞으면 resume이 깨진다 |
 | 실행 프로세스, PTY, tmux | **로컬 고정** | 파일 복제로 이식되지 않는다 |
 | 인증 토큰, 쿠키, 브라우저 프로필 | **로컬 고정** | 동기화하면 사고가 난다 |
-| 공용 스킬 | **Git + 심링크** | 사람이 읽고 리뷰할 텍스트. 런타임별 경로에 심링크한다 |
+| 공용 스킬 | **Git + 심링크** | 사람이 읽고 리뷰할 텍스트. [절차](docs/sharing-boundary.md#공용-스킬-공유-절차) |
 | 에이전트 메모리 | **로컬 + 선별 승격** | 자동 누적이라 동기화하면 중복·모순이 쌓인다 |
 | 캐시, 인덱스, 로그 | **로컬 고정** | 경로 종속이고 동시 쓰기 충돌을 만든다 |
 
@@ -142,10 +151,13 @@ Docker, Caddy(자동 HTTPS), Outline, Postgres, Redis, 비공개 Cloud Storage �
 - **본문 서명이 저자 기록이다.** 여러 에이전트가 같은 계정으로 쓰므로 위키의 작성자 필드로는 구분되지 않는다.
 - **세션 로그와 정제된 지식을 분리한다.** 오래 갈 사실만 공유 지식으로 옮긴다.
 
-13~16단계(Codex·Hermes·Aside·OpenClaw)의 규칙 원문은 [`agents/_shared/wiki-rules.ko.md`](agents/_shared/wiki-rules.ko.md)
+13~16단계(Codex·Hermes·Aside·OpenClaw)의 규칙 원문은 [`agents/_shared/block.md`](agents/_shared/block.md)
 하나다. Claude Code(09단계)는 페르소나 질문 흐름 때문에 아직 `templates/claude-md-block.ko.md` 를 쓰고,
 Discord 브리지도 자체 요약본을 갖고 있다. 마커는 전부 `<!-- oneagent:rules:start/end -->` 로 통일했으므로
 어느 경로로 주입하든 재실행 시 같은 구간이 교체된다. 규칙 본문 통합은 남은 과제다.
+
+블록 파일은 1행이 start 마커, 마지막 행이 end 마커여야 한다(`managed-block.mjs` 의 계약).
+설명은 같은 디렉터리의 별도 `.md` 에 둔다. 주입은 09단계의 도구를 `--target` 만 바꿔 재사용한다.
 
 ## registry — 에이전트군 선언
 
@@ -194,10 +206,10 @@ agents:
 | 10 | `kna-10-discord` | [같은 위키를 쓰는 Discord 봇(선택)](docs/steps/10-discord.md) | 선택 | 선택 |
 | 11 | `kna-11-backups` | [매일 스냅샷, 매일 밤 DB 덤프, 복구 연습](docs/steps/11-backups.md) | 실행 | |
 | 12 | `kna-12-add-agent` | [에이전트나 기기 추가](docs/steps/12-add-agent.md) | 나중에 | 나중에 |
-| 13 | `kna-13-codex` | Codex 에이전트 연결 (`~/.codex/AGENTS.md`, `codex mcp`) | 선택 | 선택 |
-| 14 | `kna-14-hermes` | Hermes 프로필별 에이전트 연결 (skill 주입, API key) | 선택 | 선택 |
-| 15 | `kna-15-aside` | Aside 에이전트 연결 (계정별 규칙, 회사 계정 반출 금지) | 선택 | 선택 |
-| 16 | `kna-16-openclaw` | OpenClaw 에이전트 연결 | 선택 | 선택 |
+| 13 | `kna-13-codex` | [Codex 에이전트 연결](docs/steps/13-codex.md) | 선택 | 선택 |
+| 14 | `kna-14-hermes` | [Hermes 프로필별 에이전트 연결](docs/steps/14-hermes.md) | 선택 | 선택 |
+| 15 | `kna-15-aside` | [Aside 연결 (handoff 모드)](docs/steps/15-aside.md) | 선택 | 선택 |
+| 16 | `kna-16-openclaw` | [OpenClaw 에이전트 연결](docs/steps/16-openclaw.md) | 선택 | 선택 |
 
 00~11은 위키를 만들고 첫 Claude Code 에이전트를 붙이는 단계다(원작에서 계승).
 13~16은 이 레포에서 더한 단계로, 런타임이 여러 개일 때 각 런타임을 같은 위키·같은 규칙에 붙인다.
@@ -259,6 +271,9 @@ Obsidian vault나 Markdown으로 노트를 쌓아 두었다면 Outline의 Markdo
   (`codex mcp add --url`, `hermes mcp add/list/test` 와 최상위 `mcp_servers:` 스키마, `openclaw mcp list/probe/doctor`,
   `aside account`). Aside는 MCP 서버를 *제공*하는 쪽이라 위키를 직접 소비하지 않음을 확인하고 handoff 모드로 설계.
 - `agents/registry.mjs` 는 validate/list/next/get 이 실제로 동작함을 확인.
+- `state.mjs` 의 13~16 단계 기록과 `agent-add` 의 aside/openclaw kind 를 실행해 확인(잘못된 값은 거부).
+- 규칙 블록 주입을 종단 확인: `managed-block.mjs render` → `apply --dry-run` → `apply` → 재적용 시
+  "변경 없음"(멱등), 기존 파일 내용 보존, `.bak-<타임스탬프>` 백업 생성.
 - 종단 실행(위키 생성 → 5개 런타임 연결 → 기기 간 이어받기)은 아직 수행하지 않았다.
 
 ## 출처와 관계

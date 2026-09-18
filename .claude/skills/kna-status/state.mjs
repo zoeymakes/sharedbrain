@@ -173,7 +173,7 @@ switch (cmd) {
   }
   case 'step': {
     const [id, status] = args;
-    if (!STEPS.some(([i]) => i === id)) die(`알 수 없는 단계 id "${id}" (00..12 중 하나)`);
+    if (!STEPS.some(([i]) => i === id)) die(`알 수 없는 단계 id "${id}" (00..16 중 하나)`);
     if (!STATUSES.includes(status)) die(`status 는 ${STATUSES.join('|')} 중 하나여야 한다`);
     const s = requireState();
     s.steps = s.steps || {};

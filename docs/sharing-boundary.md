@@ -48,9 +48,31 @@
 | Hermes | `~/.hermes/skills/<이름>` (프로필별은 `~/.hermes/profiles/<프로필>/skills/`) |
 | Codex | 스킬 개념 없음. 규칙은 `~/.codex/AGENTS.md` 블록으로 |
 
+### 처음 한 번 (기기별)
+
 ```bash
-ln -s ~/<공유레포>/skills/<이름> ~/.claude/skills/<이름>
+# 1. 공유 레포를 만든다 (private 권장). 이미 있으면 clone 만 한다.
+gh repo create <내계정>/agent-skills --private
+git clone https://github.com/<내계정>/agent-skills.git ~/agent-skills
+mkdir -p ~/agent-skills/skills
+
+# 2. 런타임별 스킬 경로에 심링크한다
+ln -s ~/agent-skills/skills/<이름> ~/.claude/skills/<이름>
+ln -s ~/agent-skills/skills/<이름> ~/.hermes/skills/<이름>
+
+# 3. 확인
+ls -l ~/.claude/skills/<이름>      # -> ~/agent-skills/skills/<이름> 로 보여야 한다
 ```
+
+### 세션 시작·종료
+
+```bash
+cd ~/agent-skills && git pull --rebase                 # 시작할 때
+cd ~/agent-skills && git add -A && git commit -m "skill: <무엇>" && git push
+```
+
+기기마다 `~/agent-skills` 를 두고 심링크만 걸므로 스킬 정본은 레포에 하나뿐이다.
+고치면 정본에서 고치고 push 하고, 다른 기기는 다음 pull 에서 받는다.
 
 규칙:
 

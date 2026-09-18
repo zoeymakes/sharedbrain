@@ -106,7 +106,18 @@ hermes mcp test <서버이름>       # 연결과 도구 목록
 - skill 이름: `oneagent-wiki-<에이전트-slug>`
 - 위치: 기본 프로필이면 `~/.hermes/skills/`, 그 외는 `~/.hermes/profiles/<프로필>/skills/`
 - `{{WIKI_ACCESS_RULE}}` 에는 위에서 확인한 권한 문장을 넣는다
-- `{{WIKI_RULES}}` 에는 `_shared/wiki-rules.ko.md` 치환 결과를 넣는다
+- `{{WIKI_RULES}}` 에는 `agents/_shared/block.md` 를 치환한 결과를 넣는다
+
+```bash
+H=.claude/skills/kna-09-persona/managed-block.mjs
+node $H render --template agents/_shared/block.md \
+               --values .knowanywhere/block-values.json \
+               --out .knowanywhere/hermes-rules.md
+# 그 결과를 skill-template.md 의 {{WIKI_RULES}} 자리에 넣어 최종 skill 파일을 만든다
+```
+
+skill 파일은 마커 구간이 아니라 파일 전체를 관리하므로 `apply` 대신 파일을 새로 쓴다.
+기존 같은 이름의 skill 이 있으면 먼저 백업한다.
 
 skill로 두는 이유: 위키에 쓸 일이 있을 때만 본문이 로드되어 평상시 토큰을 낭비하지 않고,
 프로필별로 다른 권한을 다른 skill로 분리할 수 있다.
