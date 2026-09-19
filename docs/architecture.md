@@ -59,7 +59,7 @@ TLS 를 Caddy 가 끝내므로 Outline 은 `FORCE_HTTPS=false` 로 돈다. Caddy
 | VM `kna-wiki-vm` | Compute Engine, e2-medium, Debian 12, 30 GB pd-balanced | 아래 전부를 돌린다. 2 GB swap, `vm.swappiness=10` | 03 |
 | 고정 IP `kna-wiki-ip` | Compute Engine | DNS 가 가리킬 바뀌지 않는 주소 | 03 |
 | 방화벽 규칙 | VPC `default` 네트워크 | 태그 붙은 VM 으로 TCP 80, 443 허용 | 03 |
-| VM 서비스 계정 `outline-vm` | IAM | VM 의 신원. 프로젝트 역할 없음, backups 버킷의 `roles/storage.objectCreator` 만 | 03, 11 |
+| VM 서비스 계정 `outline-vm` | IAM | VM 의 신원. 프로젝트 역할 없음, backups 버킷의 `roles/storage.objectCreator` 와 `roles/storage.objectViewer` 만(덮어쓰기·삭제 불가) | 03, 11 |
 | DNS 레코드 | 내 DNS 제공자, 또는 sslip.io | `wiki.<domain>` A 레코드가 고정 IP 를 가리킨다 | 04 |
 | OAuth 클라이언트 | Google Auth Platform | 위키의 Google 로그인 | 05 |
 | Caddy | Docker 컨테이너 | HTTPS, 인증서, 리버스 프록시 | 06 |

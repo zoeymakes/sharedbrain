@@ -28,14 +28,18 @@ gcloud compute disks add-resource-policies kna-wiki-vm --project=kna-wiki-a1b2 -
 
 `apply-retention-policy` 는 디스크가 지워진 뒤에도 이미 만든 스냅샷을 7일 동안 남긴다.
 
-**2. 덤프 권한.** 03단계에서 VM 에 붙인 전용 서비스 계정 `outline-vm` 에 backups 버킷의 `roles/storage.objectCreator`
-를 준다. 새 파일을 올릴 수만 있고, 기존 덤프를 읽거나 덮어쓰거나 지우지는 못한다. `outline-vm` 에는 프로젝트 역할이
-없으므로 이것이 VM 이 가진 GCP 권한 전부이고, VM 이 털려도 지난 덤프는 남는다. VM 이 프로젝트 Editor 역할이 붙은 기본
+**2. 덤프 권한.** 03단계에서 VM 에 붙인 전용 서비스 계정 `outline-vm` 에 backups 버킷의
+`roles/storage.objectCreator` 와 `roles/storage.objectViewer` 를 준다. 새 파일을 올리고 읽을 수만 있고, 덮어쓰거나
+지우지는 못한다(둘 다 `storage.objects.delete` 가 필요한데 주지 않는다). `objectViewer` 가 함께 필요한 것은
+`pg-backup.sh` 가 쓰는 `gcloud storage cp` 가 업로드 전에 대상 객체를 stat 하기 때문이다. 이것이 없으면 업로드가
+`403 ... does not have storage.objects.get access` 로 실패한다. `outline-vm` 에는 프로젝트 역할이
+없으므로 이것이 VM 이 가진 GCP 권한 전부이고, VM 이 털려도 지난 덤프는 지워지지 않는다. VM 이 프로젝트 Editor 역할이 붙은 기본
 Compute 서비스 계정을 쓰고 있으면 이 권한을 더해도 VM 의 권한이 줄지 않으므로, 인스톨러가 먼저 `outline-vm` 으로 바꾸자고
 한다(VM 을 몇 분 멈춘다).
 
 ```bash
 gcloud storage buckets add-iam-policy-binding gs://kna-wiki-a1b2-backups --project=kna-wiki-a1b2 --member=serviceAccount:outline-vm@kna-wiki-a1b2.iam.gserviceaccount.com --role=roles/storage.objectCreator
+gcloud storage buckets add-iam-policy-binding gs://kna-wiki-a1b2-backups --project=kna-wiki-a1b2 --member=serviceAccount:outline-vm@kna-wiki-a1b2.iam.gserviceaccount.com --role=roles/storage.objectViewer
 ```
 
 **3. 덤프 스크립트와 cron.** `deploy/outline/pg-backup.sh` 를 VM 의 `/usr/local/bin/outline-pg-backup` 으로 설치하고

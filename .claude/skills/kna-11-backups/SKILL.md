@@ -1,6 +1,6 @@
 ---
 name: kna-11-backups
-description: knowanywhere 11단계에 쓴다(fresh 모드의 마지막 단계, kna-09-persona와 선택 단계 kna-10-discord 뒤). 부팅 디스크에 매일 03:00(VM 시간대) 스냅샷 정책을 7일 보관으로 붙이고, VM 전용 서비스 계정 outline-vm 에 backups 버킷의 roles/storage.objectCreator 만 준 뒤, VM에 deploy/outline/pg-backup.sh 를 /usr/local/bin/outline-pg-backup 으로 설치해 매일 03:30 cron으로 DB 덤프를 backups 버킷에 올린다. 지금 한 번 덤프해 `gcloud storage ls` 로 확인하고, 첫 예약 스냅샷까지 확인한 뒤 backup.* 를 쓴다.
+description: knowanywhere 11단계에 쓴다(fresh 모드의 마지막 단계, kna-09-persona와 선택 단계 kna-10-discord 뒤). 부팅 디스크에 매일 03:00(VM 시간대) 스냅샷 정책을 7일 보관으로 붙이고, VM 전용 서비스 계정 outline-vm 에 backups 버킷의 roles/storage.objectCreator 와 roles/storage.objectViewer 를 준 뒤, VM에 deploy/outline/pg-backup.sh 를 /usr/local/bin/outline-pg-backup 으로 설치해 매일 03:30 cron으로 DB 덤프를 backups 버킷에 올린다. 지금 한 번 덤프해 `gcloud storage ls` 로 확인하고, 첫 예약 스냅샷까지 확인한 뒤 backup.* 를 쓴다.
 ---
 
 # 11단계: 백업
@@ -102,17 +102,26 @@ gcloud compute disks add-resource-policies kna-wiki-vm --project=kna-wiki-a1b2 -
 ### 4. `outline-vm` 에 backups 버킷 쓰기 권한 (무료)
 
 6단계는 backups 버킷에 `outline-storage` 권한을 주지 않았다. 덤프는 VM의 전용 서비스 계정 `outline-vm` 이 올린다.
-새 객체를 만드는 권한만 준다(기존 덤프를 읽거나, 덮어쓰거나, 지우지 못한다):
+두 역할을 함께 준다. 덮어쓰기와 삭제는 `storage.objects.delete` 가 필요한데 둘 다 그것을 주지 않으므로, 올라간
+덤프는 그대로 남는다:
 
 ```bash
 gcloud storage buckets add-iam-policy-binding gs://kna-wiki-a1b2-backups --project=kna-wiki-a1b2 --member=serviceAccount:outline-vm@kna-wiki-a1b2.iam.gserviceaccount.com --role=roles/storage.objectCreator
+gcloud storage buckets add-iam-policy-binding gs://kna-wiki-a1b2-backups --project=kna-wiki-a1b2 --member=serviceAccount:outline-vm@kna-wiki-a1b2.iam.gserviceaccount.com --role=roles/storage.objectViewer
 gcloud storage buckets get-iam-policy gs://kna-wiki-a1b2-backups --project=kna-wiki-a1b2 --format="table(bindings.role,bindings.members.list())" --flatten="bindings[]"
 ```
 
-`--member` 에는 `vm.service_account`(절차 1에서 확인한 email)를 넣는다. 둘째 명령의 출력에서
-`roles/storage.objectCreator` 행에 `serviceAccount:outline-vm@...` 가 있는지 보여준다. `outline-vm` 에는 프로젝트
-역할이 없으므로 VM 이 털려도 지난 덤프는 남는다. 이 성질은 3단계의 역할 없는 계정 설계에 기대므로, 나중에 누가
-`outline-vm` 에 프로젝트 역할을 주면 깨진다.
+`objectViewer` 도 주는 이유는 절차 5의 `pg-backup.sh` 가 쓰는 `gcloud storage cp` 가 업로드 전에 대상 객체를
+stat 하기 때문이다. `objectCreator` 만 주면 업로드가
+`HTTPError 403: ... does not have storage.objects.get access` 로 실패한다. 이것은 권한 전파 지연이 아니므로
+재시도로 풀리지 않는다.
+
+`--member` 에는 `vm.service_account`(절차 1에서 확인한 email)를 넣는다. 마지막 명령의 출력에서
+`roles/storage.objectCreator` 와 `roles/storage.objectViewer` 행에 `serviceAccount:outline-vm@...` 가 있는지
+보여준다. `outline-vm` 에는 프로젝트 역할이 없으므로 VM 이 털려도 지난 덤프를 지우거나 덮어쓸 수 없다. 읽기는
+되지만 VM 은 이미 라이브 DB 와 `/opt/outline/.env` 를 갖고 있어 새로 드러나는 것이 없다. 이 성질은 3단계의 역할
+없는 계정 설계에 기대므로, 나중에 누가 `outline-vm` 에 프로젝트 역할이나 `roles/storage.objectAdmin` 을 주면
+깨진다.
 
 ### 5. 덤프 스크립트와 cron 설치 (VM)
 
@@ -141,7 +150,8 @@ gcloud storage ls -l gs://kna-wiki-a1b2-backups/postgres/ --project=kna-wiki-a1b
 |---|---|
 | `ERROR: no backups bucket` | `.env` 에 `BACKUP_BUCKET` 이 없다. 6단계 `install.sh` 를 `--backups-bucket` 과 함께 다시 실행한다 |
 | `ERROR: dump is only N bytes` | postgres가 비정상이다. `sudo docker compose -f /opt/outline/docker-compose.yml ps` 로 `outline-postgres` 상태를 본다 |
-| `403` / `AccessDenied` 로 업로드 실패 | 절차 1의 서비스 계정과 scope, 또는 절차 4의 권한. 권한을 방금 더했으면 반영에 1~2분 걸릴 수 있다. 로컬 덤프는 이미 남았다 |
+| `403 ... does not have storage.objects.get access` | 절차 4의 `objectViewer` 를 빠뜨렸다. `gcloud storage cp` 는 업로드 전에 대상을 stat 한다. 재시도로는 안 풀리니 역할을 더하고 다시 한다 |
+| 그 밖의 `403` / `AccessDenied` | 절차 1의 서비스 계정과 scope, 또는 절차 4의 권한. 권한을 방금 더했으면 반영에 1~2분 걸릴 수 있다. 로컬 덤프는 이미 남았다 |
 | `gcloud: command not found` | 절차 1의 `google-cloud-cli` 설치 |
 
 ## 검증
