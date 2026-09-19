@@ -9,3 +9,4 @@ logs/
 .DS_Store
 agents/registry.yaml
 .sharedbrain/
+CLAUDE.local.md
