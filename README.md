@@ -40,7 +40,7 @@ Codex를 띄워 작업한다. 노트북에서는 Claude Code나 Codex와 직접 
      |                |                |                |                |
      +----------------+--------+-------+----------------+----------------+
                                |  MCP over HTTPS (OAuth 또는 API key)
-                               |  Aside는 Outline REST API 직접 호출
+                               |  Aside는 직접 쓰지 못해 다른 에이전트가 세션을 읽어 대신 올린다(수확)
                                v
      +--------------------------------------------------------
      |  Outline 위키   https://wiki.example.com
@@ -72,7 +72,7 @@ Codex를 띄워 작업한다. 노트북에서는 Claude Code나 Codex와 직접 
 |---|---|
 | 00~04단계 (GCP 계정·VM·DNS) | 실제 GCP에서 실행해 통과 |
 | 05~11단계 (OAuth·Outline·백업) | 로컬 Docker 스모크만 확인. 실제 GCP 실행 미검증 |
-| 13~16단계 (Codex·Hermes·Aside·OpenClaw) | 명령·스키마는 실제 CLI로 확인. 종단 실행 미검증 |
+| 13~16단계 (Codex·Hermes·Aside·OpenClaw) | 13·15는 종단 실행 확인. 14·16은 명령·스키마만 실제 CLI로 확인 |
 | Discord 브리지 | mock 테스트 통과(4/4, 14/14, 5/5) |
 
 즉 **위키를 세우는 앞부분은 검증됐고, 멀티 런타임 연결은 아직 실사용 검증 전**입니다.
@@ -209,7 +209,7 @@ agents:
 | 12 | `kna-12-add-agent` | [에이전트나 기기 추가](docs/steps/12-add-agent.md) | 나중에 | 나중에 |
 | 13 | `kna-13-codex` | [Codex 에이전트 연결](docs/steps/13-codex.md) | 선택 | 선택 |
 | 14 | `kna-14-hermes` | [Hermes 프로필별 에이전트 연결](docs/steps/14-hermes.md) | 선택 | 선택 |
-| 15 | `kna-15-aside` | [Aside 연결 (REST 직접 호출)](docs/steps/15-aside.md) | 선택 | 선택 |
+| 15 | `kna-15-aside` | [Aside 연결 (세션 수확)](docs/steps/15-aside.md) | 선택 | 선택 |
 | 16 | `kna-16-openclaw` | [OpenClaw 에이전트 연결](docs/steps/16-openclaw.md) | 선택 | 선택 |
 
 00~11은 위키를 만들고 첫 Claude Code 에이전트를 붙이는 단계다(원작에서 계승).
@@ -270,11 +270,15 @@ Obsidian vault나 Markdown으로 노트를 쌓아 두었다면 Outline의 Markdo
 - Discord 브리지 mock 테스트 통과(스레드 4/4, 컨텍스트 14/14, Codex 백엔드 5/5).
 - 13~16단계: 각 런타임 CLI의 실제 명령·옵션과 설정 스키마를 설치본에서 확인해 문서에 반영
   (`codex mcp add --url`, `hermes mcp add/list/test` 와 최상위 `mcp_servers:` 스키마, `openclaw mcp list/probe/doctor`,
-  `aside account`). Aside는 MCP 서버를 *제공*하는 쪽이라 위키를 직접 소비하지 않음을 확인하고 handoff 모드로 설계.
+  `aside account`). Aside는 MCP 서버를 *제공*하는 쪽이라 위키를 직접 소비하지 않음을 확인.
 - `agents/registry.mjs` 는 validate/list/next/get 이 실제로 동작함을 확인.
 - Aside REPL 제약을 실측: `fetch` 는 크로스 오리진 POST와 `Authorization` 헤더가 정상 전달되지만,
-  외부 모듈 `import` 불가·`process` 없음·`fs` 가 세션 디렉터리에 샌드박스됨. 이에 맞춰 키를 셸에서
-  치환하는 `scripts/aside-wiki.sh` 를 만들고 요청 모양(POST `/api/documents.create`, Bearer 헤더, JSON 본문)을 확인.
+  셸 실행 수단이 없고·외부 모듈 `import` 불가·`process` 없음·`fs` 가 Project·세션 루트에 하드 샌드박스됨
+  (`--permission full-access` 로도 `Path escapes Project and session roots`). **그래서 Aside 는 API key 에
+  닿지 못해 위키에 스스로 쓸 수 없다.** 셸과 위키 접근을 가진 다른 에이전트가 Aside 세션 기록을 읽어 대신
+  올리는 수확 경로로 설계하고(`agents/aside/harvest.mjs`, `HARVEST.md`), Codex 수확자로 종단 확인
+  (12건 중 3건 기록·9건 건너뜀·실패 0, 서명 `작성자: <Aside 에이전트> · 기록: <수확자>`).
+  `scripts/aside-wiki.sh` 는 셸에서 쓰는 선택 도구로 남긴다. Aside 자신은 실행할 수 없다.
 - `state.mjs` 의 13~16 단계 기록과 `agent-add` 의 aside/openclaw kind 를 실행해 확인(잘못된 값은 거부).
 - 규칙 블록 주입을 종단 확인: `managed-block.mjs render` → `apply --dry-run` → `apply` → 재적용 시
   "변경 없음"(멱등), 기존 파일 내용 보존, `.bak-<타임스탬프>` 백업 생성.

@@ -103,7 +103,7 @@ bridge/discord/                vendoring 한 Claude Code + Codex 용 Discord 브
 | 11 | kna-11-backups | 매일 디스크 스냅샷 정책, `outline-vm` 에 backups 버킷 `roles/storage.objectCreator`, 매일 밤 pg dump 를 backups 버킷으로. 복원 훈련 문서 | `backup.snapshot_policy`, `backup.verified_at` |
 | 13 | kna-13-codex | Codex 에이전트를 같은 위키에 연결 (`~/.codex/AGENTS.md`, `codex mcp`) | `agents[]` |
 | 14 | kna-14-hermes | Hermes 프로필별 에이전트 연결 (skill 주입, `hermes mcp add`) | `agents[]` |
-| 15 | kna-15-aside | Aside 연결 (계정별 규칙 + handoff 모드) | `agents[]` |
+| 15 | kna-15-aside | Aside 연결 (계정별 규칙 + 세션 수확) | `agents[]` |
 | 16 | kna-16-openclaw | OpenClaw 에이전트 연결 | `agents[]` |
 | 12 | kna-12-add-agent | join 모드: 다른 머신이나 다른 에이전트 → 07, 08(새 콜렉션), 09 만. Codex 는 13~16단계 표시 | `agents[]` 에 추가 |
 
