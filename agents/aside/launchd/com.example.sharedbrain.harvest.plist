@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>day.zoey.sharedbrain.harvest</string>
+  <string>com.example.sharedbrain.harvest</string>
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/zoey.c/sharedbrain/agents/aside/harvest-run.sh</string>
+    <string>/Users/me/sharedbrain/agents/aside/harvest-run.sh</string>
   </array>
 
   <!-- 매일 09:00. 그 시각에 맥이 자고 있으면 깨어날 때, 꺼져 있었으면 다음 부팅 뒤에 한 번 돈다. -->
@@ -20,15 +20,15 @@
   <key>EnvironmentVariables</key>
   <dict>
     <key>PATH</key>
-    <string>/Users/zoey.c/.nvm/versions/node/v24.14.0/bin:/Users/zoey.c/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <string>/Users/me/.nvm/versions/node/vXX/bin:/Users/me/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     <key>HOME</key>
-    <string>/Users/zoey.c</string>
+    <string>/Users/me</string>
   </dict>
 
   <key>StandardOutPath</key>
-  <string>/Users/zoey.c/.sharedbrain/harvest.launchd.log</string>
+  <string>/Users/me/.sharedbrain/harvest.launchd.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/zoey.c/.sharedbrain/harvest.launchd.log</string>
+  <string>/Users/me/.sharedbrain/harvest.launchd.log</string>
 
   <key>RunAtLoad</key>
   <false/>

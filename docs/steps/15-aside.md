@@ -87,7 +87,7 @@ Aside 는 계정마다 별도 브라우저 프로필을 갖는다(`aside account
 ~/.aside/u/1/sessions/  →  <회사 에이전트> Sessions
 ```
 
-매핑은 `agents/aside/harvest.mjs` 의 `AGENTS` 상수가 갖는다. 설치할 때 자기 계정·이름으로 맞춘다.
+매핑은 `~/.sharedbrain/harvest-agents.json` 에 둔다: `{ "u0": "<개인 에이전트 이름>", "u1": "<회사 에이전트 이름>" }`
 
 ## 회사 계정 기록 규칙
 
@@ -121,8 +121,8 @@ agents/aside/harvest-run.sh                          # 수확자를 한 번 돌�
 `agents/aside/launchd/` 에 있다.
 
 ```bash
-cp agents/aside/launchd/day.zoey.sharedbrain.harvest.plist ~/Library/LaunchAgents/
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/day.zoey.sharedbrain.harvest.plist
+cp agents/aside/launchd/com.example.sharedbrain.harvest.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.sharedbrain.harvest.plist
 ```
 
 plist 안의 경로(레포 위치, `PATH` 의 node·codex 경로)를 자기 환경에 맞게 고친다.
@@ -147,6 +147,6 @@ plist 안의 경로(레포 위치, `PATH` 의 node·codex 경로)를 자기 환�
 |---|---|
 | `harvest.mjs list` 가 비어 있다 | 계정 번호나 경로가 다르다. `ls ~/.aside/u/` 확인 |
 | 수확자가 MCP 쓰기에서 멈춘다 | 비대화형 승인이 막혔다. Codex 는 `--approve-for-me` |
-| 문서가 엉뚱한 콜렉션에 갔다 | `harvest.mjs` 의 `AGENTS` 매핑 확인 |
+| 문서가 엉뚱한 콜렉션에 갔다 | `~/.sharedbrain/harvest-agents.json` 의 매핑 확인 |
 | 문서에 `\n` 이 문자 그대로 보인다 | 수확자가 이스케이프를 넣었다. `HARVEST.md` 의 "흔한 실수" 참고 |
 | launchd 가 안 돈다 | `launchctl print gui/$(id -u)/<label>` 로 상태와 경로 확인. plist 의 `PATH` 에 node·codex 경로가 있는지 본다 |

@@ -18,8 +18,31 @@ import os from "node:os";
 const ASIDE = path.join(os.homedir(), ".aside", "u");
 const STATE = path.join(os.homedir(), ".sharedbrain", "harvest-state.json");
 
-// 계정 → 에이전트 이름. 계정이 늘면 여기에 더한다.
-const AGENTS = { u0: "맥사이드", u1: "업사이드" };
+// 계정 → 에이전트 이름. 설치마다 다르므로 설정 파일에서 읽는다.
+// ~/.sharedbrain/harvest-agents.json 예: { "u0": "브라우저작업자", "u1": "업무브라우저" }
+const AGENTS_FILE = path.join(os.homedir(), ".sharedbrain", "harvest-agents.json");
+
+function loadAgents() {
+  let raw;
+  try {
+    raw = JSON.parse(fs.readFileSync(AGENTS_FILE, "utf8"));
+  } catch {
+    console.error(
+      `계정 → 에이전트 이름 설정이 없다: ${AGENTS_FILE}\n` +
+        `예: { "u0": "<개인 에이전트 이름>", "u1": "<회사 에이전트 이름>" }\n` +
+        `계정 목록은 \`aside account list\` 로 본다. 이름은 kna-15-aside 에서 정한 것을 쓴다.`,
+    );
+    process.exit(2);
+  }
+  const bad = Object.entries(raw).find(([k, v]) => !/^u\d+$/.test(k) || typeof v !== "string" || !v.trim());
+  if (bad) {
+    console.error(`${AGENTS_FILE} 형식이 잘못됐다: ${JSON.stringify(bad)} (키는 u0 꼴, 값은 이름 문자열)`);
+    process.exit(2);
+  }
+  return raw;
+}
+
+const AGENTS = loadAgents();
 
 function readState() {
   try {

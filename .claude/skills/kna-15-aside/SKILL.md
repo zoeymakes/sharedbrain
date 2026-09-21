@@ -96,11 +96,14 @@ node $MB apply --block .knowanywhere/aside-block-<이름>.md --target ~/.aside/u
 
 ### 3. 수확자 설정
 
-`harvest.mjs` 의 `AGENTS` 상수가 계정 → 에이전트 이름을 정한다. 이 설치의 계정·이름과 다르면 고친다.
+계정 → 에이전트 이름 매핑을 만든다. 파일이 없으면 `harvest.mjs` 가 예시와 함께 exit 2 로 거부한다.
 
 ```bash
-grep -n 'const AGENTS' -A4 agents/aside/harvest.mjs
-node agents/aside/harvest.mjs status     # 대기 세션 수가 보이면 경로가 맞다
+mkdir -p ~/.sharedbrain && chmod 700 ~/.sharedbrain
+cat > ~/.sharedbrain/harvest-agents.json <<'JSON'
+{ "u0": "<개인 에이전트 이름>", "u1": "<회사 에이전트 이름>" }
+JSON
+node agents/aside/harvest.mjs status     # 대기 세션 수가 보이면 경로와 매핑이 맞다
 ```
 
 수확자가 Codex 면 `--approve-for-me` 로 승인 없이 MCP 쓰기가 되는지 먼저 확인한다(`codex exec --approve-for-me`).
@@ -158,7 +161,7 @@ node $H step 15 done
 |---|---|
 | `harvest.mjs list` 가 비어 있다 | 계정 번호나 경로가 다르다. `ls ~/.aside/u/` 확인 |
 | 수확자가 MCP 쓰기에서 멈춘다 | 비대화형 승인이 막혔다. Codex 는 `--approve-for-me` |
-| 문서가 엉뚱한 콜렉션에 갔다 | `harvest.mjs` 의 `AGENTS` 매핑 확인 |
+| 문서가 엉뚱한 콜렉션에 갔다 | `~/.sharedbrain/harvest-agents.json` 의 매핑 확인 |
 | 문서에 `\n` 이 문자 그대로 보인다 | 수확자가 이스케이프를 넣었다. `HARVEST.md` 의 "흔한 실수" 참고 |
 
 ## 선택: 셸에서 Aside 이름으로 직접 쓰기

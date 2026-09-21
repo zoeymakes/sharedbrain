@@ -4,7 +4,7 @@
 # 밀린 날이 있어도 따로 처리할 것이 없다. ~/.sharedbrain/harvest-state.json 이
 # 이미 올린 세션을 기억하므로, 며칠 만에 돌면 그 사이 세션이 한꺼번에 후보로 나온다.
 #
-# 설치: agents/aside/launchd/day.zoey.sharedbrain.harvest.plist
+# 설치: agents/aside/launchd/com.example.sharedbrain.harvest.plist
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
