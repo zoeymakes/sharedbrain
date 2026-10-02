@@ -84,9 +84,9 @@ unset OUTLINE_KEY
 
 | 위치 | 방식 | 템플릿 |
 |---|---|---|
-| macOS | launchd LaunchAgent | `bridge/discord/launchd/com.example.knowanywhere-bridge.plist` |
-| Linux 데스크탑, VM | systemd | `bridge/discord/systemd/knowanywhere-bridge.service` |
-| 어디든 | pm2 | `pm2 start src/index.js --name knowanywhere-bridge --time` |
+| macOS | launchd LaunchAgent | `bridge/discord/launchd/com.example.sharedbrain-bridge.plist` |
+| Linux 데스크탑, VM | systemd | `bridge/discord/systemd/sharedbrain-bridge.service` |
+| 어디든 | pm2 | `pm2 start src/index.js --name sharedbrain-bridge --time` |
 
 인스톨러가 템플릿의 경로와 사용자를 채운 파일을 보여주고, yes 를 받은 뒤 설치한다. VM 에는 `kna-bot` 의 metadata 서버
 접속을 막는 drop-in 도 넣는다. Linux 데스크탑에서는 `sudo` 가 비밀번호를 물으므로, `/etc/systemd/system/` 에 설치하는
@@ -102,8 +102,8 @@ unset OUTLINE_KEY
 launchctl print gui/$(id -u)/com.$(id -un).knowanywhere-bridge | grep -E '^\s*(state|pid) ='
 tail -n 30 ~/kna-bridge/logs/bridge.log
 # Linux, VM (VM 은 gcloud compute ssh kna-wiki-vm --project=P --zone=Z --command='...' 로)
-systemctl is-active knowanywhere-bridge
-sudo journalctl -u knowanywhere-bridge -n 30 --no-pager
+systemctl is-active sharedbrain-bridge
+sudo journalctl -u sharedbrain-bridge -n 30 --no-pager
 ```
 
 로그에 `[bot] 로그인: ...`, `[bot] agent: 코드작업자 / backend: claude`, `[bot] persona: .../kna-bridge/persona.md (...자)`,

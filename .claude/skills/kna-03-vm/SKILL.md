@@ -1,6 +1,6 @@
 ---
 name: kna-03-vm
-description: fresh 모드에서 kna-01-gcp-account(와 kna-02-budget 또는 그 건너뛰기)가 끝난 뒤 knowanywhere 03단계를 진행할 때 쓴다. 프로젝트 역할이 없는 전용 서비스 계정 outline-vm 을 만들고, 고정 IP 를 예약하고, 방화벽 80/443 을 열고, outline-vm 을 --scopes=cloud-platform 으로 붙인 e2-medium Debian 12 30GB pd-balanced VM 을 만든 뒤 SSH 로 패키지 업데이트, 시간대, 2GB swap 과 vm.swappiness=10, Docker Engine 과 compose plugin 설치를 한다. 끝으로 default 네트워크의 자동 규칙 default-allow-rdp 삭제를 제안한다.
+description: fresh 모드에서 kna-01-gcp-account(와 kna-02-budget 또는 그 건너뛰기)가 끝난 뒤 sharedbrain 03단계를 진행할 때 쓴다. 프로젝트 역할이 없는 전용 서비스 계정 outline-vm 을 만들고, 고정 IP 를 예약하고, 방화벽 80/443 을 열고, outline-vm 을 --scopes=cloud-platform 으로 붙인 e2-medium Debian 12 30GB pd-balanced VM 을 만든 뒤 SSH 로 패키지 업데이트, 시간대, 2GB swap 과 vm.swappiness=10, Docker Engine 과 compose plugin 설치를 한다. 끝으로 default 네트워크의 자동 규칙 default-allow-rdp 삭제를 제안한다.
 ---
 
 # 03단계: VM
@@ -69,7 +69,7 @@ gcloud iam service-accounts list --project=P --format="table(email,disabled)"
 바꿀 수 있다. 그래서 VM 에는 역할이 없는 전용 계정을 붙인다.
 
 ```bash
-gcloud iam service-accounts create outline-vm --project=P --display-name="knowanywhere wiki VM (no project roles)"
+gcloud iam service-accounts create outline-vm --project=P --display-name="sharedbrain wiki VM (no project roles)"
 ```
 
 이 계정에는 `gcloud projects add-iam-policy-binding` 으로 역할을 주지 **않는다**. 권한은 11단계가 backups 버킷 하나에만
@@ -160,7 +160,7 @@ gcloud compute ssh kna-wiki-vm --project=P --zone=Z --command='sudo timedatectl 
 
 ```bash
 # 2 GB swap + 낮은 swappiness (Outline, Postgres, Redis 가 4 GB RAM 을 나눠 쓴다)
-gcloud compute ssh kna-wiki-vm --project=P --zone=Z --command='if ! sudo swapon --show | grep -q /swapfile; then sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile; fi; grep -q "^/swapfile " /etc/fstab || echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab; echo "vm.swappiness=10" | sudo tee /etc/sysctl.d/99-knowanywhere-swap.conf && sudo sysctl -p /etc/sysctl.d/99-knowanywhere-swap.conf'
+gcloud compute ssh kna-wiki-vm --project=P --zone=Z --command='if ! sudo swapon --show | grep -q /swapfile; then sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile; fi; grep -q "^/swapfile " /etc/fstab || echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab; echo "vm.swappiness=10" | sudo tee /etc/sysctl.d/99-sharedbrain-swap.conf && sudo sysctl -p /etc/sysctl.d/99-sharedbrain-swap.conf'
 ```
 
 ```bash

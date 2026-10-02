@@ -1,6 +1,6 @@
 ---
 name: kna-04-dns
-description: fresh 모드에서 kna-03-vm 이 끝난 뒤 knowanywhere 04단계를 진행할 때 쓴다. 위키 호스트 이름이 VM 고정 IP 로 풀리게 한다. 내 도메인의 wiki.<domain> A 레코드(Cloudflare 는 proxy OFF), 또는 무료 wiki-<ip-with-dashes>.sslip.io 이름을 쓰고, dig 나 nslookup 으로 해석 결과를 확인한다.
+description: fresh 모드에서 kna-03-vm 이 끝난 뒤 sharedbrain 04단계를 진행할 때 쓴다. 위키 호스트 이름이 VM 고정 IP 로 풀리게 한다. 내 도메인의 wiki.<domain> A 레코드(Cloudflare 는 proxy OFF), 또는 무료 wiki-<ip-with-dashes>.sslip.io 이름을 쓰고, dig 나 nslookup 으로 해석 결과를 확인한다.
 ---
 
 # 04단계: DNS

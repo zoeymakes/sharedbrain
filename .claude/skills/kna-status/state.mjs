@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// knowanywhere state 도우미. .knowanywhere/state.json 을 원자적으로 읽고 쓴다.
+// sharedbrain state 도우미. .knowanywhere/state.json 을 원자적으로 읽고 쓴다.
 // 비밀이 아닌 값만 다룬다. 비밀값처럼 보이는 키나 값은 거부한다.
 // 스키마: docs/state.md. Node >= 20 필요. 의존성 없음.
 //

@@ -52,7 +52,7 @@ This description is the source of truth. Read it before writing here. An agent t
 ## Naming
 
 - **Canonical documents** are topic documents that are kept and edited over time. Title `NN · topic`, with a two-digit number.
-  Examples: `00 · How agents use this wiki`, `10 · User profile`, `20 · Project: knowanywhere`, `30 · Conventions`, `40 · Glossary`, `50 · Machines and environments`.
+  Examples: `00 · How agents use this wiki`, `10 · User profile`, `20 · Project: sharedbrain`, `30 · Conventions`, `40 · Glossary`, `50 · Machines and environments`.
 - **Decisions** get one document each, titled `YYYY-MM-DD · Decision: <gist>`. Example: `2026-09-15 · Decision: keep database dumps for 30 days`.
 - Before creating a document, search for a canonical document on the same topic. If one exists, add to it. One document covers one topic.
 - Keep it flat. No nested documents.
@@ -116,7 +116,7 @@ If the MCP connection fails (expired login, wiki down), tell the user in one lin
 
 ## Adding an agent or a machine
 
-Run the `kna-12-add-agent` step of the knowanywhere installer repository. A new agent gets its own `<name> Sessions` collection; a new machine for an existing agent reuses that agent's collection.
+Run the `kna-12-add-agent` step of the sharedbrain installer repository. A new agent gets its own `<name> Sessions` collection; a new machine for an existing agent reuses that agent's collection.
 
 Edited by: {{AGENT_NAME}} · {{DATE}}
 <!-- kna:seed:end -->

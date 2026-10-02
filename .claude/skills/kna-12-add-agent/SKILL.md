@@ -89,7 +89,7 @@ claude
    node .claude/skills/kna-status/state.mjs step 08 done
    ```
 4. `kna-09-persona`: 새 머신의 `~/.claude/CLAUDE.md` 에 같은 블록을 넣는다. 스모크 테스트가 먼저 검색하므로 첫 머신이
-   만든 `YYYY-MM-DD · knowanywhere 설치` 문서를 찾아 `## Update — <시각> · <새 머신>` 을 붙인다. 새 문서를 만들지 않는다.
+   만든 `YYYY-MM-DD · sharedbrain 설치` 문서를 찾아 `## Update — <시각> · <새 머신>` 을 붙인다. 새 문서를 만들지 않는다.
 5. `kna-10-discord`: 선택.
 
 ### B. 새 Claude Code 에이전트
@@ -142,7 +142,7 @@ node .claude/skills/kna-status/state.mjs agent-add '{"name":"검증작업자","m
 **A. 같은 에이전트, 새 머신.** 새 머신의 9단계 검증이 기준이다. 사용자가 끝났다고 하면 이 머신에서도 확인한다.
 
 1. `list_collections` 가 에러 없이 돈다(이 머신의 MCP 도 살아 있다).
-2. `<agent.name> Sessions` 에서 `list_documents` 에 `query: "knowanywhere"` 로 설치 문서를 찾고, 다시 읽어 새 머신 이름이
+2. `<agent.name> Sessions` 에서 `list_documents` 에 `query: "sharedbrain"` 로 설치 문서를 찾고, 다시 읽어 새 머신 이름이
    붙은 `## Update — ... · <새 머신>` 제목이 있는지 본다. 그 제목 줄과 문서 URL 을 보여준다.
 3. 설치 문서가 둘이면 새 머신이 검색을 건너뛴 것이다. 지우기 전에 사용자에게 묻고 규칙대로 하나로 합친다.
 

@@ -1,6 +1,6 @@
 # 구조
 
-knowanywhere 는 Google Cloud VM 한 대에 self-hosted [Outline](https://www.getoutline.com) 위키를 하나 설치하고,
+sharedbrain 은 Google Cloud VM 한 대에 self-hosted [Outline](https://www.getoutline.com) 위키를 하나 설치하고,
 내가 돌리는 모든 에이전트를 MCP 로 거기에 연결한다. 에이전트들은 쓰기 규칙 하나를 공유하고, 그 규칙은 위키 안의
 콜렉션 설명(overview)에 들어 있다.
 

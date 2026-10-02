@@ -56,7 +56,7 @@ placeholder 여섯 개(`{{AGENT_NAME}}`, `{{PERSONA}}`, `{{WIKI_URL}}`, `{{MCP_S
 
 ```
 <!-- sharedbrain:rules:start -->
-## 공유 위키: 코드작업자 (knowanywhere 관리 블록)
+## 공유 위키: 코드작업자 (sharedbrain 관리 블록)
 ...페르소나, 위키 주소와 MCP 서버, 세션 기록 규칙, 공유 지식 규칙, 다른 에이전트, 위키에 닿지 않을 때...
 <!-- sharedbrain:rules:end -->
 ```
@@ -91,7 +91,7 @@ grep -c '^<!-- sharedbrain:rules:start -->$' ~/.claude/CLAUDE.md                
 (cd "$(mktemp -d)" && claude -p '너의 에이전트 이름과 세션 기록 콜렉션 이름만 한 줄로 답하라.')   # 코드작업자, 코드작업자 Sessions
 ```
 
-그다음 에이전트가 `코드작업자 Sessions` 에서 `knowanywhere` 로 먼저 검색하고, 없으면 `2026-09-15 · knowanywhere 설치` 문서를
+그다음 에이전트가 `코드작업자 Sessions` 에서 `sharedbrain` 로 먼저 검색하고, 없으면 `2026-09-15 · sharedbrain 설치` 문서를
 만든다. 첫 줄 `작성자: 코드작업자 · 상태: 🟡 진행 중`, `## 배경`, `## 완료 조건`, 이 머신 이름이 붙은 `## Update`, 마지막 줄
 `최종 갱신: 코드작업자 · <시각>`. 다른 머신에서 같은 에이전트로 이미 만든 문서가 있으면 새로 만들지 않고 Update 만 붙인다.
 에이전트가 문서를 다시 읽어 URL 을 보여주면 끝이다.

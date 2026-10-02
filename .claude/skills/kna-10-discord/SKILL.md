@@ -1,6 +1,6 @@
 ---
 name: kna-10-discord
-description: knowanywhere 10단계에 쓴다(kna-09-persona 뒤, 선택 단계라 건너뛸 수 있다). 사용자가 같은 에이전트를 Discord 에서도 쓰고 싶을 때 Discord 애플리케이션과 봇을 만드는 클릭 경로를 안내하고, bridge/discord 를 레포 밖(이 머신 또는 위키 GCP VM)에 설치하고, .env 와 persona.md 를 만들고, launchd·systemd·pm2 서비스로 띄운 뒤 테스트 메시지로 스레드 답장을 확인한다.
+description: sharedbrain 10단계에 쓴다(kna-09-persona 뒤, 선택 단계라 건너뛸 수 있다). 사용자가 같은 에이전트를 Discord 에서도 쓰고 싶을 때 Discord 애플리케이션과 봇을 만드는 클릭 경로를 안내하고, bridge/discord 를 레포 밖(이 머신 또는 위키 GCP VM)에 설치하고, .env 와 persona.md 를 만들고, launchd·systemd·pm2 서비스로 띄운 뒤 테스트 메시지로 스레드 답장을 확인한다.
 ---
 
 # 10단계: Discord 봇 (선택)
@@ -266,8 +266,8 @@ sudo -iu kna-bot bash -c "~/.local/bin/claude auth status --text; ~/.local/bin/c
 
 ```bash
 gcloud compute ssh kna-wiki-vm --project=P --zone=Z --command='
-sudo mkdir -p /etc/systemd/system/knowanywhere-bridge.service.d
-printf "%s\n" "[Service]" "ExecStartPre=+/bin/sh -c \"/usr/sbin/iptables -C OUTPUT -d 169.254.169.254 -m owner --uid-owner kna-bot -j REJECT 2>/dev/null || /usr/sbin/iptables -I OUTPUT -d 169.254.169.254 -m owner --uid-owner kna-bot -j REJECT\"" | sudo tee /etc/systemd/system/knowanywhere-bridge.service.d/block-metadata.conf'
+sudo mkdir -p /etc/systemd/system/sharedbrain-bridge.service.d
+printf "%s\n" "[Service]" "ExecStartPre=+/bin/sh -c \"/usr/sbin/iptables -C OUTPUT -d 169.254.169.254 -m owner --uid-owner kna-bot -j REJECT 2>/dev/null || /usr/sbin/iptables -I OUTPUT -d 169.254.169.254 -m owner --uid-owner kna-bot -j REJECT\"" | sudo tee /etc/systemd/system/sharedbrain-bridge.service.d/block-metadata.conf'
 ```
 
 `+` 접두사는 그 한 줄만 root 로 실행한다. 확인은 3c 에서 서비스를 띄운 뒤 한다.
@@ -281,8 +281,8 @@ printf "%s\n" "[Service]" "ExecStartPre=+/bin/sh -c \"/usr/sbin/iptables -C OUTP
 ```bash
 LABEL=com.$(id -un).knowanywhere-bridge
 sed -e "s#/ABSOLUTE/PATH/TO/bridge/discord#$HOME/kna-bridge#g" -e "s#/ABSOLUTE/PATH/TO/node#$(command -v node)#g" \
-    -e "s#/Users/YOUR_USER#$HOME#g" -e "s#com.example.knowanywhere-bridge#$LABEL#g" \
-    bridge/discord/launchd/com.example.knowanywhere-bridge.plist > .knowanywhere/$LABEL.plist
+    -e "s#/Users/YOUR_USER#$HOME#g" -e "s#com.example.sharedbrain-bridge#$LABEL#g" \
+    bridge/discord/launchd/com.example.sharedbrain-bridge.plist > .knowanywhere/$LABEL.plist
 plutil -lint .knowanywhere/$LABEL.plist && sed -n '/<plist/,$p' .knowanywhere/$LABEL.plist
 ```
 
@@ -302,49 +302,49 @@ tail -n 20 ~/kna-bridge/logs/bridge.log ~/kna-bridge/logs/bridge.err.log
 **Linux 데스크탑 (systemd):**
 
 ```bash
-sed -e "s#/home/YOUR_USER/knowanywhere/bridge/discord#$HOME/kna-bridge#g" -e "s#/home/YOUR_USER#$HOME#g" -e "s#YOUR_USER#$(id -un)#g" \
+sed -e "s#/home/YOUR_USER/sharedbrain/bridge/discord#$HOME/kna-bridge#g" -e "s#/home/YOUR_USER#$HOME#g" -e "s#YOUR_USER#$(id -un)#g" \
     -e "s#^ExecStart=/usr/bin/node#ExecStart=$(command -v node)#" \
-    bridge/discord/systemd/knowanywhere-bridge.service > .knowanywhere/knowanywhere-bridge.service
-grep -v '^#' .knowanywhere/knowanywhere-bridge.service
+    bridge/discord/systemd/sharedbrain-bridge.service > .knowanywhere/sharedbrain-bridge.service
+grep -v '^#' .knowanywhere/sharedbrain-bridge.service
 ```
 
 yes 를 받은 뒤 이 두 줄은 사용자가 **Claude Code 밖의 자기 터미널**에서 이 레포 디렉터리(`pwd` 출력)로 `cd` 한 뒤
 실행한다. `sudo` 가 비밀번호를 물으므로 TTY 가 필요한데, 이 세션의 도구 호출에는 TTY 가 없다.
 
 ```bash
-sudo install -m 644 .knowanywhere/knowanywhere-bridge.service /etc/systemd/system/knowanywhere-bridge.service
-sudo systemctl daemon-reload && sudo systemctl enable --now knowanywhere-bridge
+sudo install -m 644 .knowanywhere/sharedbrain-bridge.service /etc/systemd/system/sharedbrain-bridge.service
+sudo systemctl daemon-reload && sudo systemctl enable --now sharedbrain-bridge
 ```
 
-사용자가 끝났다고 하면 `systemctl is-active knowanywhere-bridge` 로 확인한다(기대: `active`).
+사용자가 끝났다고 하면 `systemctl is-active sharedbrain-bridge` 로 확인한다(기대: `active`).
 
 **VM (systemd):**
 
 ```bash
-sed -e 's#/home/YOUR_USER/knowanywhere/bridge/discord#/home/kna-bot/kna-bridge#g' -e 's#YOUR_USER#kna-bot#g' \
-    bridge/discord/systemd/knowanywhere-bridge.service > .knowanywhere/knowanywhere-bridge.service
-grep -v '^#' .knowanywhere/knowanywhere-bridge.service
+sed -e 's#/home/YOUR_USER/sharedbrain/bridge/discord#/home/kna-bot/kna-bridge#g' -e 's#YOUR_USER#kna-bot#g' \
+    bridge/discord/systemd/sharedbrain-bridge.service > .knowanywhere/sharedbrain-bridge.service
+grep -v '^#' .knowanywhere/sharedbrain-bridge.service
 ```
 
 `ExecStart=/usr/bin/node src/index.js` 가 3b 의 `command -v node` 와 맞는지 본다. yes 를 받은 뒤:
 
 ```bash
-gcloud compute scp .knowanywhere/knowanywhere-bridge.service kna-wiki-vm:/tmp/ --project=P --zone=Z
+gcloud compute scp .knowanywhere/sharedbrain-bridge.service kna-wiki-vm:/tmp/ --project=P --zone=Z
 gcloud compute ssh kna-wiki-vm --project=P --zone=Z --command='
-sudo install -m 644 /tmp/knowanywhere-bridge.service /etc/systemd/system/knowanywhere-bridge.service && rm /tmp/knowanywhere-bridge.service &&
-sudo systemctl daemon-reload && sudo systemctl enable --now knowanywhere-bridge
-sleep 5; systemctl is-active knowanywhere-bridge
+sudo install -m 644 /tmp/sharedbrain-bridge.service /etc/systemd/system/sharedbrain-bridge.service && rm /tmp/sharedbrain-bridge.service &&
+sudo systemctl daemon-reload && sudo systemctl enable --now sharedbrain-bridge
+sleep 5; systemctl is-active sharedbrain-bridge
 sudo -u kna-bot curl -s -m 3 -o /dev/null -w "%{http_code}\n" -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/id || echo "kna-bot metadata exit=$?"
 curl -s -m 3 -o /dev/null -w "%{http_code}\n" -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/id'
 ```
 
 기대: `active`, `kna-bot` 쪽은 `000` 과 `kna-bot metadata exit=7`(연결 거부), 마지막 줄(로그인 사용자)은 `200`. `kna-bot` 쪽이 `200` 이면
-drop-in 이 적용되지 않았다. `systemctl cat knowanywhere-bridge` 로 drop-in 이 붙었는지 본다.
+drop-in 이 적용되지 않았다. `systemctl cat sharedbrain-bridge` 로 drop-in 이 붙었는지 본다.
 
-**pm2 (어느 쪽이든 대안):** `npm install -g pm2`, `(cd ~/kna-bridge && pm2 start src/index.js --name knowanywhere-bridge --time)`.
+**pm2 (어느 쪽이든 대안):** `npm install -g pm2`, `(cd ~/kna-bridge && pm2 start src/index.js --name sharedbrain-bridge --time)`.
 `npm install -g` 는 전역 설치이므로 명령을 보여주고 yes 를 받는다. `EACCES` 로 실패하면 sudo 가 필요한 Node 설치이므로
 사용자가 자기 터미널에서 실행한다. 부팅 때 시작하려면 `pm2 save && pm2 startup` 이 출력하는 명령(sudo 가 들어 있다)을
-사용자가 자기 터미널에서 실행하고, 끝났다고 하면 `pm2 status knowanywhere-bridge` 로 확인한다.
+사용자가 자기 터미널에서 실행하고, 끝났다고 하면 `pm2 status sharedbrain-bridge` 로 확인한다.
 
 ### 4. 테스트 메시지 (사람)
 
@@ -363,9 +363,9 @@ drop-in 이 적용되지 않았다. `systemctl cat knowanywhere-bridge` 로 drop
 | 위치 | 상태 | 로그 |
 |---|---|---|
 | macOS | `launchctl print gui/$(id -u)/com.$(id -un).knowanywhere-bridge \| grep -E '^\s*(state\|pid) ='` | `tail -n 30 ~/kna-bridge/logs/bridge.log` |
-| Linux 데스크탑 | `systemctl is-active knowanywhere-bridge` | `journalctl -u knowanywhere-bridge -n 30 --no-pager` |
-| VM | `gcloud compute ssh kna-wiki-vm --project=P --zone=Z --command='systemctl is-active knowanywhere-bridge; sudo journalctl -u knowanywhere-bridge -n 30 --no-pager'` | 같은 명령 |
-| pm2 | `pm2 status knowanywhere-bridge` | `pm2 logs knowanywhere-bridge --lines 30 --nostream` |
+| Linux 데스크탑 | `systemctl is-active sharedbrain-bridge` | `journalctl -u sharedbrain-bridge -n 30 --no-pager` |
+| VM | `gcloud compute ssh kna-wiki-vm --project=P --zone=Z --command='systemctl is-active sharedbrain-bridge; sudo journalctl -u sharedbrain-bridge -n 30 --no-pager'` | 같은 명령 |
+| pm2 | `pm2 status sharedbrain-bridge` | `pm2 logs sharedbrain-bridge --lines 30 --nostream` |
 
 기대 로그(순서대로):
 

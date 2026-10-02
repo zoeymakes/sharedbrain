@@ -1,6 +1,6 @@
 ---
 name: kna-11-backups
-description: knowanywhere 11단계에 쓴다(fresh 모드의 마지막 단계, kna-09-persona와 선택 단계 kna-10-discord 뒤). 부팅 디스크에 매일 03:00(VM 시간대) 스냅샷 정책을 7일 보관으로 붙이고, VM 전용 서비스 계정 outline-vm 에 backups 버킷의 roles/storage.objectCreator 와 roles/storage.objectViewer 를 준 뒤, VM에 deploy/outline/pg-backup.sh 를 /usr/local/bin/outline-pg-backup 으로 설치해 매일 03:30 cron으로 DB 덤프를 backups 버킷에 올린다. 지금 한 번 덤프해 `gcloud storage ls` 로 확인하고, 첫 예약 스냅샷까지 확인한 뒤 backup.* 를 쓴다.
+description: sharedbrain 11단계에 쓴다(fresh 모드의 마지막 단계, kna-09-persona와 선택 단계 kna-10-discord 뒤). 부팅 디스크에 매일 03:00(VM 시간대) 스냅샷 정책을 7일 보관으로 붙이고, VM 전용 서비스 계정 outline-vm 에 backups 버킷의 roles/storage.objectCreator 와 roles/storage.objectViewer 를 준 뒤, VM에 deploy/outline/pg-backup.sh 를 /usr/local/bin/outline-pg-backup 으로 설치해 매일 03:30 cron으로 DB 덤프를 backups 버킷에 올린다. 지금 한 번 덤프해 `gcloud storage ls` 로 확인하고, 첫 예약 스냅샷까지 확인한 뒤 backup.* 를 쓴다.
 ---
 
 # 11단계: 백업
@@ -92,7 +92,7 @@ node -e 'const tz=process.argv[1];const off=new Intl.DateTimeFormat("en-US",{tim
 ### 3. 스냅샷 정책을 만들고 부팅 디스크에 붙이기 (비용 발생, yes 필요)
 
 ```bash
-gcloud compute resource-policies create snapshot-schedule kna-daily-snapshot --project=kna-wiki-a1b2 --region=asia-northeast3 --start-time=18:00 --daily-schedule --max-retention-days=7 --on-source-disk-delete=apply-retention-policy --description="knowanywhere: daily boot disk snapshot"
+gcloud compute resource-policies create snapshot-schedule kna-daily-snapshot --project=kna-wiki-a1b2 --region=asia-northeast3 --start-time=18:00 --daily-schedule --max-retention-days=7 --on-source-disk-delete=apply-retention-policy --description="sharedbrain: daily boot disk snapshot"
 gcloud compute disks add-resource-policies kna-wiki-vm --project=kna-wiki-a1b2 --zone=asia-northeast3-a --resource-policies=kna-daily-snapshot
 ```
 
@@ -129,7 +129,7 @@ stat 하기 때문이다. `objectCreator` 만 주면 업로드가
 스크립트는 버킷을 `/opt/outline/.env` 의 `BACKUP_BUCKET` 에서 읽으므로 인자가 필요 없다.
 
 ```bash
-gcloud compute ssh kna-wiki-vm --project=kna-wiki-a1b2 --zone=asia-northeast3-a --command='sudo install -m 755 /opt/outline/pg-backup.sh /usr/local/bin/outline-pg-backup && (dpkg -s cron >/dev/null 2>&1 || sudo apt-get install -y cron) && printf "%s\n" "# knowanywhere: nightly Outline DB dump, VM local time (timedatectl)" "30 3 * * * root /usr/local/bin/outline-pg-backup >> /var/log/outline-backup.log 2>&1" | sudo tee /etc/cron.d/outline-backup >/dev/null && sudo chmod 644 /etc/cron.d/outline-backup && sudo systemctl restart cron && systemctl is-active cron && cat /etc/cron.d/outline-backup'
+gcloud compute ssh kna-wiki-vm --project=kna-wiki-a1b2 --zone=asia-northeast3-a --command='sudo install -m 755 /opt/outline/pg-backup.sh /usr/local/bin/outline-pg-backup && (dpkg -s cron >/dev/null 2>&1 || sudo apt-get install -y cron) && printf "%s\n" "# sharedbrain: nightly Outline DB dump, VM local time (timedatectl)" "30 3 * * * root /usr/local/bin/outline-pg-backup >> /var/log/outline-backup.log 2>&1" | sudo tee /etc/cron.d/outline-backup >/dev/null && sudo chmod 644 /etc/cron.d/outline-backup && sudo systemctl restart cron && systemctl is-active cron && cat /etc/cron.d/outline-backup'
 ```
 
 기대 출력: `active` 와 cron 파일 두 줄. `systemctl restart cron` 은 3단계에서 바꾼 시간대를 cron이 확실히 읽게 한다.

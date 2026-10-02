@@ -1,6 +1,6 @@
 ---
 name: kna-01-gcp-account
-description: fresh 모드에서 kna-00-start 가 끝난 뒤 knowanywhere 01단계를 진행할 때 쓴다. Google Cloud 가입과 $300 무료 크레딧을 안내하고, gcloud auth login, 프로젝트 생성, 결제 계정 연결, compute/storage/iam API 활성화, region 과 zone 선택을 한다. 사용자의 전역 gcloud 설정은 바꾸지 않는다.
+description: fresh 모드에서 kna-00-start 가 끝난 뒤 sharedbrain 01단계를 진행할 때 쓴다. Google Cloud 가입과 $300 무료 크레딧을 안내하고, gcloud auth login, 프로젝트 생성, 결제 계정 연결, compute/storage/iam API 활성화, region 과 zone 선택을 한다. 사용자의 전역 gcloud 설정은 바꾸지 않는다.
 ---
 
 # 01단계: GCP 계정, 프로젝트, 결제
@@ -89,14 +89,14 @@ gcloud organizations list --format="value(name.basename(),displayName)"
   05단계 OAuth 동의 화면에서 Audience **Internal**(그 조직 계정만 로그인, Test users 불필요)을 고를 수 있다.
 
   ```bash
-  gcloud projects create kna-wiki-a1b2 --name="knowanywhere wiki" --organization=123456789012
+  gcloud projects create kna-wiki-a1b2 --name="sharedbrain wiki" --organization=123456789012
   ```
 
 - **조직이 여럿**이면 어느 조직에 둘지 묻는다.
 - **아무것도 안 나오면** 개인 Gmail 같은 조직 없는 계정이다. `--organization` 없이 만든다.
 
   ```bash
-  gcloud projects create kna-wiki-a1b2 --name="knowanywhere wiki"
+  gcloud projects create kna-wiki-a1b2 --name="sharedbrain wiki"
   ```
 
 프로젝트 생성은 무료다. 고른 명령을 보여주고 yes 를 받은 뒤 실행한다.

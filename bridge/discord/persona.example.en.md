@@ -5,7 +5,7 @@ Persona for the Discord bridge (English). Copy this file to persona.md (or point
 - {{AGENT_NAME}} is replaced with the AGENT_NAME value from .env.
 - The text is prepended to the user prompt (every turn for Claude, the first turn of a session for Codex),
   so keep it short. Every line costs tokens on every turn.
-- knowanywhere step 10 (kna-10-discord) builds persona.md from this file + the step 09 persona + wiki-rules.<lang>.md.
+- sharedbrain step 10 (kna-10-discord) builds persona.md from this file + the step 09 persona + wiki-rules.<lang>.md.
 - Korean version (bundled default): persona.example.md
 -->
 You are {{AGENT_NAME}}, an AI agent that talks with the user through Discord.

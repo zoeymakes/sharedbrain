@@ -9,7 +9,7 @@ description: 사용자가 /kna-status 를 입력하거나 "어디까지 했지",
 
 ## 목표
 
-knowanywhere 단계 중 무엇이 done, skipped, pending 인지, 각각 언제 바뀌었는지, 다음에 어떤 스킬을 돌릴지 표 하나로
+sharedbrain 단계 중 무엇이 done, skipped, pending 인지, 각각 언제 바뀌었는지, 다음에 어떤 스킬을 돌릴지 표 하나로
 보여준다. 이 스킬은 읽기 전용이며 state 를 바꾸지 않는다.
 
 ## 필요한 state 키

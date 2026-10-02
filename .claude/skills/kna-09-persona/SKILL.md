@@ -1,6 +1,6 @@
 ---
 name: kna-09-persona
-description: knowanywhere 9단계에 쓴다(kna-08-collections 뒤, fresh·join 모두. kna-12-add-agent 가 다른 머신에서 다시 부를 때도). templates/persona.md 질문으로 페르소나를 받고, templates/claude-md-block.<lang>.md 를 렌더링해 전체 블록을 보여준 뒤 동의를 받아 ~/.claude/CLAUDE.md 의 knowanywhere 마커 구간에 넣는다(managed-block.mjs, 백업 자동). 스모크 테스트로 에이전트가 이 설치에 대한 세션 문서를 규칙대로 만들고 다시 읽는다.
+description: sharedbrain 9단계에 쓴다(kna-08-collections 뒤, fresh·join 모두. kna-12-add-agent 가 다른 머신에서 다시 부를 때도). templates/persona.md 질문으로 페르소나를 받고, templates/claude-md-block.<lang>.md 를 렌더링해 전체 블록을 보여준 뒤 동의를 받아 ~/.claude/CLAUDE.md 의 sharedbrain 마커 구간에 넣는다(managed-block.mjs, 백업 자동). 스모크 테스트로 에이전트가 이 설치에 대한 세션 문서를 규칙대로 만들고 다시 읽는다.
 ---
 
 # 09단계: 페르소나와 규칙 블록
@@ -180,7 +180,7 @@ grep -c '^<!-- sharedbrain:rules:end -->$' ~/.claude/CLAUDE.md
 node .claude/skills/kna-09-persona/managed-block.mjs show --target ~/.claude/CLAUDE.md | head -3
 ```
 
-기대: `1`, `1`, 그리고 `<!-- sharedbrain:rules:start -->` 와 `## 공유 위키: 코드작업자 (knowanywhere 관리 블록)` 로 시작하는 줄.
+기대: `1`, `1`, 그리고 `<!-- sharedbrain:rules:start -->` 와 `## 공유 위키: 코드작업자 (sharedbrain 관리 블록)` 로 시작하는 줄.
 
 ### 2. 새 세션이 블록을 읽는다
 
@@ -200,13 +200,13 @@ node .claude/skills/kna-09-persona/managed-block.mjs show --target ~/.claude/CLA
 (예: `outline` 이면 도구 이름은 `mcp__outline__list_collections` 등)이다.
 
 1. `list_collections` 로 `<agent.name> Sessions` 를 정확한 이름으로 찾아 id 를 얻는다.
-2. **먼저 검색한다.** 그 콜렉션에서 `list_documents` 에 `query: "knowanywhere"` 와 그 `collectionId` 를 준다.
+2. **먼저 검색한다.** 그 콜렉션에서 `list_documents` 에 `query: "sharedbrain"` 와 그 `collectionId` 를 준다.
    - 같은 에이전트가 다른 머신에서 이미 만든 설치 문서가 있으면(join 모드에서 흔하다) 새로 만들지 않는다. 그 문서에
      `## Update — <YYYY-MM-DD HH:MM TZ> · <머신>` 을 붙이고 마지막 `최종 갱신:` 줄을 새 시각으로 바꾼다. 콜렉션
      overview 의 "고칠 때" 절대로 부분 수정한다.
    - 없으면 새로 만든다.
 3. 새로 만들 때:
-   - 제목: `YYYY-MM-DD · knowanywhere 설치` (영어 템플릿이면 `YYYY-MM-DD · knowanywhere install`). 날짜는 설치를
+   - 제목: `YYYY-MM-DD · sharedbrain 설치` (영어 템플릿이면 `YYYY-MM-DD · sharedbrain install`). 날짜는 설치를
      시작한 날의 현지 날짜: `node -e 'console.log(new Date(process.argv[1]).toLocaleDateString("sv-SE"))' "$(node .claude/skills/kna-status/state.mjs get created_at | tr -d '"')"`
    - 도구가 지원하면 `icon` 필드에 이모지 1개(예: 📚).
    - 시각은 `date '+%Y-%m-%d %H:%M %Z'`, 머신은 2에서 정한 이름.
@@ -217,7 +217,7 @@ node .claude/skills/kna-09-persona/managed-block.mjs show --target ~/.claude/CLA
      시작: 2026-09-15 14:05 KST · 최종 갱신: 2026-09-15 18:40 KST
 
      ## 배경
-     knowanywhere 인스톨러로 공유 위키 https://wiki.example.com 을 만들고 이 에이전트를 연결했다. 이 문서는 설치
+     sharedbrain 인스톨러로 공유 위키 https://wiki.example.com 을 만들고 이 에이전트를 연결했다. 이 문서는 설치
      과정의 기록이며 9단계 스모크 테스트로 만들었다.
 
      ## 완료 조건

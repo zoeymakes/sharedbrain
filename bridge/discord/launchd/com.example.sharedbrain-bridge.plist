@@ -4,7 +4,7 @@
   launchd template for running the Discord bridge on macOS (per-user LaunchAgent).
 
   How to fill it in:
-  1. Pick a label, for example com.yourname.knowanywhere-bridge, and use it for the file name and <Label>.
+  1. Pick a label, for example com.yourname.sharedbrain-bridge, and use it for the file name and <Label>.
   2. Replace every /ABSOLUTE/PATH/TO/bridge/discord with the absolute path of this folder (`pwd` inside it).
   3. Replace /ABSOLUTE/PATH/TO/node with the output of `command -v node` (Homebrew on Apple silicon: /opt/homebrew/bin/node).
   4. Replace /Users/YOUR_USER with your home directory (`echo $HOME`). The agent needs HOME to find the
@@ -13,7 +13,7 @@
   6. Make sure the logs/ folder exists: mkdir -p /ABSOLUTE/PATH/TO/bridge/discord/logs
 
   Install and control (replace LABEL with your label):
-    cp launchd/com.example.knowanywhere-bridge.plist ~/Library/LaunchAgents/LABEL.plist
+    cp launchd/com.example.sharedbrain-bridge.plist ~/Library/LaunchAgents/LABEL.plist
     launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/LABEL.plist    # load and start
     launchctl kickstart -k gui/$(id -u)/LABEL                              # restart after code or .env changes
     launchctl bootout gui/$(id -u)/LABEL                                   # stop and unload
@@ -21,7 +21,7 @@
 -->
 <plist version="1.0">
 <dict>
-  <key>Label</key><string>com.example.knowanywhere-bridge</string>
+  <key>Label</key><string>com.example.sharedbrain-bridge</string>
   <key>ProgramArguments</key>
   <array>
     <string>/ABSOLUTE/PATH/TO/node</string>

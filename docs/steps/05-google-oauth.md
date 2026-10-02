@@ -61,7 +61,7 @@ https://console.cloud.google.com/auth/overview?project=kna-wiki-a1b2
 
 | 칸 | 넣을 것 |
 |---|---|
-| **App Information** | App name: `knowanywhere wiki`(Google 로그인 화면에 보이는 이름). User support email: 내 계정 |
+| **App Information** | App name: `sharedbrain wiki`(Google 로그인 화면에 보이는 이름). User support email: 내 계정 |
 | **Audience** | 0절 결과대로. 조직 아래 프로젝트면 **Internal**(그 조직 계정만 로그인), 조직이 없으면 **External** |
 | **Contact Information** | 알림을 받을 이메일 |
 | **Finish** | "Google API Services: User Data Policy" 동의에 체크 > **Continue** > **Create** |

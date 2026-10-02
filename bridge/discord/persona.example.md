@@ -4,7 +4,7 @@ Discord 브리지 페르소나. persona.md 로 복사해서 고친다(PERSONA_FI
 - 이런 HTML 주석은 에이전트에 보내기 전에 지워진다.
 - {{AGENT_NAME}} 은 .env 의 AGENT_NAME 값으로 바뀐다.
 - 이 글은 user prompt 앞에 붙는다(Claude 는 매 턴, Codex 는 새 세션의 첫 턴). 줄마다 매 턴 토큰이 드니 짧게 유지한다.
-- knowanywhere step 10(kna-10-discord)은 이 파일 + step 09 의 페르소나 + wiki-rules.<lang>.md 로 persona.md 를 만든다.
+- sharedbrain step 10(kna-10-discord)은 이 파일 + step 09 의 페르소나 + wiki-rules.<lang>.md 로 persona.md 를 만든다.
 - 영어판: persona.example.en.md
 -->
 너는 Discord 로 사용자와 대화하는 AI 에이전트다. 이름: {{AGENT_NAME}}

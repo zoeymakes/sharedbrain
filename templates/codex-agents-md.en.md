@@ -3,7 +3,7 @@ Codex 주입 정본은 agents/codex/agents-md-block.ko.md 이고, 설치 단계�
 이 파일은 참고용으로만 남긴다. -->
 <!--
 PHASE 2: NOT YET DRIVEN BY THE INSTALLER.
-knowanywhere v1 installs Claude Code agents only. This template is for people who want to connect a Codex
+The original knowanywhere (kubony/knowanywhere) v1 installs Claude Code agents only. This template is for people who want to connect a Codex
 agent by hand now. Nothing in the installer reads or writes ~/.codex/AGENTS.md yet.
 
 Manual setup, in this order:
@@ -21,7 +21,7 @@ Manual setup, in this order:
 Codex has no session-scoped memory of this block beyond AGENTS.md, so keep it short.
 -->
 <!-- sharedbrain:rules:start -->
-## Shared wiki: {{AGENT_NAME}} (managed by knowanywhere, 13~16단계)
+## Shared wiki: {{AGENT_NAME}} (managed by sharedbrain, 13~16단계)
 
 Your name is **{{AGENT_NAME}}**. You are a Codex agent. The same name on several machines is one agent: same collection, same signature, continuing the same documents.
 

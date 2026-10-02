@@ -1,5 +1,5 @@
 {
-  "name": "knowanywhere-discord-bridge",
+  "name": "sharedbrain-discord-bridge",
   "version": "1.0.0",
   "description": "Discord bridge for Claude Code (Agent SDK) and Codex agents: one message, one thread, one agent session",
   "type": "module",

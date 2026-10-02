@@ -1,6 +1,6 @@
 ---
 name: kna-05-google-oauth
-description: knowanywhere 5단계에 쓴다(fresh 모드, kna-04-dns 뒤). Google Cloud 콘솔의 Google Auth Platform에서 OAuth 동의 화면과 Web application client를 만들도록 클릭 경로를 안내하고(프로젝트의 parent 를 gcloud 로 확인해 조직 소속이면 Audience Internal, 아니면 External + Test users 를 권한다), redirect URI `https://<wiki.host>/auth/google.callback` 을 Google에 실제로 물어 검증한다. client ID만 state에 쓰고, client secret은 6단계에서 VM의 install.sh 프롬프트에 직접 입력하게 한다.
+description: sharedbrain 5단계에 쓴다(fresh 모드, kna-04-dns 뒤). Google Cloud 콘솔의 Google Auth Platform에서 OAuth 동의 화면과 Web application client를 만들도록 클릭 경로를 안내하고(프로젝트의 parent 를 gcloud 로 확인해 조직 소속이면 Audience Internal, 아니면 External + Test users 를 권한다), redirect URI `https://<wiki.host>/auth/google.callback` 을 Google에 실제로 물어 검증한다. client ID만 state에 쓰고, client secret은 6단계에서 VM의 install.sh 프롬프트에 직접 입력하게 한다.
 ---
 
 # 05단계: Google 로그인(OAuth client)
@@ -42,7 +42,7 @@ node .claude/skills/kna-status/state.mjs get gcp.project_id
      밖에 있으면 Internal 을 고를 수 없다. 6단계에서 `--personal-gmail` 이 필요한지는 이 답으로 정한다. Outline은
      개인 Gmail 로그인으로는 새 워크스페이스를 만들지 않기 때문이다. state 스키마에 이 키는 없으므로 기록하지
      않고, 6단계가 다시 묻는다.
-2. **앱 이름.** 기본 `knowanywhere wiki`. Google 로그인 화면에 보이는 이름이다.
+2. **앱 이름.** 기본 `sharedbrain wiki`. Google 로그인 화면에 보이는 이름이다.
 3. **지원 이메일.** 기본은 지금 콘솔에 로그인한 계정. `gcloud config get-value account` 로 보여준다.
 
 ## 절차
@@ -78,7 +78,7 @@ gcloud projects describe kna-wiki-a1b2 --format="value(parent.type,parent.id)"
 
 | 화면 | 입력 |
 |---|---|
-| App Information | App name: `knowanywhere wiki`, User support email: 지원 이메일 |
+| App Information | App name: `sharedbrain wiki`, User support email: 지원 이메일 |
 | Audience | 절차 0의 결과대로. parent 가 `organization`/`folder` 면 **Internal** 권장, 비어 있으면 **External** (Internal 은 비활성) |
 | Contact Information | 알림 받을 이메일 |
 | Finish | Google API Services: User Data Policy 동의 체크 → **Continue** → **Create** |

@@ -22,7 +22,7 @@
 VM 시간대의 03:00 을 UTC 로 바꿔 넣는다. 서울(UTC+9)이면 `18:00` 이다.
 
 ```bash
-gcloud compute resource-policies create snapshot-schedule kna-daily-snapshot --project=kna-wiki-a1b2 --region=asia-northeast3 --start-time=18:00 --daily-schedule --max-retention-days=7 --on-source-disk-delete=apply-retention-policy --description="knowanywhere: daily boot disk snapshot"
+gcloud compute resource-policies create snapshot-schedule kna-daily-snapshot --project=kna-wiki-a1b2 --region=asia-northeast3 --start-time=18:00 --daily-schedule --max-retention-days=7 --on-source-disk-delete=apply-retention-policy --description="sharedbrain: daily boot disk snapshot"
 gcloud compute disks add-resource-policies kna-wiki-vm --project=kna-wiki-a1b2 --zone=asia-northeast3-a --resource-policies=kna-daily-snapshot
 ```
 

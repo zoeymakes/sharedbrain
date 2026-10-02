@@ -1,7 +1,7 @@
 <!-- sharedbrain:rules:start -->
-## 공유 위키: {{AGENT_NAME}} (knowanywhere 관리 블록)
+## 공유 위키: {{AGENT_NAME}} (sharedbrain 관리 블록)
 
-이 블록은 knowanywhere 설치기(step 09)가 쓴다. 고치려면 그 단계를 다시 실행한다. 마커 사이를 손으로 고치면 다음 실행 때 덮어쓴다.
+이 블록은 sharedbrain 설치기(step 09)가 쓴다. 고치려면 그 단계를 다시 실행한다. 마커 사이를 손으로 고치면 다음 실행 때 덮어쓴다.
 
 이 에이전트의 이름은 **{{AGENT_NAME}}**. 같은 이름이 여러 머신(노트북, 데스크탑, Discord 봇)에서 돌 수 있지만 에이전트는 하나다. 같은 콜렉션에 같은 서명으로 같은 문서를 이어 쓴다.
 

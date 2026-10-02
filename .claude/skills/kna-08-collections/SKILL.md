@@ -1,6 +1,6 @@
 ---
 name: kna-08-collections
-description: knowanywhere 8단계에 쓴다(kna-07-mcp-connect 뒤, fresh와 join 모두, kna-12-add-agent가 새 에이전트를 붙일 때도). MCP `create_collection` 으로 `<Agent> Sessions` 콜렉션과 공유 콜렉션(기본 이름 `공유 지식` / `Shared Knowledge`)을 만들고, `templates/collection-*.<language>.md` 의 규칙을 치환해 설명(description)에 넣고, 공유 콜렉션에 시드 문서를 만든다. 권한(모든 구성원 편집 가능)과 정렬은 사용자가 위키 UI에서 바꾸고 `list_collections` 로 검증한다.
+description: sharedbrain 8단계에 쓴다(kna-07-mcp-connect 뒤, fresh와 join 모두, kna-12-add-agent가 새 에이전트를 붙일 때도). MCP `create_collection` 으로 `<Agent> Sessions` 콜렉션과 공유 콜렉션(기본 이름 `공유 지식` / `Shared Knowledge`)을 만들고, `templates/collection-*.<language>.md` 의 규칙을 치환해 설명(description)에 넣고, 공유 콜렉션에 시드 문서를 만든다. 권한(모든 구성원 편집 가능)과 정렬은 사용자가 위키 UI에서 바꾸고 `list_collections` 로 검증한다.
 ---
 
 # 08단계: 콜렉션과 규칙

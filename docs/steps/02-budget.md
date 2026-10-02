@@ -39,7 +39,7 @@ gcloud billing budgets list --billing-account=XXXXXX-XXXXXX-A1C3D4 --billing-pro
 # 4. 예산
 gcloud billing budgets create --billing-project=kna-wiki-a1b2 \
   --billing-account=XXXXXX-XXXXXX-A1C3D4 \
-  --display-name="knowanywhere monthly" \
+  --display-name="sharedbrain monthly" \
   --budget-amount=40USD \
   --calendar-period=month \
   --filter-projects=projects/kna-wiki-a1b2 \
@@ -64,7 +64,7 @@ gcloud billing budgets list --billing-account=XXXXXX-XXXXXX-A1C3D4 --billing-pro
 
 ```
 DISPLAY_NAME          UNITS  CURRENCY_CODE  THRESHOLD_PERCENT
-knowanywhere monthly  40     USD            0.5,0.9,1.0
+sharedbrain monthly  40     USD            0.5,0.9,1.0
 ```
 
 KRW 결제 계정이면 `UNITS` 가 `27500`, `CURRENCY_CODE` 가 `KRW` 처럼 나온다.
@@ -83,7 +83,7 @@ KRW 결제 계정이면 `UNITS` 가 `27500`, `CURRENCY_CODE` 가 `KRW` 처럼 �
 ## 콘솔에서 직접 만들기
 
 1. **Billing > Budgets & alerts > Create budget**(예산 만들기).
-2. 이름 `knowanywhere monthly`. Time range(기간) **Monthly**(월별). Projects(프로젝트)는 위키 프로젝트 하나만.
+2. 이름 `sharedbrain monthly`. Time range(기간) **Monthly**(월별). Projects(프로젝트)는 위키 프로젝트 하나만.
    Credits(크레딧)는 체크를 모두 풀어 적용하지 않는다.
 3. Amount(금액): **Specified amount**(지정 금액), 40(결제 계정 통화 단위. KRW 면 55000 처럼).
 4. Thresholds(기준점): **Actual**(실제) 기준 50%, 90%, 100%.

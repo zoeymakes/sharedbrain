@@ -1,6 +1,6 @@
 ---
 name: kna-06-outline-deploy
-description: knowanywhere 6단계에 쓴다(fresh 모드, kna-05-google-oauth 뒤). GCS 버킷 2개(uploads, backups)와 lifecycle·CORS, 서비스 계정 outline-storage와 HMAC 키를 만들고, deploy/outline 키트를 VM에 복사한 뒤 사용자가 자기 터미널에서 install.sh를 실행하게 해 Outline을 띄운다. TLS와 첫 관리자 로그인까지 확인하고 wiki.url, wiki.buckets.*, wiki.deployed_at을 쓴다.
+description: sharedbrain 6단계에 쓴다(fresh 모드, kna-05-google-oauth 뒤). GCS 버킷 2개(uploads, backups)와 lifecycle·CORS, 서비스 계정 outline-storage와 HMAC 키를 만들고, deploy/outline 키트를 VM에 복사한 뒤 사용자가 자기 터미널에서 install.sh를 실행하게 해 Outline을 띄운다. TLS와 첫 관리자 로그인까지 확인하고 wiki.url, wiki.buckets.*, wiki.deployed_at을 쓴다.
 ---
 
 # 06단계: Outline 배포

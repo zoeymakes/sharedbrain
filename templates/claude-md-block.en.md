@@ -1,7 +1,7 @@
 <!-- sharedbrain:rules:start -->
-## Shared wiki: {{AGENT_NAME}} (managed by knowanywhere)
+## Shared wiki: {{AGENT_NAME}} (managed by sharedbrain)
 
-This block is written by the knowanywhere installer (step 09). Edit it by re-running that step; hand edits between the markers are replaced.
+This block is written by the sharedbrain installer (step 09). Edit it by re-running that step; hand edits between the markers are replaced.
 
 Your name is **{{AGENT_NAME}}**. The same name may run on several machines (laptop, desktop, a Discord bot). That is one agent: same collection, same signature, continuing the same documents.
 

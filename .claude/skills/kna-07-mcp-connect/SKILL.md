@@ -1,6 +1,6 @@
 ---
 name: kna-07-mcp-connect
-description: knowanywhere 7단계에 쓴다(fresh 모드는 kna-06-outline-deploy 뒤, join 모드는 kna-00-start 뒤, kna-12-add-agent가 다른 머신에서 다시 부를 때도). 위키의 내장 MCP 서버 `https://<wiki.host>/mcp` 를 이 머신의 Claude Code에 user scope로 등록하고 `/mcp` 에서 OAuth 로그인하게 한 뒤 `list_collections` 로 검증한다. OAuth가 안 되면 Outline API key로 등록하는 fallback을 안내한다.
+description: sharedbrain 7단계에 쓴다(fresh 모드는 kna-06-outline-deploy 뒤, join 모드는 kna-00-start 뒤, kna-12-add-agent가 다른 머신에서 다시 부를 때도). 위키의 내장 MCP 서버 `https://<wiki.host>/mcp` 를 이 머신의 Claude Code에 user scope로 등록하고 `/mcp` 에서 OAuth 로그인하게 한 뒤 `list_collections` 로 검증한다. OAuth가 안 되면 Outline API key로 등록하는 fallback을 안내한다.
 ---
 
 # 07단계: MCP 연결

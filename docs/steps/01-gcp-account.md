@@ -17,7 +17,7 @@
 |---|---|
 | GCP | Google Cloud Platform. Google 의 클라우드 서비스 |
 | 프로젝트 | 클라우드 리소스(VM, 디스크, 버킷)를 담는 그릇. 프로젝트를 지우면 안의 것이 전부 지워진다 |
-| 프로젝트 이름 | 바꿀 수 있는 표시 이름. 예: `knowanywhere wiki` |
+| 프로젝트 이름 | 바꿀 수 있는 표시 이름. 예: `sharedbrain wiki` |
 | 프로젝트 ID | 바꿀 수 없고 전 세계에서 유일한 식별자. 예: `kna-wiki-a1b2`. 모든 명령에 쓰인다 |
 | 결제 계정 | 요금이 청구되는 곳. 무료 체험을 시작하면 $300 크레딧이 든 결제 계정이 하나 생긴다 |
 | region / zone | 데이터센터 위치. region(`asia-northeast3`, 서울) 안에 zone(`asia-northeast3-a`)이 있다 |
@@ -89,8 +89,8 @@ gcloud organizations list --format="value(name.basename(),displayName)"
 
 | 결과 | 계정 | 만드는 명령 |
 |---|---|---|
-| 조직 하나(예: `123456789012  yourcompany.com`) | Google Workspace | `gcloud projects create kna-wiki-a1b2 --name="knowanywhere wiki" --organization=123456789012` |
-| 아무것도 없음 | 개인 Gmail 등 | `gcloud projects create kna-wiki-a1b2 --name="knowanywhere wiki"` |
+| 조직 하나(예: `123456789012  yourcompany.com`) | Google Workspace | `gcloud projects create kna-wiki-a1b2 --name="sharedbrain wiki" --organization=123456789012` |
+| 아무것도 없음 | 개인 Gmail 등 | `gcloud projects create kna-wiki-a1b2 --name="sharedbrain wiki"` |
 
 조직이 여럿이면 인스톨러가 어느 조직에 둘지 묻는다. 조직 아래 만든 프로젝트는 05단계 OAuth 동의 화면에서
 **Internal**(그 조직 계정만 로그인)을 고를 수 있어 테스트 사용자 등록이 필요 없다. 조직 없는 프로젝트는 **External**

@@ -1,6 +1,6 @@
 ---
 name: kna-02-budget
-description: fresh 모드에서 kna-01-gcp-account 가 끝난 뒤 knowanywhere 02단계를 진행할 때, 또는 건너뛴 예산 알림을 나중에 걸고 싶을 때 쓴다. gcloud billing budgets create 로 위키 프로젝트에 한정한 월 예산과 50/90/100% 이메일 알림을 만든다. 권장하지만 건너뛸 수 있다.
+description: fresh 모드에서 kna-01-gcp-account 가 끝난 뒤 sharedbrain 02단계를 진행할 때, 또는 건너뛴 예산 알림을 나중에 걸고 싶을 때 쓴다. gcloud billing budgets create 로 위키 프로젝트에 한정한 월 예산과 50/90/100% 이메일 알림을 만든다. 권장하지만 건너뛸 수 있다.
 ---
 
 # 02단계: 예산과 알림
@@ -60,7 +60,7 @@ node .claude/skills/kna-status/state.mjs get gcp
    state 의 `gcp.billing_account_last4` 와 같은지 확인한다. 둘째 명령은 `USD`, `KRW` 같은 통화 코드를 출력한다.
    아무것도 출력되지 않으면 콘솔 **Billing > Account management** 에서 통화를 확인하게 한다.
 
-3. 이미 있는 예산을 본다. 재실행이라 `knowanywhere monthly` 가 이미 있으면 새로 만들지 않는다(아래 검증 절의 중복 처리).
+3. 이미 있는 예산을 본다. 재실행이라 `sharedbrain monthly` 가 이미 있으면 새로 만들지 않는다(아래 검증 절의 중복 처리).
 
    ```bash
    gcloud billing budgets list --billing-account=XXXXXX-XXXXXX-XXXXXX --billing-project=kna-wiki-a1b2 --format="value(displayName)"
@@ -74,7 +74,7 @@ node .claude/skills/kna-status/state.mjs get gcp
    ```bash
    gcloud billing budgets create --billing-project=kna-wiki-a1b2 \
      --billing-account=XXXXXX-XXXXXX-XXXXXX \
-     --display-name="knowanywhere monthly" \
+     --display-name="sharedbrain monthly" \
      --budget-amount=40USD \
      --calendar-period=month \
      --filter-projects=projects/kna-wiki-a1b2 \
@@ -98,9 +98,9 @@ gcloud billing budgets list --billing-account=XXXXXX-XXXXXX-XXXXXX --billing-pro
   --format="table(displayName,amount.specifiedAmount.units,amount.specifiedAmount.currencyCode,thresholdRules[].thresholdPercent.list())"
 ```
 
-기대 출력: `knowanywhere monthly` 행에 고른 금액, 통화 코드(예: `40  USD` 또는 `27500  KRW`), `0.5,0.9,1.0`.
+기대 출력: `sharedbrain monthly` 행에 고른 금액, 통화 코드(예: `40  USD` 또는 `27500  KRW`), `0.5,0.9,1.0`.
 
-재실행이라 `knowanywhere monthly` 예산이 이미 있으면 중복으로 만들지 않는다. 두 행을 모두 보여주고 옛 것을 남길지
+재실행이라 `sharedbrain monthly` 예산이 이미 있으면 중복으로 만들지 않는다. 두 행을 모두 보여주고 옛 것을 남길지
 새 것을 지울지 묻는다. 삭제(`gcloud billing budgets delete <budget-id> --billing-account=XXXXXX-XXXXXX-XXXXXX --billing-project=kna-wiki-a1b2`)는
 지우는 일이므로 먼저 묻는다.
 

@@ -1,7 +1,7 @@
 # Discord 브리지 (Claude Code, Codex 에이전트용)
 
 Discord 봇 하나를 이 머신의 코딩 에이전트에 잇는 상시 실행 Node.js 프로세스다. Discord 메시지가 에이전트에게 가고,
-에이전트의 답과 파일이 Discord 로 돌아온다. knowanywhere 에서는 10단계(`kna-10-discord`)가 이 폴더를 설치한다.
+에이전트의 답과 파일이 Discord 로 돌아온다. sharedbrain 에서는 10단계(`kna-10-discord`)가 이 폴더를 설치한다.
 노트북의 Claude Code 와 같은 에이전트 이름을 여기서도 쓰면, Discord 에서 한 일도 같은 `<이름> Sessions` 콜렉션에
 같은 서명으로 기록된다.
 
@@ -37,7 +37,7 @@ Discord 봇 하나를 이 머신의 코딩 에이전트에 잇는 상시 실행 
   이때는 위키 MCP 도구가 승인 대기로 막힐 수 있다(미검증). `bypassPermissions` 에서는 홈 밖의 `WORKSPACE_DIR` 을
   써도 사고를 줄일 뿐 격리가 되지 않는다.
 - VM 에서는 sudo 권한이 없는 전용 사용자로 돌리고, root 로 돌리지 않는다. GCP VM 이면 metadata 서버
-  (`169.254.169.254`)로 VM 서비스 계정 토큰을 받을 수 있다는 점도 생각한다. knowanywhere VM 의 서비스 계정
+  (`169.254.169.254`)로 VM 서비스 계정 토큰을 받을 수 있다는 점도 생각한다. sharedbrain VM 의 서비스 계정
   `outline-vm` 은 프로젝트 역할이 없고 backups 버킷에 새 객체를 만드는 권한만 있어서, 그 토큰으로 DB 덤프를 읽거나
   지우지는 못한다. 그래도 가짜 덤프를 올리거나, 나중에 그 계정에 더해진 권한을 봇이 그대로 얻을 수 있으므로 심층
   방어로 봇 사용자의 metadata 접속을 막는다. `kna-10-discord` 가 막는 방법을 안내한다.
@@ -56,12 +56,12 @@ Discord 봇 하나를 이 머신의 코딩 에이전트에 잇는 상시 실행 
 ## 에이전트가 읽는 설정: `~/.claude` 와 CLAUDE.md
 
 Claude 백엔드는 `settingSources` 를 지정하지 않으므로 SDK 가 Claude Code CLI 와 같은 설정을 읽는다. 브리지를 실행한
-사용자의 `~/.claude.json` 에 등록된 MCP 서버(knowanywhere 7단계의 위키 서버 포함)와 `~/.claude/CLAUDE.md` 가 봇에도
+사용자의 `~/.claude.json` 에 등록된 MCP 서버(sharedbrain 7단계의 위키 서버 포함)와 `~/.claude/CLAUDE.md` 가 봇에도
 적용된다. 그래서 노트북에서 돌리면 7단계와 9단계에서 한 설정을 그대로 쓰고, VM 처럼 새 머신에서 돌리면 그 사용자로
 MCP 를 따로 등록해야 한다.
 
 CLAUDE.md 는 작업 디렉터리에서 위로 올라가며 읽힌다. `WORKSPACE_DIR` 을 다른 CLAUDE.md 가 있는 폴더 아래에 두면 봇이
-그 파일도 따른다. knowanywhere 레포 안에서 브리지를 돌리면 봇이 레포의 인스톨러 지침을 읽게 되므로, 이 폴더를 레포
+그 파일도 따른다. sharedbrain 레포 안에서 브리지를 돌리면 봇이 레포의 인스톨러 지침을 읽게 되므로, 이 폴더를 레포
 밖(예: `~/kna-bridge`)으로 복사해서 돌린다.
 
 ## 1. Discord 봇 만들기
@@ -176,8 +176,8 @@ npm run smoke          # SDK 로 실제 Claude 호출 한 번. 인증 확인용,
 
 ```bash
 npm install -g pm2
-pm2 start src/index.js --name knowanywhere-bridge --time
-pm2 logs knowanywhere-bridge
+pm2 start src/index.js --name sharedbrain-bridge --time
+pm2 logs sharedbrain-bridge
 pm2 save && pm2 startup    # pm2 가 출력하는 명령을 실행하면 부팅 때 시작한다
 ```
 
@@ -185,15 +185,15 @@ pm2 save && pm2 startup    # pm2 가 출력하는 명령을 실행하면 부팅 
 
 ### launchd (macOS)
 
-`launchd/com.example.knowanywhere-bridge.plist` 는 템플릿이다. 파일 맨 위 주석에 바꿀 값(label, 절대 경로, `node` 경로,
+`launchd/com.example.sharedbrain-bridge.plist` 는 템플릿이다. 파일 맨 위 주석에 바꿀 값(label, 절대 경로, `node` 경로,
 `HOME`)이 적혀 있다. 바꾼 뒤:
 
 ```bash
-cp launchd/com.example.knowanywhere-bridge.plist ~/Library/LaunchAgents/com.yourname.knowanywhere-bridge.plist
+cp launchd/com.example.sharedbrain-bridge.plist ~/Library/LaunchAgents/com.yourname.sharedbrain-bridge.plist
 mkdir -p logs
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.yourname.knowanywhere-bridge.plist
-launchctl kickstart -k gui/$(id -u)/com.yourname.knowanywhere-bridge   # 재시작
-launchctl bootout gui/$(id -u)/com.yourname.knowanywhere-bridge        # 멈추고 내리기
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.yourname.sharedbrain-bridge.plist
+launchctl kickstart -k gui/$(id -u)/com.yourname.sharedbrain-bridge   # 재시작
+launchctl bootout gui/$(id -u)/com.yourname.sharedbrain-bridge        # 멈추고 내리기
 tail -f logs/bridge.log logs/bridge.err.log
 ```
 
@@ -201,14 +201,14 @@ tail -f logs/bridge.log logs/bridge.err.log
 
 ### systemd (Linux VM, Linux 데스크탑)
 
-`systemd/knowanywhere-bridge.service` 는 템플릿이다(`YOUR_USER`, 폴더 경로, `node` 경로를 바꾼다). 그다음:
+`systemd/sharedbrain-bridge.service` 는 템플릿이다(`YOUR_USER`, 폴더 경로, `node` 경로를 바꾼다). 그다음:
 
 ```bash
-sudo cp systemd/knowanywhere-bridge.service /etc/systemd/system/
+sudo cp systemd/sharedbrain-bridge.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now knowanywhere-bridge
-systemctl status knowanywhere-bridge --no-pager
-journalctl -u knowanywhere-bridge -n 50 --no-pager
+sudo systemctl enable --now sharedbrain-bridge
+systemctl status sharedbrain-bridge --no-pager
+journalctl -u sharedbrain-bridge -n 50 --no-pager
 ```
 
 화면이 없는 VM 에서는 서비스를 돌릴 사용자로 로그인한다. `claude auth login` 은 노트북 브라우저에서 열 URL 을 출력한다.
