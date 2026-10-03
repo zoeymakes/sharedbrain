@@ -29,6 +29,6 @@ codex exec \
   --skip-git-repo-check \
   --approve-for-me \
   --cd "$REPO" \
-  "agents/aside/HARVEST.md 를 읽고 그 절차대로 Aside 세션을 수확하라. 이번 실행에서는 최대 ${LIMIT}건만 처리한다(node agents/aside/harvest.mjs list --limit ${LIMIT}). 각 세션마다 남길지 판단하고, 남길 것은 위키에 쓰고, 처리한 것은 반드시 mark 하라. 사람이 지켜보지 않는 자동 실행이므로 사용자에게 되묻지 말고, 판단이 서지 않는 세션은 mark --skip 으로 사유를 남기고 넘어가라. 끝나면 올린 문서 수, 건너뛴 수, 실패한 세션 id 만 한 줄로 요약하라."
+  "agents/aside/HARVEST.md 를 읽고 그 절차대로 Aside 세션을 수확하라. 이번 실행에서는 최대 ${LIMIT}건만 처리한다(node agents/aside/harvest.mjs list --limit ${LIMIT}). 각 세션마다 남길지 판단하고, 남길 것은 위키에 쓰고, 처리한 것은 반드시 mark 하라. 문서를 쓴 세션마다 HARVEST.md 의 "공유 지식 반영" 절대로 공유 지식을 고치고 세션 문서에 ## 공유 지식 반영 을 남겨라. 사람이 지켜보지 않는 자동 실행이므로 사용자에게 되묻지 말고, 판단이 서지 않는 세션은 mark --skip 으로 사유를 남기고 넘어가라. 끝나면 올린 문서 수, 건너뛴 수, 공유 지식에 반영한 문서 수, 보류 목록(제안 위치와 이유), 실패한 세션 id 를 요약하라."
 
 echo "=== $(date '+%Y-%m-%d %H:%M:%S %Z') 수확 끝 ==="
