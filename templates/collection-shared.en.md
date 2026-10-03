@@ -49,13 +49,59 @@ This description is the source of truth. Read it before writing here. An agent t
 - Cite the documents you relied on, as links.
 - If the latest `Edited by` date is old, the fact may have changed. Confirm with the user before an important decision.
 
+## Structure
+
+Documents go at most three levels deep. Outline has no folders, so parent documents (hubs) act as folders.
+
+```
+{{SHARED_COLLECTION}}
+├─ NN · <common canonical>   00 guide, 10 user profile, 30 conventions, 40 glossary, 50 machines and environments
+├─ Work                      category hub
+│  └─ <company>              area hub. One per company the user works or worked at
+│     └─ Project: <name>     project canonical document
+└─ Personal                  category hub
+   └─ <area>                 area hub. e.g. grad school, teaching, freelance and side jobs, real estate, content and social media, portfolio, side projects
+      └─ Project: <name>
+```
+
+- **No year layer.** So that a project spanning years never has to move, the years go on the project document's `Period:` line.
+- **Create category and area hubs only after the user confirms.** If no area fits, do not force the document into a similar one; ask the user. When you cannot ask (harvesting, scheduled jobs), do not create it; record it as `Deferred` in the session document's `## Shared knowledge updates`.
+- **Agents create project canonical documents.** Create them under an existing area hub with `parentDocumentId`. Look at the tree with `list_collection_documents` before deciding where.
+- **A hub's body is a table of contents.** One line per child document: `- [title](link) — one-line summary · status`. When you create a child document or its status changes, update its line in the hub.
+- Under a project canonical document, put only that project's decision documents. Attachments and sub-tasks are not separate documents; write them as sections of the canonical document.
+- Common canonical documents (`NN · topic`) and decisions that span several areas stay at the top level.
+
+## Project canonical documents
+
+It is a project when there are two or more sessions on the same topic, when there is a repository, deliverable, client or deadline, or when the user said the work will continue. Skeleton:
+
+```
+Period: YYYY-MM ~ (ongoing) · Status: <active | on hold | closed> · Owner: <agent>
+
+## Purpose
+## Current state (checked YYYY-MM-DD)
+## Key facts and decisions
+## Related sessions
+- [YYYY-MM-DD · <task summary>](link) — <agent>
+## Sources
+
+Edited by: <agent> · <YYYY-MM-DD>
+```
+
+## When to write
+
+- **Decide every time a task ends.** When an agent writes `## Completion record` in its Sessions document (also when stopping because the task was cancelled or blocked), it writes a `## Shared knowledge updates` section with it, and writes here then if anything belongs here. Never skip the decision.
+- If the task belongs to a project canonical document, update its `Current state` and `Related sessions`. If there is none and the task meets the project criteria above, create one.
+- Preferences and conventions the user stated, decisions made, and new machines or services go into the matching common canonical document or a decision document.
+- When in doubt, write. A wrong canonical document can be corrected; a fact that was never written stays buried in a session document.
+
 ## Naming
 
-- **Canonical documents** are topic documents that are kept and edited over time. Title `NN · topic`, with a two-digit number.
-  Examples: `00 · How agents use this wiki`, `10 · User profile`, `20 · Project: sharedbrain`, `30 · Conventions`, `40 · Glossary`, `50 · Machines and environments`.
+- **Common canonical documents** are titled `NN · topic`, with a two-digit number. Examples: `00 · How agents use this wiki`, `10 · User profile`, `30 · Conventions`, `40 · Glossary`, `50 · Machines and environments`.
+- **Hubs** use the name alone. Examples: `Work`, `Personal`, `Grad school`, `Teaching`.
+- **Project canonical documents** are titled `Project: <name>`.
 - **Decisions** get one document each, titled `YYYY-MM-DD · Decision: <gist>`. Example: `2026-09-15 · Decision: keep database dumps for 30 days`.
 - Before creating a document, search for a canonical document on the same topic. If one exists, add to it. One document covers one topic.
-- Keep it flat. No nested documents.
 - Give each fact a source: a session document link, the date the user said it, a commit hash.
 
 ## Conflicts
@@ -82,19 +128,21 @@ The place where several AI agents working for one person share memory. For examp
 | collection | who writes | what |
 |---|---|---|
 | `<agent> Sessions` | that agent only | one document per task: background, done-when, progress Updates, completion record |
-| `{{SHARED_COLLECTION}}` | everyone | distilled facts: user preferences, projects, conventions, decisions, glossary, machines |
+| `{{SHARED_COLLECTION}}` | everyone | distilled facts: user preferences, projects, conventions, decisions, glossary, machines. Grouped as `Work > <company> > Project` and `Personal > <area> > Project` |
 
 ## When a session starts
 
 1. Read the description of your own `<agent> Sessions` collection and of `{{SHARED_COLLECTION}}`, once per session before the first write.
 2. Search for documents related to the task: in your Sessions collection for the same task, in `{{SHARED_COLLECTION}}` for the user's preferences and the project's canonical document.
 3. If a document for the same task exists, append a resume Update. Otherwise create one titled `YYYY-MM-DD · <task summary>`.
+4. When the task ends, write `## Shared knowledge updates` in the Sessions document, and write whatever belongs in `{{SHARED_COLLECTION}}` there.
 
 ## Where to write
 
 | what you learned | where it goes |
 |---|---|
 | what you did today, what is blocked, what is next | the task document in your Sessions collection (`## Update — <time> · <machine>`) |
+| the current state and facts of the project the task belongs to | the `Project: <name>` canonical document under `Work` or `Personal` in `{{SHARED_COLLECTION}}` |
 | a preference the user stated (e.g. "commit messages in Korean") | a canonical document in `{{SHARED_COLLECTION}}` such as `10 · User profile` |
 | a decision and its reason | `{{SHARED_COLLECTION}}`, as `YYYY-MM-DD · Decision: <gist>` |
 | a new machine or service | `50 · Machines and environments` in `{{SHARED_COLLECTION}}` (no secrets) |

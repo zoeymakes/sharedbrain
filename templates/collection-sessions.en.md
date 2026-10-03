@@ -43,12 +43,19 @@ What was done, what was learned, what is blocked, what is next.
 ## Completion record
 The result and the evidence for it.
 
+## Shared knowledge updates
+- Updated: [Project: <name>](link) — current state and related sessions updated
+
 Last updated: {{AGENT_NAME}} · 2026-09-15 16:40 KST
 ```
 
 - The `Author:` line with the status, the started and last-updated times, `## Background` and `## Done when` are written when the document is created.
 - Append one `## Update — <time> · <machine>` per meaningful milestone, change of direction or blocker. `<machine>` is the short host name (`hostname -s`). Do not rewrite earlier Updates.
 - `## Completion record` is written when the task ends. Without evidence it is not a completion record.
+- `## Shared knowledge updates` is written together with the completion record (also when stopping as ⚫ cancelled or 🔴 blocked). Never omit it. Each line is one of these three:
+  - `Updated: <link to the {{SHARED_COLLECTION}} document> — <what changed>`
+  - `No update: <reason>` (e.g. a one-off lookup with no durable facts)
+  - `Deferred: <reason>` (e.g. no matching area hub, needs the user's confirmation)
 - The last line, `Last updated: {{AGENT_NAME}} · <time>`, changes on every write. Times include the time zone.
 
 ## Status
@@ -67,7 +74,7 @@ A command that ended with exit code 0 and a goal that was reached are different 
 
 - When a task starts: create the document, or append a resume Update to the existing one and set the status to 🟡.
 - While working: append an Update at every meaningful milestone, change of direction or blocker.
-- When it ends: write `## Completion record`, then update the status and the last-updated line.
+- When it ends: write `## Completion record` and `## Shared knowledge updates`, then update the status and the last-updated line.
 - Small talk, quick questions and simple lookups need no document. Record work that has a goal, spans several steps, or whose result someone will look for later.
 
 ## Leave evidence
@@ -90,4 +97,11 @@ No API keys, tokens, passwords, OAuth client secrets or private keys. Write the 
 ## Shared knowledge does not go here
 
 Durable facts learned while working (the user's preferences, project summaries, conventions, decisions) are not piled up here. Distill them into `{{SHARED_COLLECTION}}` and link to that document from here.
+
+Every time a task ends, decide as follows. The criteria and locations are defined by the overview of `{{SHARED_COLLECTION}}`, which is the source of truth.
+
+1. Is there a project canonical document (`Project: <name>`) this task belongs to? If so, update its `Current state` and `Related sessions`.
+2. If not, is this a project? It is when there are two or more sessions on the same topic, when there is a repository, deliverable, client or deadline, or when the user said the work will continue. Create the canonical document under the matching area hub (`Work > <company>`, `Personal > <area>`). If no hub matches, do not create one: ask the user, or record it as `Deferred`.
+3. Did a new user preference, convention, decision, machine or service come up? Write it to the matching common canonical document.
+4. Record the outcome in `## Shared knowledge updates`. When in doubt, write.
 <!-- kna:overview:end -->

@@ -25,10 +25,10 @@ Only you write in `{{SESSIONS_COLLECTION}}`. The collection's description (overv
   - `## Background`
   - `## Done when`
   - `## Update — <YYYY-MM-DD HH:MM TZ> · <machine>` appended at each meaningful milestone, direction change or blocker (`<machine>` = short host name, `hostname -s`)
-  - `## Completion record` when the task ends, with evidence: numbers, paths, commit hashes, links, command output
+  - `## Completion record` when the task ends, with evidence: numbers, paths, commit hashes, links, command output, followed by `## Shared knowledge updates`
   - last line: `Last updated: {{AGENT_NAME}} · <YYYY-MM-DD HH:MM TZ>`
 - **Signature matters.** The wiki's "created by" field shows whoever owns the login or API token, not you. The `Author:` line and the footer are the only authorship record. Never omit them.
-- **When to write:** create (or reopen with an Update) when a task starts, append an Update at milestones and blockers, write the Completion record and set the status when it ends.
+- **When to write:** create (or reopen with an Update) when a task starts, append an Update at milestones and blockers, write the Completion record and the Shared knowledge updates and set the status when it ends.
 - **Flat.** No nested documents in `{{SESSIONS_COLLECTION}}`.
 - **No secrets.** Never write API keys, tokens, passwords or OAuth secrets to the wiki. Write the storage path, the variable name and at most the last 4 characters.
 - Write in the user's language unless the user asks otherwise. Keep commands, paths and technical terms verbatim.
@@ -39,6 +39,8 @@ Every agent reads and writes `{{SHARED_COLLECTION}}`. It holds distilled, durabl
 
 - **Read first.** Before asking the user about their preferences, projects or conventions, search `{{SHARED_COLLECTION}}`. If the answer is there, use it and cite the document link.
 - **Write distilled facts, not logs.** When you learn something durable, add it to the right existing document (search first) or create a focused one. Session logs, progress notes and chat transcripts never go here; they belong in `{{SESSIONS_COLLECTION}}`.
+- **Update it when you finish.** When you write `## Completion record` (also when stopping as ⚫ cancelled or 🔴 blocked), write a `## Shared knowledge updates` section in the session document too. If the task belongs to a `Project: <name>` canonical document, update its `Current state` and `Related sessions`. If there is none and the task meets the project criteria (two or more sessions on the same topic; a repository, deliverable, client or deadline; or the user says it will continue), create one. Record the outcome as `Updated: <link> — <what>`, `No update: <reason>` or `Deferred: <reason>`. When in doubt, write.
+- **Keep the hierarchy.** `Work > <company> > Project: <name>` and `Personal > <area> > Project: <name>`. There is no year layer; the year goes on the canonical document's `Period:` line. Decide where a document goes by looking at the tree with `list_collection_documents`, and create it with `parentDocumentId`. Never create a company or area hub without the user's confirmation. When you create a document or its status changes, update its line in the hub's table of contents.
 - **Mark your edits.** Every change ends with a line `Edited by: {{AGENT_NAME}} · <YYYY-MM-DD>` (append a new line, keep earlier ones).
 - **Correct, do not fork.** If a fact is outdated, update it in place and say what changed. Do not create a second document that contradicts the first.
 - No secrets here either.
