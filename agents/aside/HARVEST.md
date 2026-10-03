@@ -5,9 +5,10 @@ Aside 가 한 작업을 다른 에이전트가 대신 위키에 기록하는 절
 
 ## 왜 대신 쓰는가
 
-Aside 는 REPL 만 있고 셸이 없다. REPL 의 `fs` 는 Project·세션 루트에 하드 샌드박스되어 API key 파일을
+셸이 없는 Aside 버전은 REPL 만 있다. REPL 의 `fs` 는 Project·세션 루트에 하드 샌드박스되어 API key 파일을
 읽지 못한다. `--permission full-access` 로도 뚫리지 않는다(실측: `Path escapes Project and session
-roots`). 그래서 Aside 는 위키에 스스로 쓸 수 없고, Aside 를 위해 다른 에이전트가 쓴다.
+roots`). 그래서 그런 계정은 위키에 스스로 쓸 수 없고, 다른 에이전트가 대신 쓴다. 셸이 있는 버전에서
+사용자가 직접 쓰기(A 모드)를 고른 계정은 수확하지 않는다. 그런 계정은 `harvest-agents.json` 에 넣지 않는다.
 
 이것은 "다른 에이전트의 Sessions 콜렉션은 읽기만 한다" 규칙의 **유일한 예외**다. 예외인 만큼 서명으로
 누가 일했고 누가 받아적었는지 구분한다.

@@ -40,7 +40,7 @@ Codex를 띄워 작업한다. 노트북에서는 Claude Code나 Codex와 직접 
      |                |                |                |                |
      +----------------+--------+-------+----------------+----------------+
                                |  MCP over HTTPS (OAuth 또는 API key)
-                               |  Aside는 직접 쓰지 못해 다른 에이전트가 세션을 읽어 대신 올린다(수확)
+                               |  Aside는 셸이 있으면 API key로 직접, 없으면 다른 에이전트가 대신 올린다(수확)
                                v
      +--------------------------------------------------------
      |  Outline 위키   https://wiki.example.com
@@ -209,7 +209,7 @@ agents:
 | 12 | `kna-12-add-agent` | [에이전트나 기기 추가](docs/steps/12-add-agent.md) | 나중에 | 나중에 |
 | 13 | `kna-13-codex` | [Codex 에이전트 연결](docs/steps/13-codex.md) | 선택 | 선택 |
 | 14 | `kna-14-hermes` | [Hermes 프로필별 에이전트 연결](docs/steps/14-hermes.md) | 선택 | 선택 |
-| 15 | `kna-15-aside` | [Aside 연결 (세션 수확)](docs/steps/15-aside.md) | 선택 | 선택 |
+| 15 | `kna-15-aside` | [Aside 연결 (직접 쓰기 또는 세션 수확)](docs/steps/15-aside.md) | 선택 | 선택 |
 | 16 | `kna-16-openclaw` | [OpenClaw 에이전트 연결](docs/steps/16-openclaw.md) | 선택 | 선택 |
 
 00~11은 위키를 만들고 첫 Claude Code 에이전트를 붙이는 단계다(원작에서 계승).
@@ -279,6 +279,9 @@ Obsidian vault나 Markdown으로 노트를 쌓아 두었다면 Outline의 Markdo
   올리는 수확 경로로 설계하고(`agents/aside/harvest.mjs`, `HARVEST.md`), Codex 수확자로 종단 확인
   (12건 중 3건 기록·9건 건너뜀·실패 0, 서명 `작성자: <Aside 에이전트> · 기록: <수확자>`).
   `scripts/aside-wiki.sh` 는 셸에서 쓰는 선택 도구로 남긴다. Aside 자신은 실행할 수 없다.
+- Aside 1.26.810.1915 를 다시 실측: `bash` 도구가 있고 `curl`·`python3`·네트워크가 된다. 셸의 홈은
+  `~/.aside/runtime/home`(계정 공용)이고 레포 경로는 막혀 있다. 그 홈의 계정 전용 키 파일을 읽어 위키에 문서를
+  만들고 append 하는 것까지 확인했다. 그래서 15단계는 셸을 먼저 검사해 직접 쓰기(A)와 수확(B) 중 고른다.
 - `state.mjs` 의 13~16 단계 기록과 `agent-add` 의 aside/openclaw kind 를 실행해 확인(잘못된 값은 거부).
 - 규칙 블록 주입을 종단 확인: `managed-block.mjs render` → `apply --dry-run` → `apply` → 재적용 시
   "변경 없음"(멱등), 기존 파일 내용 보존, `.bak-<타임스탬프>` 백업 생성.

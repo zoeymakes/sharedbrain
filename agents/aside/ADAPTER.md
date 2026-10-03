@@ -2,18 +2,34 @@
 
 Aside 는 브라우저 안에서 도는 에이전트다. **브라우저 상태(탭·로그인·쿠키·binding)는 이식할 수 없으므로 기기 로컬**에 남기고, 작업 기록만 공유 위키에 쌓인다.
 
-다른 런타임과 달리 **Aside 는 자기 기록을 스스로 쓰지 않는다.** 아래 "왜 수확인가" 참고.
+Aside 는 버전에 따라 셸(bash 도구) 유무가 다르다. 그래서 계정마다 두 모드 중 하나로 기록한다. 아래 "두 모드" 참고.
 
 | 항목 | 값 |
 |---|---|
 | 규칙 주입 위치 | 계정별 `~/.aside/u/<계정>/AGENTS.md` |
 | 마커 | `<!-- sharedbrain:rules:start -->` ~ `<!-- sharedbrain:rules:end -->` |
-| 블록 템플릿 | `agents/aside/block.md` |
-| 기록 방식 | **수확** — 다른 에이전트가 Aside 세션을 읽어 대신 올린다 (`agents/aside/HARVEST.md`) |
+| 블록 템플릿 | A 직접 쓰기: `agents/aside/block-direct.md` · B 수확: `agents/aside/block.md` |
+| 기록 방식 | **A. 직접 쓰기** — 셸이 있으면 Aside 가 계정 전용 키로 Outline API 를 부른다. **B. 수확** — 셸이 없으면 다른 에이전트가 Aside 세션을 읽어 대신 올린다 (`agents/aside/HARVEST.md`) |
+| 모드 판정 | `aside exec --account <n>` 으로 bash 도구 유무 검사 (`kna-15-aside` "모드 판정") |
 | 수확 도구 | `agents/aside/harvest.mjs`, 자동 실행 `agents/aside/harvest-run.sh` |
 | 설치 단계 | `kna-15-aside` |
 
-## 왜 수확인가
+## 두 모드
+
+| 항목 | 2026-09 실측 (구버전) | 1.26.810.1915 실측 (2026-10) |
+|---|---|---|
+| 셸(bash 도구) | 없다 | 있다. `curl`·`python3`, 네트워크 됨 |
+| 셸의 `~` | 해당 없음 | `~/.aside/runtime/home` (계정 공용) |
+| 레포 경로 접근 | 해당 없음 | 막힘(`Operation not permitted`) |
+| 결론 | B. 수확 | A. 직접 쓰기 가능 |
+
+**A. 직접 쓰기.** 키는 `AGENTS.md` 가 아니라 계정 전용 파일 `~/.aside/runtime/home/.sharedbrain/aside-<계정>.env`
+(mode 600)에 둔다. 블록은 그 파일을 셸에서 읽어 `curl` 로 Outline API 를 부르게 하고, 키를 출력·복사하지 말라고
+지시한다. 그래도 웹페이지를 읽는 브라우저 에이전트가 키 파일에 닿는 구성이라는 점은 남는다. 그래서 계정마다 키를
+따로 만들고(`aside-<계정>-<기기>`), 사고 시 그 키만 폐기한다. 이 위험을 받아들이지 않으면 셸이 있어도 B 를 쓴다.
+
+**B. 수확.** 아래는 셸이 없는 버전에서 수확을 택한 이유다.
+
 
 먼저 MCP 가 안 된다. `aside mcp` 는 Aside 를 MCP **서버로 노출**하는 명령이다(`aside mcp --help` → "Start the MCP server over stdio"). Aside 는 MCP 를 *제공*하는 쪽이고, 외부 MCP 서버(위키)를 *소비*하는 클라이언트 기능은 확인되지 않았다.
 
@@ -46,15 +62,18 @@ Aside 는 브라우저 안에서 도는 에이전트다. **브라우저 상태(�
 
 ## 계정 분리
 
-Aside 는 계정(`u/0`, `u/1` …)마다 별도 브라우저 프로필을 갖는다(`aside account list`). 계정 하나가 에이전트 하나이고 콜렉션도 따로다. 세션 폴더가 계정별로 나뉘므로 수확 시 섞일 여지가 없다. 매핑은 `harvest.mjs` 의 `AGENTS` 상수가 갖는다.
+A 계정은 `~/.sharedbrain/harvest-agents.json` 에 넣지 않는다. 수확기는 매핑에 있는 계정만 돌기 때문에, 넣으면
+같은 작업이 두 번 기록된다.
+
+Aside 는 계정(`u/0`, `u/1` …)마다 별도 브라우저 프로필을 갖는다(`aside account list`). 계정 하나가 에이전트 하나이고 콜렉션도 따로다. 세션 폴더가 계정별로 나뉘므로 수확 시 섞일 여지가 없다. 매핑은 `~/.sharedbrain/harvest-agents.json` 이 갖는다.
 
 개인 계정과 회사 계정을 함께 쓰면 **회사 계정 콜렉션의 overview 에 기록 규칙을 반드시 넣는다.** 개인 계정 세션이라도 회사 자료를 다뤘으면 같은 규칙을 적용한다(회사 계정으로 로그인한 구글 시트 등).
 
-## 선택: 셸에서 Aside 이름으로 직접 쓰기
+## 선택: 사람 셸에서 Aside 이름으로 쓰기 (`scripts/aside-wiki.sh`)
 
-`scripts/aside-wiki.sh` 는 Outline REST 를 Aside REPL 의 `fetch` 로 호출하는 래퍼다. **Aside 자신은 이것을 실행할 수 없다**(셸이 없다). 사람이나 다른 에이전트가 셸에서 쓰는 물건이다.
+`scripts/aside-wiki.sh` 는 Outline REST 를 Aside REPL 의 `fetch` 로 호출하는 래퍼다. 사람이나 다른 에이전트가 **자기 셸에서** 쓰는 물건이다. Aside 셸에서는 레포 경로에 접근하지 못해 돌지 않는다(126). A 모드의 Aside 는 블록의 인라인 `curl` 을 쓴다.
 
-수확 경로를 쓰면 이 래퍼도, 그 API key 도 필요 없다. 수확자는 자기 MCP 로 쓴다. 굳이 셸에서 Aside 이름으로 직접 쓰고 싶을 때만 설정한다.
+수확 경로를 쓰면 이 래퍼도, 그 API key 도 필요 없다. 수확자는 자기 MCP 로 쓴다.
 
 ```bash
 mkdir -p ~/.sharedbrain && chmod 700 ~/.sharedbrain
@@ -86,4 +105,5 @@ node agents/aside/harvest.mjs list --limit 3         # 후보
 agents/aside/harvest-run.sh
 ```
 
-위키의 `<에이전트> Sessions` 에 문서가 생기고 서명이 `작성자: <에이전트> · 기록: <수확자>` 면 통과다.
+B: 위키의 `<에이전트> Sessions` 에 문서가 생기고 서명이 `작성자: <에이전트> · 기록: <수확자>` 면 통과다.
+A: `aside exec --account <n>` 으로 테스트 세션 문서를 만들게 하고, 다른 에이전트의 MCP 로 그 문서(`작성자: <에이전트>`, Update 1줄)를 확인하면 통과다.

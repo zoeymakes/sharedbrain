@@ -1,6 +1,6 @@
 ---
 name: kna-15-aside
-description: sharedbrain 15단계에 쓴다. Aside 에이전트를 공유 위키에 붙인다. Aside 는 셸이 없고 REPL fs 가 하드 샌드박스되어 API key 에 닿지 못하므로 위키에 스스로 쓰지 못한다. 대신 셸과 위키 MCP 를 가진 다른 에이전트가 Aside 세션 기록을 읽어 대신 올린다(수확). 계정별 AGENTS.md 에 "수확되기 좋게 일해라" 규칙을 넣고, 수확을 한 번 돌려 문서가 생기는지 검증한다. 회사 계정에는 기록 규칙을 필수로 넣는다.
+description: sharedbrain 15단계에 쓴다. Aside 에이전트를 공유 위키에 붙인다. Aside 버전에 따라 셸(bash 도구) 유무가 다르므로 먼저 셸을 검사한다. 셸이 있으면 계정 전용 API key 파일로 Aside 가 직접 쓰고(직접 쓰기 모드), 없으면 셸과 위키 MCP 를 가진 다른 에이전트가 Aside 세션 기록을 읽어 대신 올린다(수확 모드). 계정별 AGENTS.md 에 모드에 맞는 규칙 블록을 넣고, 문서 한 건으로 검증한다. 회사 계정에는 기록 규칙을 필수로 넣는다.
 ---
 
 # 15단계: Aside 에이전트 연결
@@ -10,25 +10,39 @@ description: sharedbrain 15단계에 쓴다. Aside 에이전트를 공유 위키
 
 ## 목표
 
-Aside 가 한 작업이 공유 위키의 `<이름> Sessions` 에 쌓이는 상태. **Aside 자신이 쓰지는 않는다.**
+Aside 가 한 작업이 공유 위키의 `<이름> Sessions` 에 쌓이는 상태. 계정마다 둘 중 한 모드로 쌓는다.
+
+| 모드 | 누가 쓰나 | 조건 |
+|---|---|---|
+| **A. 직접 쓰기** | Aside 자신이 bash 로 Outline API 를 부른다 | Aside 에 셸(bash 도구)이 있다 |
+| **B. 수확** | 셸과 위키 MCP 를 가진 다른 에이전트가 Aside 세션 기록을 읽어 대신 쓴다 | 셸이 없다, 또는 사용자가 키를 Aside 에 두고 싶지 않다 |
+
 브라우저 탭·로그인·쿠키·binding 은 이식할 수 없으므로 기기 로컬에 그대로 둔다.
 
-## 먼저 읽을 것: Aside 는 위키에 스스로 쓰지 못한다
+## 먼저: 모드 판정 (셸 검사)
 
-이 단계를 "Aside 에게 위키 쓰기를 가르치는 단계" 로 오해하면 안 된다. 실측 결과 불가능하다.
+Aside 의 도구는 버전마다 다르다. 실측 두 건:
 
-| 항목 | 결과 |
-|---|---|
-| 셸 실행 | **없다.** builtin 스킬에 bash/terminal 계열이 없다 |
-| `fetch` | 된다 |
-| `fs` | Project·세션 루트에 **하드 샌드박스**. 키 파일을 읽으면 `Path escapes Project and session roots` |
-| `--permission full-access` | **뚫리지 않는다.** 같은 에러 |
-| MCP 소비 | 확인되지 않음. `aside mcp` 는 Aside 를 서버로 노출하는 명령이다 |
+| 항목 | 2026-09 (구버전, 노트북) | 1.26.810.1915 (2026-10) |
+|---|---|---|
+| 셸 실행 | **없다.** builtin 스킬에 bash/terminal 계열이 없다 | **있다.** `bash` 도구, `curl`·`python3` 사용 가능, 네트워크 됨 |
+| `fs`(REPL) | Project·세션 루트에 하드 샌드박스. `--permission full-access` 로도 안 뚫린다 | 같음. 단 셸은 별도 |
+| 셸의 `~` | 해당 없음 | 진짜 홈이 아니라 `~/.aside/runtime/home` (모든 계정 공용) |
+| 레포 접근 | 해당 없음 | `~/Projects` 등은 `Operation not permitted`. 그래서 `scripts/aside-wiki.sh` 는 Aside 셸에서 못 돈다(126) |
+| MCP 소비 | 확인되지 않음 | 확인되지 않음 |
 
-그래서 `scripts/aside-wiki.sh` 는 **Aside 가 실행할 수 없는 물건**이다(셸에서 쓰는 래퍼다).
-대신 셸과 위키 MCP 를 모두 가진 다른 에이전트가 Aside 세션을 읽어 대신 올린다. 이것이 **수확**이다.
+계정마다 아래를 실행해 판정한다. 읽기 전용이지만 Aside 세션 하나와 모델 호출이 생긴다는 점을 먼저 말한다.
 
-이 단계에는 **API key 가 필요 없다.** 수확자는 자기 MCP 로 쓴다.
+```bash
+aside --version
+aside exec --account <계정번호> "bash 도구로 다음을 실행하고 출력만 그대로 답해: echo HOME=\$HOME; command -v curl python3. bash 도구가 없으면 NO_SHELL 이라고만 답해."
+```
+
+- `HOME=...` 과 `curl` 경로가 나오면 셸이 있다 → 기본값 **A**. `HOME` 값(보통 `~/.aside/runtime/home`)을 기록해 둔다.
+- `NO_SHELL` 이거나 도구 오류면 → **B**.
+- 셸이 있어도 사용자가 Aside 에 키를 두기 싫다고 하면 **B** 를 고른다. A 는 브라우저 에이전트가 키 파일을 읽을 수 있는 구성이다. 임의의 웹페이지 내용이 섞이는 에이전트이므로, 계정 전용 키를 쓰고 사고 시 그 키만 폐기한다는 전제를 사용자에게 말하고 고르게 한다.
+
+판정 결과와 고른 모드를 계정별로 사용자에게 보여준다. 한 기기에서 계정마다 모드가 달라도 된다.
 
 ## 공통 선행 조건
 
@@ -41,8 +55,8 @@ node $H get agents
 ```
 
 `steps.08` 이 `done` 이어야 한다(콜렉션 규칙이 이미 있어야 한다).
-`steps.07`(Claude Code MCP)은 이 단계 자체에는 필요 없지만, **수확자가 될 에이전트는 위키에 쓸 수 있어야 한다.**
-수확자 후보는 `agents[]` 중 `kind` 가 `claude` 또는 `codex` 인 항목이다. 하나도 없으면 07 또는 13 을 먼저 한다.
+B 모드 계정이 있으면 **수확자가 될 에이전트가 위키에 쓸 수 있어야 한다.** 수확자 후보는 `agents[]` 중
+`kind` 가 `claude` 또는 `codex` 인 항목이다. 하나도 없으면 07 또는 13 을 먼저 한다. A 모드만 쓰면 필요 없다.
 
 ## 물을 것
 
@@ -52,8 +66,9 @@ node $H get agents
    둘 다 붙일지 묻는다. **계정 하나가 에이전트 하나이고 콜렉션도 따로다.**
 2. **에이전트 이름.** 계정마다 다른 이름을 쓴다. 다른 런타임의 이름과도 겹치면 안 된다
    (이름이 정체성이고 콜렉션이 이름 단위다). 사용자에게 **반드시 묻는다.** 임의로 짓지 않는다.
-3. **수확자.** 위 후보 중 누가 수확할지 묻는다. 기본값은 사용자가 더 여유 있게 쓰는 런타임이다.
-4. **개인 계정인가 회사 계정인가.** 회사 계정이면 콜렉션 overview 에 기록 규칙을 필수로 넣는다.
+3. **모드.** 위 판정 결과를 보여주고 계정별 모드(A/B)를 확인받는다.
+4. **수확자 (B 계정이 있을 때만).** 위 후보 중 누가 수확할지 묻는다. 기본값은 사용자가 더 여유 있게 쓰는 런타임이다.
+5. **개인 계정인가 회사 계정인가.** 회사 계정이면 콜렉션 overview 에 기록 규칙을 필수로 넣는다.
 
 ## 절차
 
@@ -63,6 +78,13 @@ node $H get agents
 회사 계정 콜렉션의 overview 에는 절차 4의 기록 규칙을 함께 넣는다.
 
 ### 2. 규칙 블록 주입
+
+모드에 따라 템플릿이 다르다.
+
+| 모드 | 템플릿 | 추가 값 |
+|---|---|---|
+| A | `agents/aside/block-direct.md` | `ENV_FILE`: Aside 셸 기준 키 파일 경로. 예: `~/.sharedbrain/aside-u0.env` |
+| B | `agents/aside/block.md` | 없음 |
 
 ```bash
 MB=.claude/skills/kna-09-persona/managed-block.mjs
@@ -80,6 +102,7 @@ if (!v.PERSONA) v.PERSONA = "- 역할: (한 줄로)\n- 말투: (한 줄로)";
 fs.writeFileSync(`.knowanywhere/aside-values-${name}.json`, JSON.stringify(v, null, 2) + "\n");
 console.log(JSON.stringify(v, null, 2));
 '
+# A 모드면 값 JSON 에 "ENV_FILE" 을 더하고 템플릿을 agents/aside/block-direct.md 로 바꾼다
 node $MB render --template agents/aside/block.md \
                 --values .knowanywhere/aside-values-<이름>.json \
                 --out .knowanywhere/aside-block-<이름>.md
@@ -91,12 +114,33 @@ node $MB apply --block .knowanywhere/aside-block-<이름>.md --target ~/.aside/u
 계정이 여러 개면 계정마다 반복한다. 렌더링한 블록에 **다른 계정의 이름이 섞이지 않았는지** 확인한다.
 `apply` 는 멱등이고 쓰기 전에 `.bak-<타임스탬프>` 백업을 만든다.
 
-블록이 Aside 에게 시키는 것은 "위키에 써라" 가 아니라 **"수확되기 좋게 일해라"** 다. 목표를 먼저 밝히고,
+B 블록이 Aside 에게 시키는 것은 "위키에 써라" 가 아니라 **"수확되기 좋게 일해라"** 다. 목표를 먼저 밝히고,
 판단과 근거를 남기고, 결과를 확정하고, 수치와 경로를 그대로 말하게 한다. 말하지 않은 것은 기록되지 않는다.
 
-### 3. 수확자 설정
+### 2-A. 직접 쓰기 키 (A 계정만)
+
+계정마다 Outline API key 를 따로 만든다. 한 키를 공유하면 회사 기록이 개인 키로 올라간다.
+
+1. 위키 Settings → API & Access 에서 키를 만든다. 이름은 `aside-<계정>-<기기>` (예: `aside-u0-mini`). 화면 경로는
+   Outline 버전에 따라 다를 수 있다.
+2. 키 파일은 **Aside 셸의 홈 기준** 경로에 둔다. 셸 홈이 `~/.aside/runtime/home` 이면 실제 경로는
+   `~/.aside/runtime/home/.sharedbrain/aside-<계정>.env` 이고 블록의 `ENV_FILE` 은 `~/.sharedbrain/aside-<계정>.env` 다.
+3. 키는 사용자가 **자기 터미널에서 직접** 넣는다. 에이전트가 heredoc 으로 받지 않는다.
+
+```bash
+D=~/.aside/runtime/home/.sharedbrain; mkdir -p "$D" && chmod 700 "$D"
+read -rs -p "Outline API key: " K; echo
+umask 177; printf 'SHAREDBRAIN_WIKI_URL=%s\nSHAREDBRAIN_WIKI_KEY=%s\n' "<wiki.url>" "$K" > "$D/aside-<계정>.env"; unset K
+ls -l "$D/aside-<계정>.env"     # -rw------- 이어야 한다
+```
+
+키 값은 출력하지 않는다. 확인은 mode 와 끝 4자리까지만 한다.
+
+### 3. 수확자 설정 (B 계정만)
 
 계정 → 에이전트 이름 매핑을 만든다. 파일이 없으면 `harvest.mjs` 가 예시와 함께 exit 2 로 거부한다.
+**A 모드 계정은 이 매핑에 넣지 않는다.** `harvest.mjs` 는 매핑에 있는 계정만 수확하므로, 넣으면 같은 작업이
+직접 쓰기와 수확으로 두 번 기록된다.
 
 ```bash
 mkdir -p ~/.sharedbrain && chmod 700 ~/.sharedbrain
@@ -133,6 +177,19 @@ node agents/aside/harvest.mjs status     # 대기 세션 수가 보이면 경로
 
 ## 검증 (출력을 요약하지 말고 그대로 보여준다)
 
+A 계정:
+
+```bash
+grep -c '^<!-- sharedbrain:rules:start -->$' ~/.aside/u/<계정번호>/AGENTS.md   # 1
+ls -l ~/.aside/runtime/home/.sharedbrain/aside-<계정>.env                      # -rw-------
+aside exec --account <계정번호> "AGENTS.md 의 위키 규칙대로 '<YYYY-MM-DD> · sharedbrain 15단계 직접 쓰기 확인' 세션 문서를 만들고, Update 한 줄을 append 한 뒤 문서 URL 만 답해."
+```
+
+그다음 이 세션의 MCP 로 그 문서를 읽어 `<이름> Sessions` 에 있는지, 첫 줄이 `작성자: <이름>` 인지, Update 가
+붙었는지 확인한다.
+
+B 계정:
+
 ```bash
 aside account list
 grep -c '^<!-- sharedbrain:rules:start -->$' ~/.aside/u/<계정번호>/AGENTS.md   # 계정마다 1
@@ -145,6 +202,7 @@ agents/aside/harvest-run.sh          # 또는 수확자에게 1건만 수확시�
 2. `harvest.mjs list` 가 세션을 보여준다(경로와 파싱이 맞다).
 3. 수확 실행 후 위키의 `<이름> Sessions` 에 문서가 생긴다.
 4. 그 문서를 열어 서명이 `작성자: <이름> · 기록: <수확자>` 인지, 콜렉션이 맞는지 확인한다.
+6. A 계정이 `~/.sharedbrain/harvest-agents.json` 에 없는지 확인한다(이중 기록 방지).
 5. 계정이 여러 개면 **각 계정 세션이 자기 콜렉션에만 들어갔는지** 확인한다.
 
 모두 통과하면 state 에 기록한다. 계정마다 한 줄씩 넣는다.
@@ -163,10 +221,11 @@ node $H step 15 done
 | 수확자가 MCP 쓰기에서 멈춘다 | 비대화형 승인이 막혔다. Codex 는 `--approve-for-me` |
 | 문서가 엉뚱한 콜렉션에 갔다 | `~/.sharedbrain/harvest-agents.json` 의 매핑 확인 |
 | 문서에 `\n` 이 문자 그대로 보인다 | 수확자가 이스케이프를 넣었다. `HARVEST.md` 의 "흔한 실수" 참고 |
+| A: Aside 가 키 파일을 못 찾는다 | 셸 홈이 다르다. 판정 때 기록한 `HOME` 기준으로 경로를 다시 잡는다 |
+| A: `scripts/aside-wiki.sh` 가 126 으로 실패 | Aside 셸은 레포 경로에 접근하지 못한다. 블록의 인라인 `curl` 을 쓴다 |
+| 같은 작업이 두 번 기록된다 | A 계정이 수확 매핑에 들어 있다. 매핑에서 뺀다 |
 
-## 선택: 셸에서 Aside 이름으로 직접 쓰기
+## 참고: `scripts/aside-wiki.sh`
 
-수확 경로를 쓰면 API key 가 필요 없다. 굳이 셸에서 Aside 이름으로 직접 쓰고 싶을 때만
-`scripts/aside-wiki.sh` 와 `~/.sharedbrain/aside.env` 를 설정한다. 절차는 `agents/aside/ADAPTER.md`.
-**Aside 자신은 이 래퍼를 실행할 수 없다.** 계정마다 `.env` 를 따로 두고 `SHAREDBRAIN_ENV` 로 지정한다.
-한 파일을 공유하면 회사 기록이 개인 키로 올라간다.
+사람이나 다른 에이전트가 **자기 셸에서** Aside 이름으로 위키에 쓸 때 쓰는 래퍼다. Aside 셸에서는 레포 경로에
+접근하지 못해 돌지 않으므로, A 모드의 Aside 는 블록에 적힌 인라인 `curl` 을 쓴다. 절차는 `agents/aside/ADAPTER.md`.
